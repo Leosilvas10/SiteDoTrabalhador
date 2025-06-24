@@ -133,13 +133,6 @@ export default function AdminLogin() {
 
           <div className="mt-6 text-center text-sm text-slate-400">
             <p>Acesso restrito apenas para administradores</p>
-            <div className="mt-3 p-4 bg-slate-700 rounded-lg border border-slate-600">
-              <p className="text-sm text-blue-300 mb-2"><strong>Credenciais de Acesso:</strong></p>
-              <div className="text-left space-y-1">
-                <p className="text-sm"><strong>Usuário:</strong> <span className="text-green-300">admin</span></p>
-                <p className="text-sm"><strong>Senha:</strong> <span className="text-green-300">admin123</span></p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

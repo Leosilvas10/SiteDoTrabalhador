@@ -1,37 +1,19 @@
-
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSiteContext } from '../../contexts/SiteContext'
 
-const Header = () => {
+const EmpresasHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [user, setUser] = useState(null)
   const { siteConfig } = useSiteContext()
 
-  useEffect(() => {
-    // Verificar se há usuário logado
-    const userData = localStorage.getItem('user')
-    if (userData) {
-      setUser(JSON.parse(userData))
-    }
-  }, [])
-
-  const handleLogout = () => {
-    localStorage.removeItem('user')
-    localStorage.removeItem('token')
-    setUser(null)
-    setIsMobileMenuOpen(false)
-  }
-
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+    // Redirecionar para a página principal com âncora
+    window.location.href = `/#${sectionId}`
     setIsMobileMenuOpen(false)
   }
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Redirecionar para a página principal
+    window.location.href = '/'
     setIsMobileMenuOpen(false)
   }
 
@@ -74,12 +56,9 @@ const Header = () => {
 
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
-              <button 
-                onClick={() => window.open('/empresas', '_blank')}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors duration-200"
-              >
+              <span className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium">
                 Para Empresas
-              </button>
+              </span>
             </div>
 
             {/* Mobile Menu Button */}
@@ -111,17 +90,6 @@ const Header = () => {
               <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => scrollToSection('contato')}>
                 Contato
               </button>
-              
-              <div className="border-t border-slate-700 pt-4">
-                <div className="px-3 py-2">
-                  <button 
-                    onClick={() => window.open('/empresas', '_blank')}
-                    className="w-full text-left px-3 py-2 text-base font-medium text-green-400 hover:text-green-300"
-                  >
-                    Para Empresas
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -130,4 +98,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default EmpresasHeader

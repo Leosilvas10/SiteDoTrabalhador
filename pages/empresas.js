@@ -1,8 +1,8 @@
 
 import { useState } from 'react'
 import Head from 'next/head'
-import Header from '../src/components/Header/Header'
-import Footer from '../src/components/Footer/Footer'
+import EmpresasHeader from '../src/components/Header/EmpresasHeader'
+import EmpresasFooter from '../src/components/Footer/EmpresasFooter'
 
 const EmpresasPage = () => {
   const [formData, setFormData] = useState({
@@ -87,9 +87,10 @@ const EmpresasPage = () => {
         <meta name="description" content="Publique suas vagas no Site do Trabalhador e encontre os melhores candidatos" />
       </Head>
 
-      <Header />
-
-      <main className="min-h-screen bg-slate-900 pt-20">
+      <div className="min-h-screen bg-slate-900 text-white">
+        <EmpresasHeader />
+        
+        <main className="min-h-screen bg-slate-900 pt-20">
         <div className="container mx-auto px-4 py-12">
           
           {/* Hero Section */}
@@ -436,9 +437,10 @@ const EmpresasPage = () => {
             </div>
           )}
         </div>
-      </main>
+        </main>
 
-      <Footer />
+        <EmpresasFooter />
+      </div>
     </>
   )
 }

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
+import { useSiteContext } from '../../contexts/SiteContext'
 
 const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
   const router = useRouter()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const { siteConfig } = useSiteContext()
 
   useEffect(() => {
     const checkAuth = () => {
@@ -74,107 +77,99 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-slate-800 shadow-xl relative">
-        {/* Header do Sidebar */}
-        <div className="p-6 border-b border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">ST</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-white">Admin Panel</h1>
-              <p className="text-slate-400 text-sm">Painel Administrativo</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="p-4">
-          <div className="space-y-2">
-            {menuItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => router.push(item.path)}
-                className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
-                  item.active
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                }`}
-              >
-                <span className="mr-3 text-lg">{item.icon}</span>
-                <span className="font-medium">{item.name}</span>
-                <span className="ml-auto text-xs">↗</span>
-              </button>
-            ))}
-          </div>
-        </nav>
-
-        {/* User Info & Actions */}
-        <div className="absolute bottom-0 w-64 p-4 border-t border-slate-700">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xs">A</span>
-            </div>
-            <div>
-              <p className="text-white text-sm font-medium">
-                {user?.name || 'Administrador'}
-              </p>
-              <p className="text-slate-400 text-xs">Admin</p>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <button
-              onClick={navigateToHome}
-              className="w-full flex items-center px-3 py-2 text-slate-300 hover:bg-slate-700 hover:text-white rounded-lg transition-colors duration-200"
-            >
-              <span className="mr-2">🏠</span>
-              <span className="text-sm">Ver Site</span>
-            </button>
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center px-3 py-2 text-red-400 hover:bg-red-600 hover:text-white rounded-lg transition-colors duration-200"
-            >
-              <span className="mr-2">🚪</span>
-              <span className="text-sm">Sair</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Bar */}
-        <header className="bg-slate-800 shadow-sm border-b border-slate-700">
-          <div className="px-8 py-4">
-            <div className="flex items-center justify-between">
+    <>
+      <Head>
+        <title>{title} - Site do Trabalhador</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      
+      <div className="min-h-screen bg-slate-900 flex">
+        {/* Sidebar */}
+        <div className="w-64 bg-slate-800 shadow-xl relative">
+          {/* Header do Sidebar */}
+          <div className="p-6 border-b border-slate-700">
+            <div className="flex items-center space-x-3">
+              {siteConfig?.logoUrl ? (
+                <img 
+                  src={siteConfig.logoUrl} 
+                  alt="Logo" 
+                  className="w-10 h-10 rounded-lg object-contain"
+                />
+              ) : (
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">ST</span>
+                </div>
+              )}
               <div>
-                <h2 className="text-2xl font-bold text-white">{title}</h2>
-                <p className="text-slate-400 text-sm mt-1">
-                  Gerencie o conteúdo e configurações do site
-                </p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={navigateToHome}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 flex items-center"
-                >
-                  <span className="mr-2">🔗</span>
-                  Para Empresas
-                </button>
+                <h1 className="text-lg font-bold text-white">Admin Panel</h1>
+                <p className="text-slate-400 text-sm">Painel Administrativo</p>
               </div>
             </div>
           </div>
-        </header>
 
-        {/* Content */}
-        <main className="flex-1 p-8 overflow-y-auto">
-          {children}
-        </main>
+          {/* Navigation */}
+          <nav className="p-4">
+            <div className="space-y-2">
+              {menuItems.map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => router.push(item.path)}
+                  className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
+                    item.active
+                      ? 'bg-blue-600 text-white'
+                      : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                  }`}
+                >
+                  <span className="mr-3 text-lg">{item.icon}</span>
+                  <span className="font-medium">{item.name}</span>
+                  <span className="ml-auto text-xs">↗</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+
+          {/* User Info & Actions */}
+          <div className="absolute bottom-0 w-64 p-4 border-t border-slate-700">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xs">A</span>
+              </div>
+              <div>
+                <p className="text-white text-sm font-medium">
+                  {user?.name || 'Administrador'}
+                </p>
+                <p className="text-slate-400 text-xs">Admin</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={navigateToHome}
+                className="w-full flex items-center px-3 py-2 text-slate-300 hover:bg-slate-700 hover:text-white rounded-lg transition-colors duration-200"
+              >
+                <span className="mr-2">🏠</span>
+                <span className="text-sm">Ver Site</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center px-3 py-2 text-red-400 hover:bg-red-600 hover:text-white rounded-lg transition-colors duration-200"
+              >
+                <span className="mr-2">🚪</span>
+                <span className="text-sm">Sair</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content - SEM HEADER EXTRA */}
+        <div className="flex-1 flex flex-col bg-slate-900">
+          {/* Content direto */}
+          <main className="flex-1 p-8 overflow-y-auto">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
