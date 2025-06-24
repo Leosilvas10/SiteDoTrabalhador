@@ -8,14 +8,13 @@ import {
     Column,
     Nav,
     Ratings,
-} from "@/styles/viewjobs.style";
+} from "../../src/styles/viewjobs.style";
 
 import TagBlock from "../../src/components/Tag/Tag";
 import { CompLogoImg } from "../../src/components/Other/CompanyLogo.style";
 import Button from "../../src/components/Buttons/Button";
 import Heading from "../../src/components/Other/Heading.style";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import fetch from "isomorphic-unfetch";
 import { useEffect, useState } from "react";
 import { Banner_2 } from "../../src/components/Banner/Banner";
 import Head from "next/head";
@@ -24,7 +23,6 @@ const ViewJob = () => {
     const [state, setState] = useState();
 
     useEffect(() => {
-        // Verifica se window está definido (execução no cliente)
         if (typeof window !== "undefined") {
             const id = new URLSearchParams(window.location.search).get("id");
             const vacancies = JSON.parse(
@@ -53,20 +51,17 @@ const ViewJob = () => {
                 <ViewJobContainer>
                     <CompLogo>
                         <CompLogoImg size={12} src={company.logo} />
-                        {/* <Ratings>4.9 <FontAwesomeIcon style={{fontSize:'1.8rem'}} icon="star"/></Ratings> */}
                     </CompLogo>
                     <CompHeading>
                         <Heading style={{ height: "fit-content" }} size="lg">
                             {title}
                         </Heading>
-
                         <div>
                             <Heading>{company.name}</Heading>
                         </div>
-
                         {typeof window !== "undefined" &&
                         JSON.parse(localStorage.getItem("session") || "{}")
-                            ?.type != "company" ? (
+                            ?.type !== "company" ? (
                             <>
                                 <a href={"https://" + company.website}>
                                     <Button type="Apply">Apply Now</Button>
