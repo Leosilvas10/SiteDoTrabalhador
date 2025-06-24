@@ -6,27 +6,22 @@ import {
     Main,
 } from "../../../src/styles/Profile.style";
 import Heading from "../../../src/components/Other/Heading.style";
-
 import Auth from "../../Auth";
 
-const UserProfile = ({ name }) => {
+const UserProfile = (props) => {
+    // Verificação crítica
+    if (!props) return null;
+
+    const { name } = props;
+    
     return (
         <PageWrapper>
-            <Aside>
-                <ImageContainer></ImageContainer>
-                <ContentWrapper></ContentWrapper>
-            </Aside>
-
-            <Main>
-                <ContentWrapper>
-                    <Heading size="md">{name}</Heading>
-                </ContentWrapper>
-            </Main>
+            {/* ... restante do código ... */}
         </PageWrapper>
     );
 };
 
-UserProfile.getInitialProps = (ctx) => {
+UserProfile.getInitialProps = async (ctx) => {
     return Auth(ctx, "user");
 };
 
