@@ -1,4 +1,7 @@
-import { InputContainer, JobDescription } from "./PostJob.style";
+import {
+    InputContainer,
+    JobDescription,
+} from "../../../src/styles/PostJob.style";
 import { PageContainer } from "../../src/components/Other/PageContainer.style";
 
 import { InputText } from "../../src/components/Other/Input.style";
