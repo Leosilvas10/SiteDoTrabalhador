@@ -1,0 +1,58 @@
+[14:38:15.643] Running build in Washington, D.C., USA (East) – iad1
+[14:38:15.644] Build machine configuration: 2 cores, 8 GB
+[14:38:15.661] Cloning github.com/Leosilvas10/SiteDoTrabalhador (Branch: main, Commit: 047a261)
+[14:38:15.913] Previous build caches not available
+[14:38:16.838] Cloning completed: 1.177s
+[14:38:17.221] Running "vercel build"
+[14:38:17.652] Vercel CLI 43.3.0
+[14:38:17.972] WARNING: You should not upload the `.next` directory.
+[14:38:17.979] Installing dependencies...
+[14:38:30.744] 
+[14:38:30.745] added 269 packages in 13s
+[14:38:30.745] 
+[14:38:30.746] 48 packages are looking for funding
+[14:38:30.746]   run `npm fund` for details
+[14:38:30.796] Detected Next.js version: 15.3.4
+[14:38:30.799] Running "npm run build"
+[14:38:30.908] 
+[14:38:30.908] > job-board@1.0.0 build
+[14:38:30.908] > NODE_OPTIONS='--openssl-legacy-provider' next build
+[14:38:30.909] 
+[14:38:31.529]    ▲ Next.js 15.3.4
+[14:38:31.530]    - Experiments (use with caution):
+[14:38:31.530]      ✓ forceSwcTransforms
+[14:38:31.530] 
+[14:38:31.574]    Linting and checking validity of types ...
+[14:38:31.692]    Creating an optimized production build ...
+[14:38:35.184] Failed to compile.
+[14:38:35.184] 
+[14:38:35.184] ./pages/api/get_jobs.js
+[14:38:35.184] Module not found: Can't resolve '../database/middlewares/vacancy'
+[14:38:35.184] 
+[14:38:35.184] https://nextjs.org/docs/messages/module-not-found
+[14:38:35.184] 
+[14:38:35.184] ./pages/api/post_job.js
+[14:38:35.184] Module not found: Can't resolve '../database/middlewares/vacancy'
+[14:38:35.184] 
+[14:38:35.185] https://nextjs.org/docs/messages/module-not-found
+[14:38:35.185] 
+[14:38:35.185] ./pages/api/register.js
+[14:38:35.185] Module not found: Can't resolve '../database/middlewares/auth'
+[14:38:35.185] 
+[14:38:35.185] https://nextjs.org/docs/messages/module-not-found
+[14:38:35.185] 
+[14:38:35.185] ./pages/api/session.js
+[14:38:35.185] Module not found: Can't resolve '../database/middlewares/auth'
+[14:38:35.185] 
+[14:38:35.185] https://nextjs.org/docs/messages/module-not-found
+[14:38:35.185] 
+[14:38:35.185] ./pages/api/signin.js
+[14:38:35.185] Module not found: Can't resolve '../database/middlewares/auth'
+[14:38:35.185] 
+[14:38:35.185] https://nextjs.org/docs/messages/module-not-found
+[14:38:35.185] 
+[14:38:35.196] 
+[14:38:35.197] > Build failed because of webpack errors
+[14:38:35.224] Error: Command "npm run build" exited with 1
+[14:38:35.548] 
+[14:38:38.374] Exiting build container
