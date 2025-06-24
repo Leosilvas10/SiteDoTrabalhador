@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import { signout } from '../database/middlewares/auth';
+import { signout } from '../../src/lib/database/middlewares/auth';
 
 const handler = nextConnect();
 

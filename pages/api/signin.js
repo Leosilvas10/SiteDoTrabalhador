@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import { signin } from '../database/middlewares/auth';
+import { signin } from '../../src/lib/database/middlewares/auth';
 import cookieDef from '../database/middlewares/cookieDef';
 
 const handler = nextConnect();

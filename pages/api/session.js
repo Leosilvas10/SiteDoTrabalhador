@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import { getSession } from '../database/middlewares/auth';
+import { getSession } from '../../src/lib/database/middlewares/auth';
 
 const handler = nextConnect();
 

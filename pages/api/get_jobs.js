@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import { get_vacancies } from "../database/middlewares/vacancy";
+import { get_vacancies } from "../../src/lib/database/middlewares/vacancy";
 
 const handler = nextConnect();
 
