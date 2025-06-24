@@ -1,0 +1,89 @@
+Quero que você desenvolva o painel administrativo (admin dashboard) do meu site "Site do Trabalhador", feito com Next.js, React e Tailwind CSS.
+O painel deve ser acessível por rota protegida (ex: /admin) e voltado apenas para gestores internos. Não haverá área pública de login/cadastro para candidatos.
+
+Funcionalidades obrigatórias:
+Login seguro para administradores (autenticação simples por senha, sem área pública de cadastro).
+
+Gestão de vagas:
+
+Listar todas as vagas cadastradas (com busca e filtros).
+
+Adicionar nova vaga (formulário com título, tipo, categoria, empresa, localização, salário, descrição, data de publicação, link externo).
+
+Editar e excluir vagas existentes.
+
+Gestão de leads:
+
+Visualizar todos os leads captados pelo site (nome, contato, vaga, respostas do formulário).
+
+Exportar leads para CSV ou Google Sheets.
+
+Gestão de usuários administradores:
+
+Criar, editar e remover usuários admin.
+
+Gestão de conteúdo do site:
+
+Editar textos principais do site (headline, descrição, rodapé, instruções).
+
+Fazer upload da logo e imagens do site.
+
+Relatórios simples:
+
+Exibir número de vagas ativas, leads captados, últimos acessos, etc.
+
+Configurações:
+
+Alterar senha do admin.
+
+Gerenciar integrações (ex: Google Sheets, EmailJS).
+
+Interface responsiva, clara e fácil de usar, com menu lateral fixo.
+
+Detalhes de UX/UI:
+Layout limpo, com fundo escuro, usando Tailwind CSS.
+
+Menu lateral para navegação entre seções (Vagas, Leads, Usuários, Conteúdo, Relatórios, Configurações).
+
+Barra superior com nome do admin e botão de logout.
+
+Feedback visual para ações (salvar, excluir, editar).
+
+Todos os textos em português.
+
+Outras sugestões para pedir ao assistente:
+Área para visualizar analytics básicos (número de vagas, leads por período).
+
+Permitir upload de arquivos PDF (ex: políticas, regulamentos).
+
+Logs de atividade dos administradores.
+
+Suporte a múltiplos administradores com permissões diferentes (opcional).
+
+Notificações por e-mail a cada novo lead ou vaga publicada.
+
+Possibilidade de ativar/desativar vagas sem excluir.
+
+Busca rápida e filtros avançados em todas as listas.
+
+Se precisar de exemplos de dashboards, pode se inspirar nos painéis admin de job boards modernos, como SmartJobBoard, JobBoardHQ, ou nos exemplos do GitHub e Dribbble.
+
+Como pedir ao assistente
+Crie para mim o painel administrativo do "Site do Trabalhador" com as seguintes funções:
+
+Login seguro de admin
+
+Gestão completa de vagas (listar, criar, editar, excluir)
+
+Gestão e exportação de leads
+
+Gestão de usuários admin
+
+Edição de textos e imagens do site
+
+Relatórios simples
+
+Layout responsivo, escuro, com menu lateral
+
+Todos os textos em português
+Se possível, inclua sugestões extras de UX para admin de job board brasileiro.

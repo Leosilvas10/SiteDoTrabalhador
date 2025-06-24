@@ -1,0 +1,122 @@
+Quero criar um site chamado Site do Trabalhador (sitedotrabalhador.com.br) usando Next.js + React + Tailwind CSS. O objetivo é listar vagas de emprego online, buscar automaticamente e atualizar vagas de pelo menos 3 fontes gratuitas e que não exigem login. Quando o usuário clicar em uma vaga, deverá abrir um formulário para captar leads com perguntas específicas (listadas abaixo), e as respostas devem ser enviadas para uma planilha do Google Sheets via API. Quero receber notificação por e-mail a cada novo lead. O site deve ter filtros de pesquisa (cidade, área, tipo de vaga), painel administrativo completo, atualização automática das vagas a cada 30 minutos, consentimento LGPD, Termos de Uso e Política de Privacidade.
+
+Especificações detalhadas:
+Nome do site: Site do Trabalhador (sitedotrabalhador.com.br)
+
+Tecnologias: Next.js, React, Tailwind CSS
+
+Design: Visual moderno, escuro, com fundo azul escuro (dark blue), responsivo, confiável. Cores sugeridas: azul escuro, branco, cinza.
+
+Página inicial:
+
+Logo e nome do site no topo
+
+Headline explicando o propósito: "Encontre vagas de emprego atualizadas gratuitamente, sem necessidade de cadastro para visualizar as oportunidades."
+
+Filtros de pesquisa por cidade, área e tipo de vaga
+
+Listagem de vagas em cards (título, empresa, cidade, salário, data, botão "Quero me candidatar")
+
+Atualização automática das vagas a cada 30 minutos
+
+Rodapé com contato, Termos de Uso e Política de Privacidade
+
+Fontes de vagas (mínimo 3, sem login):
+
+Codante Jobs API: https://apis.codante.io/api/job-board/jobs
+
+Vagas.com.br (scraping simples ou RSS, se disponível)
+
+InfoJobs (scraping simples ou RSS, se disponível)
+
+Se não conseguir integrar todas, priorize pelo menos uma API 100% funcional
+
+Ao clicar em "Quero me candidatar":
+
+Abrir modal/formulário com as seguintes perguntas:
+
+Qual foi o nome da última empresa onde você trabalhou?
+
+Você trabalhou com ou sem carteira assinada?
+
+() Com carteira assinada
+
+() Sem carteira assinada
+
+() Comecei sem, depois registraram
+
+() Não tenho certeza
+
+Quando saiu da empresa, recebeu tudo certinho?
+
+() Sim
+
+() Não recebi nada
+
+() Recebi só uma parte
+
+() Não sei dizer
+
+Durante o trabalho, você passou por alguma dessas situações?
+
+() Fazia hora extra sem receber
+
+() Trabalhei domingos/feriados sem adicional ou folga
+
+() Sofri assédio ou humilhações
+
+() Acúmulo de funções sem aumento salarial
+
+() Nenhuma dessas
+
+Podemos encaminhar suas respostas para um parceiro especializado em consultas trabalhistas gratuitas, que pode te orientar sobre seus direitos?
+
+() Sim, quero saber se tenho algo a receber
+
+() Não, obrigado(a)
+
+Para isso, informe seu nome e WhatsApp para contato:
+
+[campo nome]
+
+[campo WhatsApp]
+
+Checkbox de consentimento LGPD: "Li e concordo com os Termos de Uso e Política de Privacidade"
+
+Ao enviar o formulário:
+
+Dados enviados para uma planilha do Google Sheets (pode usar SheetDB, Google Apps Script, ou outra solução sem backend próprio)
+
+Notificação por e-mail para o administrador a cada novo lead (pode usar EmailJS, Resend, ou outro serviço)
+
+Redirecionar o lead para a vaga original ou mostrar mensagem de confirmação
+
+Painel Administrativo (completo):
+
+Login seguro (senha ou autenticação via NextAuth, RBAC)
+
+Gestão de múltiplos usuários administradores (criar, editar, remover usuários)
+
+Visualização e exportação dos leads recebidos (por padrão, exporta para Google Sheets)
+
+Edição de textos/copy do site diretamente pelo painel (ex: headline, descrições, instruções, rodapé)
+
+Upload e gerenciamento da logo e imagens do site pelo painel (permitir upload de arquivos para atualizar logo e banners do site)
+
+Permissão para alterar imagens e textos em tempo real, sem necessidade de deploy
+
+Controle de permissões para diferentes administradores, se necessário
+
+LGPD, Termos de Uso e Política de Privacidade:
+
+Checkbox de consentimento no formulário
+
+Páginas dedicadas para Termos de Uso e Política de Privacidade (pode usar texto padrão, ajustável depois)
+
+Extras:
+
+Código organizado e comentado
+
+Instruções de configuração do Google Sheets e e-mail no README
+
+Pronto para hospedar no Vercel ou Replit

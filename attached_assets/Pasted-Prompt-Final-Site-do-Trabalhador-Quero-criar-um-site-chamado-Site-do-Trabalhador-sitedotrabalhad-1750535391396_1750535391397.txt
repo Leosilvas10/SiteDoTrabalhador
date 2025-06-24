@@ -1,0 +1,71 @@
+Prompt Final — Site do Trabalhador
+Quero criar um site chamado Site do Trabalhador (sitedotrabalhador.com.br) usando Next.js + React + Tailwind CSS. O objetivo é listar vagas de emprego online, buscar automaticamente e atualizar vagas de pelo menos 3 fontes gratuitas e que não exigem login. Quando o usuário clicar em uma vaga, deverá abrir um formulário para captar leads com perguntas específicas (listadas abaixo), e as respostas devem ser enviadas para uma planilha do Google Sheets via API. Quero receber notificação por e-mail a cada novo lead. O site deve ter filtros de pesquisa (cidade, área, tipo de vaga), painel administrativo completo, atualização automática das vagas a cada 30 minutos, consentimento LGPD, Termos de Uso e Política de Privacidade.
+
+Especificações detalhadas:
+Nome do site: Site do Trabalhador (sitedotrabalhador.com.br)
+
+Tecnologias: Next.js, React, Tailwind CSS
+
+Design: Visual moderno, escuro, com fundo azul escuro (dark blue), responsivo, confiável. Cores sugeridas: azul escuro, branco, cinza.
+
+Página inicial:
+
+Logo e nome do site no topo
+
+Headline explicando o propósito: "Encontre vagas de emprego atualizadas gratuitamente, sem necessidade de cadastro para visualizar as oportunidades."
+
+Filtros de pesquisa por cidade, área e tipo de vaga
+
+Listagem de vagas em cards (título, empresa, cidade, salário, data, botão "Quero me candidatar")
+
+Atualização automática das vagas a cada 30 minutos
+
+Rodapé com contato, Termos de Uso e Política de Privacidade
+
+Fontes de vagas (mínimo 3, sem login):
+
+Codante Jobs API: https://apis.codante.io/api/job-board/jobs
+
+Vagas.com.br (scraping simples ou RSS, se disponível)
+
+InfoJobs (scraping simples ou RSS, se disponível)
+
+Se não conseguir integrar todas, priorize pelo menos uma API 100% funcional
+
+Ao clicar em "Quero me candidatar":
+
+Abrir modal/formulário com as seguintes perguntas:
+
+Qual foi o nome da última empresa onde você trabalhou?
+
+Você trabalhou com ou sem carteira assinada?
+
+() Com carteira assinada
+
+() Sem carteira assinada
+
+() Comecei sem, depois registraram
+
+() Não tenho certeza
+
+Quando saiu da empresa, recebeu tudo certinho?
+
+() Sim
+
+() Não recebi nada
+
+() Recebi só uma parte
+
+() Não sei dizer
+
+Durante o trabalho, você passou por alguma dessas situações?
+
+() Fazia hora extra sem receber
+
+() Trabalhei domingos/feriados sem adicional ou folga
+
+() Sofri assédio ou humilhações
+
+() Acúmulo de funções sem aumento salarial
+
+() Nenhuma dessas

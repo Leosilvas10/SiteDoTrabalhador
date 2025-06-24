@@ -1,0 +1,47 @@
+
+> job-board@1.0.0 dev
+   ▲ Next.js 15.3.4penssl-legacy-provider' next dev
+   - Local:        http://localhost:3000
+   - Network:      http://172.31.128.70:3000
+
+ ✓ Starting...
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'allowedOrigins' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 1595ms
+ ⚠ Cross origin request detected from b3f0c91e-4656-4b2b-b7a0-5f1d98c28cd3-00-2dcrr5axkseq.janeway.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ○ Compiling / ...
+ ✓ Compiled / in 4.4s (473 modules)
+ GET / 200 in 856ms
+[TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+[TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')] {
+  page: '/'
+}
+[TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')] {
+  page: '/'
+}
+[TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')] {
+  page: '/'
+}
+ GET / 500 in 606ms
+ GET /_next/static/webpack/bc58faf96deeb8b9.webpack.hot-update.json 500 in 5325ms
+[TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+[TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')]
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'split')] {
+  page: '/'
+}
+ GET / 500 in 1468ms
+ GET /_next/static/webpack/bc58faf96deeb8b9.webpack.hot-update.json 500 in 1905ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/runner/workspace/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/home/runner/workspace/.next/cache/webpack/client-development-fallback/0.pack.gz'

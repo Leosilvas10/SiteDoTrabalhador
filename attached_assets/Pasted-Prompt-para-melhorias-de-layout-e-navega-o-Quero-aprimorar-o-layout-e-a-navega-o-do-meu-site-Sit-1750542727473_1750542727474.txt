@@ -1,0 +1,49 @@
+Prompt para melhorias de layout e navegação
+Quero aprimorar o layout e a navegação do meu site "Site do Trabalhador".
+Aqui estão as melhorias que preciso:
+
+Todos os menus do cabeçalho (navbar) devem ser linkados para blocos/sections específicas da mesma página, usando âncoras (ex: #vagas, #direitos, #calculadora, #contato, etc.), criando uma navegação fluida tipo one page.
+
+Remover o botão "Entrar" do menu. O único acesso restrito deve ser o botão "Para Empresas", que leva ao painel administrativo do gestor interno.
+
+Mantenha o design limpo, responsivo, com fundo azul escuro, e todos os textos em português.
+
+Inclua rolagem suave ao clicar nos menus (scroll suave para as seções).
+
+Garanta acessibilidade nos links e botões (uso de aria-label, contraste, etc.).
+
+Destaque visualmente o menu ativo conforme a seção visível na rolagem.
+
+Mantenha o menu fixo no topo (sticky) com efeito de sombra discreto ao rolar.
+
+Inclua um botão de "voltar ao topo" sempre visível no canto inferior direito.
+
+Otimize o layout para mobile, com menu hambúrguer e navegação fácil.
+
+No rodapé, adicione links rápidos para as principais seções, termos de uso, política de privacidade e LGPD.
+
+Sugira e implemente outras melhorias de UX para um job board brasileiro, como:
+
+Filtros rápidos de vagas (ex: Remoto, Pleno, Sênior, SP)
+
+Destaque para categorias em alta
+
+Botão de "Aplicar Agora" sempre visível nos cards de vaga
+
+Exibição de números reais ou estimados de vagas/candidatos
+
+Área para depoimentos de usuários ou empresas
+
+Mensagem clara quando não houver vagas para o filtro selecionado
+
+Modal de candidatura com foco em captação de leads e consentimento LGPD
+
+Se precisar de mais detalhes sobre alguma seção, me pergunte antes de implementar.
+Entregue o código JSX/Tailwind dos componentes do layout ajustados, comentando as principais mudanças.
+
+Outras sugestões de melhorias para pedir ao assistente
+Adicionar destaque visual para empresas parceiras ou vagas patrocinadas.
+
+Criar um banner de aviso para manutenção ou novidades.
+
+Implementar loading animado enquanto as vagas carregam.

@@ -1,0 +1,188 @@
+~/workspace$ npm run dev
+
+> job-board@1.0.0 dev
+> NODE_OPTIONS='--openssl-legacy-provider' next dev
+
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3000
+   - Network:      http://172.31.128.54:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ forceSwcTransforms
+
+ ✓ Starting...
+ ✓ Ready in 3.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 6.5s (432 modules)
+ GET / 200 in 7098ms
+ ⚠ Cross origin request detected from b3f0c91e-4656-4b2b-b7a0-5f1d98c28cd3-00-2dcrr5axkseq.janeway.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ✓ Compiled /api/fetch-jobs in 333ms (151 modules)
+ GET /api/fetch-jobs?t=1750720778751 200 in 646ms
+ GET / 200 in 323ms
+ GET /api/fetch-jobs?t=1750720790951 200 in 288ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 590ms (440 modules)
+ GET /admin 200 in 895ms
+ ✓ Compiled /admin/vagas in 323ms (444 modules)
+ ✓ Compiled /admin/leads in 205ms (448 modules)
+ ✓ Compiled /admin/empresas in 191ms (452 modules)
+ ✓ Compiled /admin/conteudo in 141ms (456 modules)
+ ✓ Compiled /admin/configuracoes in 313ms (444 modules)
+ ✓ Compiled /admin/usuarios in 212ms (446 modules)
+ ✓ Compiled /admin in 138ms (452 modules)
+ ✓ Compiled in 1174ms (448 modules)
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 860ms (553 modules)
+ GET /admin 404 in 1173ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/runner/workspace/.next/server/pages/admin.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/workspace/.next/server/pages/admin.js',
+  page: '/admin'
+}
+ GET /admin 500 in 570ms
+ GET / 200 in 313ms
+ ✓ Compiled /api/fetch-jobs in 327ms (265 modules)
+ GET /api/fetch-jobs?t=1750721278300 200 in 589ms
+ GET / 200 in 323ms
+ GET /api/fetch-jobs?t=1750721301324 200 in 222ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 226ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 242ms
+ GET /api/fetch-jobs?t=1750721303847 200 in 167ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 215ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 238ms
+ GET /api/fetch-jobs?t=1750721306022 200 in 175ms
+ GET /admin 404 in 420ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 222ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 404 in 432ms
+ GET / 200 in 237ms
+ GET /api/fetch-jobs?t=1750721316880 200 in 315ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 215ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 232ms
+ GET /api/fetch-jobs?t=1750721319598 200 in 213ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 219ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 249ms
+ GET /api/fetch-jobs?t=1750721321725 200 in 166ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 223ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 249ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 219ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 252ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 223ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 235ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 215ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 235ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 215ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 235ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 216ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 237ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 223ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 262ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 225ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /api/fetch-jobs?t=1750721343294 200 in 199ms
+ GET / 200 in 281ms
+ GET /api/fetch-jobs?t=1750721345168 200 in 197ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 216ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 236ms
+ GET /api/fetch-jobs?t=1750721348568 200 in 202ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 216ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 240ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 217ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 254ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 230ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 251ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 217ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 236ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 225ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 242ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 219ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 241ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 221ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 241ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 215ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 238ms
+ GET /api/fetch-jobs?t=1750721371224 200 in 179ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 217ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 235ms
+ GET /api/fetch-jobs?t=1750721373500 200 in 294ms
+ GET /_next/static/webpack/589633269b4cc81c.webpack.hot-update.json 404 in 218ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 236ms
+^C
+
+~/workspace$ npm run dev
+
+> job-board@1.0.0 dev
+> NODE_OPTIONS='--openssl-legacy-provider' next dev
+
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3000
+   - Network:      http://172.31.128.54:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ forceSwcTransforms
+
+ ✓ Starting...
+ ✓ Ready in 1346ms
+ ○ Compiling / ...
+ ✓ Compiled / in 4.3s (432 modules)
+ GET / 200 in 5079ms
+ ⚠ Cross origin request detected from b3f0c91e-4656-4b2b-b7a0-5f1d98c28cd3-00-2dcrr5axkseq.janeway.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ✓ Compiled /api/fetch-jobs in 174ms (151 modules)
+ GET /api/fetch-jobs?t=1750721399073 200 in 430ms
+ GET / 200 in 318ms
+ GET /api/fetch-jobs?t=1750721408318 200 in 186ms
+ ✓ Compiled /admin in 415ms (454 modules)
+ GET /admin 200 in 691ms
+ ⨯ ./src/components/Header/Header.jsx
+Error:   × Expression expected
+     ╭─[/home/runner/workspace/src/components/Header/Header.jsx:192:1]
+ 189 │           </div>
+ 190 │         </div>
+ 191 │       </div>
+ 192 │     </header>
+     ·     ─
+ 193 │   )
+ 194 │ }
+     ╰────
+  × Unterminated regexp literal
+     ╭─[/home/runner/workspace/src/components/Header/Header.jsx:192:1]
+ 189 │           </div>
+ 190 │         </div>
+ 191 │       </div>
+ 192 │     </header>
+     ·      ────────
+ 193 │   )
+ 194 │ }
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header/Header.jsx

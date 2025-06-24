@@ -1,0 +1,141 @@
+~/workspace$ npm run dev
+
+> job-board@1.0.0 dev
+> NODE_OPTIONS='--openssl-legacy-provider' next dev
+
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3000
+   - Network:      http://172.31.128.67:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ forceSwcTransforms
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling / ...
+ ⚠ Cross origin request detected from b3f0c91e-4656-4b2b-b7a0-5f1d98c28cd3-00-2dcrr5axkseq.janeway.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ✓ Compiled /_error in 5.6s (539 modules)
+ GET / 200 in 6020ms
+ GET /_next/static/webpack/47142f89b90d52f5.webpack.hot-update.json 404 in 2855ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 244ms
+ ✓ Compiled /api/fetch-jobs in 245ms (259 modules)
+ GET /api/fetch-jobs 200 in 1251ms
+ GET /api/fetch-jobs 200 in 572ms
+ GET /api/fetch-jobs 200 in 935ms
+ GET /api/fetch-jobs 200 in 650ms
+ GET / 200 in 328ms
+ GET /api/fetch-jobs 200 in 837ms
+ ✓ Compiled in 485ms (442 modules)
+ ✓ Compiled in 1091ms (453 modules)
+Erro ao buscar vagas do Trabalha Brasil: TypeError: fetch failed
+    at async handler (pages/api/fetch-jobs.js:13:37)
+  11 |     // 1. Buscar vagas da API do Trabalha Brasil (Gov.br)
+  12 |     try {
+> 13 |       const trabalhaBrasilResponse = await fetch('https://api.trabalhabrasil.gov.br/api/vagas', {
+     |                                     ^
+  14 |         headers: {
+  15 |           'Accept': 'application/json',
+  16 |           'User-Agent': 'SiteDoTrabalhador/1.0' {
+  [cause]: [Error: getaddrinfo ENOTFOUND api.trabalhabrasil.gov.br] {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'api.trabalhabrasil.gov.br'
+  }
+}
+Erro ao buscar vagas do Empregare: TypeError: fetch failed
+    at async handler (pages/api/fetch-jobs.js:54:32)
+  52 |     // 2. Buscar vagas do Empregare (API pública)
+  53 |     try {
+> 54 |       const empregareResponse = await fetch('https://api.empregare.com/vagas/buscar', {
+     |                                ^
+  55 |         method: 'POST',
+  56 |         headers: {
+  57 |           'Content-Type': 'application/json', {
+  [cause]: [Error: getaddrinfo ENOTFOUND api.empregare.com] {
+    errno: -3007,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'api.empregare.com'
+  }
+}
+Erro no scraping do Empregos.com.br: TypeError: Failed to parse URL from /api/scrape-empregos-brasil
+    at async handler (pages/api/fetch-jobs.js:101:31)
+   99 |     // 3. Web scraping seguro do Empregos.com.br
+  100 |     try {
+> 101 |       const scrapingResponse = await fetch('/api/scrape-empregos-brasil');
+      |                               ^
+  102 |       if (scrapingResponse.ok) {
+  103 |         const data = await scrapingResponse.json();
+  104 |         if (data.success && data.jobs) { {
+  [cause]: TypeError: Invalid URL
+      at handler (pages/api/fetch-jobs.js:101:37)
+     99 |     // 3. Web scraping seguro do Empregos.com.br
+    100 |     try {
+  > 101 |       const scrapingResponse = await fetch('/api/scrape-empregos-brasil');
+        |                                     ^
+    102 |       if (scrapingResponse.ok) {
+    103 |         const data = await scrapingResponse.json();
+    104 |         if (data.success && data.jobs) { {
+    code: 'ERR_INVALID_URL',
+    input: '/api/scrape-empregos-brasil'
+  }
+}
+Erro ao buscar vagas do Trabalha Brasil: TypeError: fetch failed
+    at async handler (pages/api/fetch-jobs.js:13:37)
+  11 |     // 1. Buscar vagas da API do Trabalha Brasil (Gov.br)
+  12 |     try {
+> 13 |       const trabalhaBrasilResponse = await fetch('https://api.trabalhabrasil.gov.br/api/vagas', {
+     |                                     ^
+  14 |         headers: {
+  15 |           'Accept': 'application/json',
+  16 |           'User-Agent': 'SiteDoTrabalhador/1.0' {
+  [cause]: [Error: getaddrinfo ENOTFOUND api.trabalhabrasil.gov.br] {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'api.trabalhabrasil.gov.br'
+  }
+}
+Erro ao buscar vagas do Empregare: TypeError: fetch failed
+    at async handler (pages/api/fetch-jobs.js:54:32)
+  52 |     // 2. Buscar vagas do Empregare (API pública)
+  53 |     try {
+> 54 |       const empregareResponse = await fetch('https://api.empregare.com/vagas/buscar', {
+     |                                ^
+  55 |         method: 'POST',
+  56 |         headers: {
+  57 |           'Content-Type': 'application/json', {
+  [cause]: [Error: getaddrinfo ENOTFOUND api.empregare.com] {
+    errno: -3007,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'api.empregare.com'
+  }
+}
+Erro no scraping do Empregos.com.br: TypeError: Failed to parse URL from /api/scrape-empregos-brasil
+    at async handler (pages/api/fetch-jobs.js:101:31)
+   99 |     // 3. Web scraping seguro do Empregos.com.br
+  100 |     try {
+> 101 |       const scrapingResponse = await fetch('/api/scrape-empregos-brasil');
+      |                               ^
+  102 |       if (scrapingResponse.ok) {
+  103 |         const data = await scrapingResponse.json();
+  104 |         if (data.success && data.jobs) { {
+  [cause]: TypeError: Invalid URL
+      at handler (pages/api/fetch-jobs.js:101:37)
+     99 |     // 3. Web scraping seguro do Empregos.com.br
+    100 |     try {
+  > 101 |       const scrapingResponse = await fetch('/api/scrape-empregos-brasil');
+        |                                     ^
+    102 |       if (scrapingResponse.ok) {
+    103 |         const data = await scrapingResponse.json();
+    104 |         if (data.success && data.jobs) { {
+    code: 'ERR_INVALID_URL',
+    input: '/api/scrape-empregos-brasil'
+  }
+}
+ GET /api/fetch-jobs?t=1750598206598 200 in 832ms
+ GET /api/fetch-jobs?t=1750598206852 200 in 596ms

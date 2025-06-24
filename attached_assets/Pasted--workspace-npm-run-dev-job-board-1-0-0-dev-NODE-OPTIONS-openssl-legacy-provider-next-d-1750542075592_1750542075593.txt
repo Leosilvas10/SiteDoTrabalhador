@@ -1,0 +1,54 @@
+~/workspace$ npm run dev
+
+> job-board@1.0.0 dev
+> NODE_OPTIONS='--openssl-legacy-provider' next dev
+
+ ⚠ Port 3000 is in use, using available port 3001 instead.
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3001
+   - Network:      http://172.31.128.70:3001
+   - Experiments (use with caution):
+     ✓ forceSwcTransforms
+
+ ✓ Starting...
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'swcMinify'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ⚠ `devIndicators.buildActivity` is deprecated and no longer configurable. Please remove it from next.config.js.
+ ✓ Ready in 1264ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.2s (424 modules)
+ReferenceError: window is not defined
+    at SearchFilters (src/components/SearchFilters/SearchFilters.jsx:149:22)
+  147 |       {/* Filtros avançados (expansíveis no mobile) */}
+  148 |       <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ${
+> 149 |         isExpanded || window.innerWidth >= 768 ? 'block' : 'hidden'
+      |                      ^
+  150 |       }`}>
+  151 |         {/* Tipo de contrato */}
+  152 |         <div>
+ ⨯ ReferenceError: window is not defined
+    at SearchFilters (src/components/SearchFilters/SearchFilters.jsx:149:22)
+  147 |       {/* Filtros avançados (expansíveis no mobile) */}
+  148 |       <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ${
+> 149 |         isExpanded || window.innerWidth >= 768 ? 'block' : 'hidden'
+      |                      ^
+  150 |       }`}>
+  151 |         {/* Tipo de contrato */}
+  152 |         <div>
+ ⨯ ReferenceError: window is not defined
+    at SearchFilters (src/components/SearchFilters/SearchFilters.jsx:149:22)
+  147 |       {/* Filtros avançados (expansíveis no mobile) */}
+  148 |       <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ${
+> 149 |         isExpanded || window.innerWidth >= 768 ? 'block' : 'hidden'
+      |                      ^
+  150 |       }`}>
+  151 |         {/* Tipo de contrato */}
+  152 |         <div> {
+  page: '/'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 594ms (535 modules)
+ GET / 500 in 4557ms
+ ⚠ Cross origin request detected from b3f0c91e-4656-4b2b-b7a0-5f1d98c28cd3-00-2dcrr5axkseq.janeway.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
