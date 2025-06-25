@@ -19,6 +19,14 @@ const VagasPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const jobsPerPage = 12
 
+  // Função helper para busca segura em strings
+  const safeIncludes = (str, search) => {
+    if (!str || !search || typeof str !== 'string' || typeof search !== 'string') {
+      return false
+    }
+    return str.toLowerCase().includes(search.toLowerCase())
+  }
+
   // Buscar vagas reais da API
   useEffect(() => {
     fetchJobs()
@@ -105,16 +113,22 @@ const VagasPage = () => {
     }
 
     let filtered = jobs.filter(job => {
-      // Filtro de busca por título ou empresa
+      // Filtro de busca por título, empresa, descrição ou tags
       const searchMatch = !filters.search || 
-        job.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        (job.company?.name || job.company || '').toLowerCase().includes(filters.search.toLowerCase())
+        safeIncludes(job.title, filters.search) ||
+        safeIncludes(job.company?.name || job.company, filters.search) ||
+        safeIncludes(job.description, filters.search) ||
+        safeIncludes(job.tags, filters.search)
 
       // Filtro por área/categoria
-      const areaMatch = !filters.area || job.category === filters.area
+      const areaMatch = !filters.area || 
+        job.category === filters.area ||
+        safeIncludes(job.category, filters.area) ||
+        safeIncludes(job.tags, filters.area)
 
       // Filtro por cidade
-      const cityMatch = !filters.city || job.location.toLowerCase().includes(filters.city.toLowerCase())
+      const cityMatch = !filters.city || 
+        safeIncludes(job.location, filters.city)
 
       return searchMatch && areaMatch && cityMatch
     })
@@ -164,8 +178,8 @@ const VagasPage = () => {
   return (
     <>
       <Head>
-        <title>Todas as Vagas Disponíveis - Site do Trabalhador</title>
-        <meta name="description" content="Encontre as melhores oportunidades de emprego. Vagas reais atualizadas diariamente." />
+        <title>Vagas em Destaque - Site do Trabalhador</title>
+        <meta name="description" content="Encontre as melhores oportunidades de emprego. Vagas em destaque de todo o Brasil atualizadas em tempo real." />
       </Head>
 
       <Header />
@@ -176,22 +190,22 @@ const VagasPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="mb-8">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                💼 Todas as Vagas Disponíveis
+                💼 Vagas em Destaque
               </h1>
               <p className="text-xl text-slate-300 mb-6">
-                {loading ? "Carregando vagas..." : `${filteredJobs.length} vagas de emprego reais`}
+                {loading ? "Carregando vagas..." : `${filteredJobs.length} vagas em destaque de todo o Brasil`}
               </p>
               
               {!loading && (
                 <div className="flex flex-wrap justify-center gap-4 text-sm">
                   <div className="flex items-center bg-green-500 bg-opacity-20 px-3 py-1 rounded-full">
-                    <span className="text-green-400">✅ Vagas Reais</span>
+                    <span className="text-green-400">✅ Vagas em Destaque</span>
                   </div>
                   <div className="flex items-center bg-blue-500 bg-opacity-20 px-3 py-1 rounded-full">
                     <span className="text-blue-400">🌎 Todo o Brasil</span>
                   </div>
                   <div className="flex items-center bg-purple-500 bg-opacity-20 px-3 py-1 rounded-full">
-                    <span className="text-purple-400">📊 Atualizadas Diariamente</span>
+                    <span className="text-purple-400">📊 Atualizadas em Tempo Real</span>
                   </div>
                 </div>
               )}
@@ -308,12 +322,12 @@ const VagasPage = () => {
                 <div key={job.id} className="bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-1">{job.title}</h3>
-                      <p className="text-slate-300 text-sm">{job.company?.name || job.company}</p>
+                      <h3 className="text-lg font-semibold text-white mb-1">{job.title || 'Vaga sem título'}</h3>
+                      <p className="text-slate-300 text-sm">{job.company?.name || job.company || 'Empresa não informada'}</p>
                     </div>
                     <div className="text-right">
                       <span className="bg-green-500 bg-opacity-20 text-green-400 px-2 py-1 rounded text-xs">
-                        {job.type}
+                        {job.type || 'Tipo não informado'}
                       </span>
                     </div>
                   </div>
@@ -321,28 +335,33 @@ const VagasPage = () => {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-slate-300">
                       <span className="mr-2">📍</span>
-                      <span className="text-sm">{job.location}</span>
+                      <span className="text-sm">{job.location || 'Local não informado'}</span>
                     </div>
                     <div className="flex items-center text-slate-300">
                       <span className="mr-2">💰</span>
-                      <span className="text-sm font-medium text-green-400">{job.salary}</span>
+                      <span className="text-sm font-medium text-green-400">{job.salary || 'Salário a combinar'}</span>
                     </div>
                     <div className="flex items-center text-slate-300">
                       <span className="mr-2">⏰</span>
-                      <span className="text-sm">{job.timeAgo}</span>
+                      <span className="text-sm">{job.timeAgo || 'Recente'}</span>
                     </div>
                   </div>
 
                   <p className="text-slate-400 text-sm mb-4 line-clamp-2">
-                    {job.description}
+                    {job.description || 'Descrição não disponível'}
                   </p>
 
                   <div className="flex flex-wrap gap-1 mb-4">
-                    {job.tags?.slice(0, 3).map((tag, index) => (
+                    {Array.isArray(job.tags) && job.tags.slice(0, 3).map((tag, index) => (
                       <span key={index} className="bg-blue-500 bg-opacity-20 text-blue-400 px-2 py-1 rounded text-xs">
                         {tag}
                       </span>
                     ))}
+                    {job.category && (
+                      <span className="bg-purple-500 bg-opacity-20 text-purple-400 px-2 py-1 rounded text-xs">
+                        {job.category}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex gap-2">
@@ -365,7 +384,7 @@ const VagasPage = () => {
                   </div>
 
                   <div className="mt-2 text-xs text-slate-500">
-                    Fonte: {job.source}
+                    Fonte: {job.source || 'Fonte não informada'}
                   </div>
                 </div>
               ))}
