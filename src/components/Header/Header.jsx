@@ -94,28 +94,30 @@ const Header = () => {
       <header className="bg-slate-800 shadow-lg fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* Logo - Com fundo charmoso e inovador */}
+            {/* Logo - Com fundo de contraste e tamanho aumentado */}
             <div className="flex items-center cursor-pointer" onClick={scrollToTop}>
               {siteConfig.logoUrl ? (
-                <div className="relative h-20 sm:h-24 w-32 sm:w-40 flex items-center group logo-container">
-                  {/* Background com múltiplas camadas de efeito */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-green-500 to-blue-800 rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+                <div className="relative h-24 sm:h-28 w-40 sm:w-48 flex items-center group logo-container">
+                  {/* Background com contraste forte e múltiplas camadas de efeito */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-500 border-2 border-white/20">
+                    {/* Camada de contraste adicional */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-green-500/30 to-blue-800/30 rounded-3xl"></div>
                     {/* Efeito de brilho animado */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-3xl shimmer-effect opacity-60"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-3xl shimmer-effect opacity-60"></div>
                     {/* Borda interna brilhante */}
-                    <div className="absolute inset-1 border border-white/20 rounded-3xl"></div>
+                    <div className="absolute inset-2 border border-white/30 rounded-2xl"></div>
                     {/* Sombra interna para profundidade */}
-                    <div className="absolute inset-0 rounded-3xl shadow-inner bg-gradient-to-t from-black/20 to-transparent"></div>
+                    <div className="absolute inset-0 rounded-3xl shadow-inner bg-gradient-to-t from-black/30 to-transparent"></div>
                     {/* Efeito de reflexo no topo */}
-                    <div className="absolute top-2 left-2 right-2 h-6 bg-gradient-to-b from-white/30 to-transparent rounded-t-3xl blur-sm"></div>
+                    <div className="absolute top-3 left-3 right-3 h-8 bg-gradient-to-b from-white/20 to-transparent rounded-t-2xl blur-sm"></div>
                   </div>
                   {/* Anel de luz externa para hover */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-green-400 rounded-3xl opacity-0 group-hover:opacity-75 blur transition-all duration-500"></div>
-                  {/* Logo */}
+                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-green-400 rounded-3xl opacity-0 group-hover:opacity-60 blur transition-all duration-500"></div>
+                  {/* Logo com padding aumentado para garantir visibilidade total */}
                   <img 
                     src={`${siteConfig.logoUrl}?t=${Date.now()}`}
                     alt="Site do Trabalhador" 
-                    className="relative z-20 h-full w-full object-contain p-3 transition-all duration-500 group-hover:scale-110 filter drop-shadow-2xl"
+                    className="relative z-20 h-full w-full object-contain p-4 transition-all duration-500 group-hover:scale-110 filter drop-shadow-2xl"
                     style={{ maxHeight: '100%', maxWidth: '100%' }}
                     onError={(e) => {
                       console.error('Erro ao carregar logo no header:', siteConfig.logoUrl)
@@ -127,7 +129,7 @@ const Header = () => {
                   <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
                 </div>
               ) : (
-                <div className="h-20 sm:h-24 w-32 sm:w-40 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-lg">
+                <div className="h-24 sm:h-28 w-40 sm:w-48 bg-gradient-to-br from-slate-800 to-slate-700 rounded-3xl flex items-center justify-center shadow-2xl border-2 border-white/20">
                   <span className="text-white font-bold text-2xl sm:text-3xl">ST</span>
                 </div>
               )}

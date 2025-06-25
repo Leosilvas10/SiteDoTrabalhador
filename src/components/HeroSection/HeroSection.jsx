@@ -38,10 +38,25 @@ const HeroSection = () => {
                 oportunidade
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed mb-8">
               A maior plataforma de vagas do Brasil. Mais de 50 mil oportunidades atualizadas, 
               orientação completa sobre direitos trabalhistas e ferramenta gratuita.
             </p>
+            
+            {/* Botão Ver Todas as Vagas */}
+            <div className="bounce-in" style={{ animationDelay: '0.2s' }}>
+              <button
+                onClick={() => window.location.href = '/vagas'}
+                className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold text-lg px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25"
+              >
+                <span className="text-2xl">👀</span>
+                <span>Ver Todas as Vagas</span>
+                <span className="text-xl">→</span>
+              </button>
+              <p className="text-sm text-slate-400 mt-3">
+                Mais de 50 mil oportunidades atualizadas diariamente
+              </p>
+            </div>
           </div>
 
           {/* Categorias populares */}
