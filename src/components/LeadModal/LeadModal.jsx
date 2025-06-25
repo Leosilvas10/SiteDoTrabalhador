@@ -44,6 +44,8 @@ const LeadModal = ({ job, onClose }) => {
           jobTitle: job.title,
           jobCompany: job.company?.name || job.company,
           jobUrl: job.url || '',
+          jobLocation: job.location || '',
+          jobSalary: job.salary || '',
           timestamp: new Date().toISOString()
         }),
       })
@@ -51,8 +53,25 @@ const LeadModal = ({ job, onClose }) => {
       const result = await response.json()
 
       if (result.success) {
-        alert('✅ Candidatura enviada com sucesso! Nossa equipe entrará em contato em breve.')
+        // Criar mensagem personalizada
+        let successMessage = '✅ Candidatura enviada com sucesso! Nossa equipe entrará em contato em breve.'
+        
+        if (job.url) {
+          successMessage += '\n\n🔗 Você será redirecionado para a vaga original em alguns segundos para se candidatar diretamente também!'
+        }
+        
+        alert(successMessage)
         onClose()
+        
+        // Redirecionar para a vaga real se tiver URL
+        if (job.url) {
+          setTimeout(() => {
+            const confirmation = confirm('🎯 Quer acessar a vaga original agora para se candidatar diretamente na empresa?')
+            if (confirmation) {
+              window.open(job.url, '_blank')
+            }
+          }, 2000)
+        }
       } else {
         alert('❌ Erro ao enviar candidatura: ' + (result.message || 'Tente novamente'))
       }

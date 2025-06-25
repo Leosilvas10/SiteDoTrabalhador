@@ -325,6 +325,29 @@ const AdminLeads = () => {
                       <p className="mt-1 text-sm text-gray-900">{selectedLead.jobCompany}</p>
                     </div>
                     <div>
+                      <label className="block text-sm font-medium text-gray-700">Local da Vaga</label>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobLocation || 'Não informado'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Salário da Vaga</label>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobSalary || 'Não informado'}</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700">URL da Vaga Original</label>
+                      {selectedLead.jobUrl ? (
+                        <a 
+                          href={selectedLead.jobUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="mt-1 text-sm text-blue-600 hover:text-blue-800 underline"
+                        >
+                          🔗 Acessar vaga original
+                        </a>
+                      ) : (
+                        <p className="mt-1 text-sm text-gray-900">Não disponível</p>
+                      )}
+                    </div>
+                    <div>
                       <label className="block text-sm font-medium text-gray-700">Última Empresa</label>
                       <p className="mt-1 text-sm text-gray-900">{selectedLead.lastCompany || 'Não informado'}</p>
                     </div>
