@@ -16,5 +16,26 @@
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
     "createdAt": "2025-06-25T13:28:27.347Z",
     "status": "novo"
+  },
+  {
+    "id": "1750861021210",
+    "name": "Leonardo",
+    "whatsapp": "31991998938",
+    "email": "leonardosilvas10@gmail.com",
+    "jobTitle": "Motorista Executivo",
+    "jobCompany": "BRF S.A.",
+    "jobUrl": "",
+    "jobLocation": "Curitiba, PR",
+    "jobSalary": "R$ 2.000,00",
+    "lastCompany": "aliar sistemas",
+    "workStatus": "Com carteira assinada",
+    "receivedRights": "Sim, recebi tudo certinho",
+    "workIssues": "Nao",
+    "wantConsultation": "Sim, quero saber meus direitos",
+    "lgpdConsent": true,
+    "ip": "::ffff:172.22.192.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "createdAt": "2025-06-25T14:17:01.210Z",
+    "status": "novo"
   }
 ]

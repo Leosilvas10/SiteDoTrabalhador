@@ -53,24 +53,24 @@ const LeadModal = ({ job, onClose }) => {
       const result = await response.json()
 
       if (result.success) {
+        // Fechar modal primeiro
+        onClose()
+        
         // Criar mensagem personalizada
         let successMessage = '✅ Candidatura enviada com sucesso! Nossa equipe entrará em contato em breve.'
         
         if (job.url) {
-          successMessage += '\n\n🔗 Você será redirecionado para a vaga original em alguns segundos para se candidatar diretamente também!'
-        }
-        
-        alert(successMessage)
-        onClose()
-        
-        // Redirecionar para a vaga real se tiver URL
-        if (job.url) {
+          successMessage += '\n\n🔗 Agora você será redirecionado para a vaga original para se candidatar diretamente na empresa também!'
+          
+          alert(successMessage)
+          
+          // Redirecionar imediatamente
           setTimeout(() => {
-            const confirmation = confirm('🎯 Quer acessar a vaga original agora para se candidatar diretamente na empresa?')
-            if (confirmation) {
-              window.open(job.url, '_blank')
-            }
-          }, 2000)
+            console.log('Redirecionando para:', job.url)
+            window.open(job.url, '_blank')
+          }, 1000)
+        } else {
+          alert(successMessage)
         }
       } else {
         alert('❌ Erro ao enviar candidatura: ' + (result.message || 'Tente novamente'))

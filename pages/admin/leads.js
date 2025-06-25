@@ -34,6 +34,60 @@ const AdminLeads = () => {
     window.open('/api/get-leads?format=csv', '_blank')
   }
 
+  const deleteLead = async (leadId) => {
+    if (!confirm('Tem certeza que deseja excluir este lead?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/delete-lead?id=${leadId}`, {
+        method: 'DELETE'
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        alert('✅ Lead excluído com sucesso!')
+        fetchLeads() // Recarregar a lista
+        setSelectedLead(null) // Fechar modal se estiver aberto
+      } else {
+        alert('❌ Erro ao excluir lead: ' + data.message)
+      }
+    } catch (error) {
+      console.error('Erro ao excluir lead:', error)
+      alert('❌ Erro ao excluir lead')
+    }
+  }
+
+  const clearAllLeads = async () => {
+    if (!confirm('⚠️ ATENÇÃO: Isso vai excluir TODOS os leads permanentemente. Tem certeza?')) {
+      return
+    }
+    
+    if (!confirm('🚨 ÚLTIMA CONFIRMAÇÃO: Todos os leads serão perdidos. Continuar?')) {
+      return
+    }
+
+    try {
+      const response = await fetch('/api/clear-leads', {
+        method: 'DELETE'
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        alert('✅ Todos os leads foram excluídos!')
+        fetchLeads() // Recarregar a lista
+        setSelectedLead(null)
+      } else {
+        alert('❌ Erro ao limpar leads: ' + data.message)
+      }
+    } catch (error) {
+      console.error('Erro ao limpar leads:', error)
+      alert('❌ Erro ao limpar leads')
+    }
+  }
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('pt-BR')
   }
@@ -89,6 +143,12 @@ const AdminLeads = () => {
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
                 >
                   📊 Exportar CSV
+                </button>
+                <button
+                  onClick={clearAllLeads}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+                >
+                  🗑️ Limpar Tudo
                 </button>
               </div>
             </div>
@@ -273,12 +333,20 @@ const AdminLeads = () => {
                           {formatDate(lead.createdAt)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => setSelectedLead(lead)}
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            Ver detalhes
-                          </button>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => setSelectedLead(lead)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              👁️ Ver
+                            </button>
+                            <button
+                              onClick={() => deleteLead(lead.id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              🗑️ Excluir
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -380,21 +448,29 @@ const AdminLeads = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-end mt-6 space-x-3">
+                <div className="flex justify-between mt-6">
                   <button
-                    onClick={() => setSelectedLead(null)}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                    onClick={() => deleteLead(selectedLead.id)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                   >
-                    Fechar
+                    🗑️ Excluir Lead
                   </button>
-                  <a
-                    href={`https://wa.me/${selectedLead.whatsapp.replace(/\D/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                  >
-                    📱 Abrir WhatsApp
-                  </a>
+                  <div className="space-x-3">
+                    <button
+                      onClick={() => setSelectedLead(null)}
+                      className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                    >
+                      Fechar
+                    </button>
+                    <a
+                      href={`https://wa.me/${selectedLead.whatsapp.replace(/\D/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    >
+                      📱 Abrir WhatsApp
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
