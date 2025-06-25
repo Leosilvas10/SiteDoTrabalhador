@@ -32,51 +32,51 @@ const JobCard = ({ job, onApplyClick }) => {
   const hiddenLocation = getHiddenLocation(location);
 
   return (
-    <div className="job-card bg-slate-800 border border-slate-700 rounded-xl p-6 hover:bg-slate-750 transition-all duration-300 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20">
-      {/* Cabeçalho com logo e informações da empresa */}
+    <div className="job-card bg-white border border-govgray-200 rounded-lg p-6 hover:bg-govgray-50 transition-all duration-200 hover:border-govblue-600 hover:shadow-lg">
+      {/* Cabeçalho com logo e informações da empresa - Estilo Gov.br */}
       <div className="flex items-start gap-4 mb-4">
-        <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-12 h-12 bg-govblue-600 rounded flex items-center justify-center flex-shrink-0">
           <span className="text-white font-bold text-lg">
             {companyName.charAt(0).toUpperCase()}
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-white mb-1 line-clamp-2">
+          <h3 className="text-lg font-bold text-govblue-800 mb-1 line-clamp-2">
             {title}
           </h3>
-          <p className="text-slate-400 text-sm mb-1">{companyName}</p>
-          <div className="flex items-center gap-3 text-xs text-slate-500">
+          <p className="text-govgray-600 text-sm mb-1 font-medium">{companyName}</p>
+          <div className="flex items-center gap-3 text-xs text-govgray-500 font-medium">
             <span>📍 {hiddenLocation}</span>
             <span>⏰ {timeAgo}</span>
           </div>
         </div>
       </div>
 
-      {/* Informações de salário e tipo */}
+      {/* Informações de salário e tipo - Estilo Gov.br */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <span className="px-3 py-1 bg-green-900/30 text-green-400 text-sm rounded-full border border-green-700">
+        <span className="px-3 py-1 bg-govgreen-100 text-govgreen-700 text-sm rounded border border-govgreen-300 font-medium">
           💰 {salary}
         </span>
-        <span className="px-3 py-1 bg-blue-900/30 text-blue-400 text-sm rounded-full border border-blue-700">
+        <span className="px-3 py-1 bg-govblue-100 text-govblue-700 text-sm rounded border border-govblue-300 font-medium">
           ⏰ {type}
         </span>
       </div>
 
       {/* Descrição */}
       <div className="mb-4">
-        <p className="text-slate-300 text-sm line-clamp-3">
+        <p className="text-govgray-700 text-sm line-clamp-3">
           {description}
         </p>
       </div>
 
-      {/* Tags */}
+      {/* Tags - Estilo Gov.br */}
       {tags && (
         <div className="mb-4">
           <div className="flex flex-wrap gap-2">
             {(Array.isArray(tags) ? tags : tags.split(',')).slice(0, 3).map((tag, index) => (
               <span
                 key={index}
-                className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded"
+                className="px-2 py-1 bg-govgray-100 text-govgray-600 text-xs rounded border border-govgray-300"
               >
                 {typeof tag === 'string' ? tag.trim() : tag}
               </span>
@@ -85,28 +85,28 @@ const JobCard = ({ job, onApplyClick }) => {
         </div>
       )}
 
-      {/* Rodapé com fonte e botão */}
-      <div className="border-t border-slate-700 pt-4">
+      {/* Rodapé com fonte e botão - Estilo Gov.br */}
+      <div className="border-t border-govgray-200 pt-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-govgray-500 font-medium">
             📡 {source}
           </span>
-          <span className="text-xs text-green-400 font-medium">
+          <span className="text-xs text-govgreen-600 font-bold">
             ✅ Verificada
           </span>
         </div>
 
-        {/* Botão de candidatura */}
+        {/* Botão de candidatura - Estilo Gov.br */}
         <button
           onClick={onApplyClick}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+          className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-4 rounded transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
         >
           <span>Quero me candidatar</span>
           <span>🔗</span>
         </button>
         
-        {/* Informação sobre localização */}
-        <p className="text-xs text-slate-500 text-center mt-2">
+        {/* Informação sobre localização - Estilo Gov.br */}
+        <p className="text-xs text-govgray-500 text-center mt-2 font-medium">
           📍 Localização completa revelada após candidatura
         </p>
       </div>

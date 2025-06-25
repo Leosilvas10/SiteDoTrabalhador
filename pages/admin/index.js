@@ -49,8 +49,11 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-govgray-50 flex items-center justify-center">
+        <div className="text-center bg-white rounded-xl p-12 shadow-lg">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-govblue-600 mx-auto mb-4"></div>
+          <p className="text-govgray-600 font-medium">Carregando painel administrativo...</p>
+        </div>
       </div>
     )
   }
@@ -66,37 +69,44 @@ export default function AdminDashboard() {
       </Head>
       <AdminLayout>
         <div className="p-6">
-          <h1 className="text-3xl font-bold text-white mb-6">Dashboard</h1>
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-govblue-600 mb-2">Dashboard Administrativo</h1>
+            <p className="text-govgray-600">Bem-vindo ao painel de controle do Site do Trabalhador</p>
+          </div>
+          
           <DashboardStats />
 
           {/* Ações Rápidas */}
-          <div className="bg-slate-800 rounded-lg p-6 mt-8">
-            <h2 className="text-xl font-semibold text-white mb-4">Ações Rápidas</h2>
+          <div className="bg-white rounded-xl p-6 mt-8 shadow-lg border border-govgray-200">
+            <h2 className="text-xl font-semibold text-govblue-600 mb-6 flex items-center">
+              <span className="mr-2">⚡</span>
+              Ações Rápidas
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button 
                 onClick={() => router.push('/admin/vagas/nova')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="bg-govblue-600 hover:bg-govblue-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 font-medium"
               >
                 <span>+</span>
                 <span>Nova Vaga</span>
               </button>
               <button 
                 onClick={() => router.push('/admin/leads')}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="bg-govgreen-600 hover:bg-govgreen-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 font-medium"
               >
                 <span>📊</span>
                 <span>Ver Leads</span>
               </button>
               <button 
                 onClick={() => router.push('/admin/conteudo')}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="bg-govyellow-500 hover:bg-govyellow-600 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 font-medium"
               >
                 <span>✏️</span>
                 <span>Editar Site</span>
               </button>
               <button 
                 onClick={() => router.push('/admin/empresas')}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="bg-govgray-600 hover:bg-govgray-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 font-medium"
               >
                 <span>🏢</span>
                 <span>Empresas</span>

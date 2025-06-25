@@ -262,31 +262,31 @@ const HomePage = () => {
         <HeroSection />
       </section>
 
-      {/* Seção Vagas */}
-      <section id="vagas" className="min-h-screen bg-slate-900">
+      {/* Seção Vagas - Estilo Gov.br */}
+      <section id="vagas" className="min-h-screen bg-govgray-50">
         <div className="container mx-auto px-4 py-20">
-          {/* Cabeçalho da Seção Vagas */}
+          {/* Cabeçalho da Seção Vagas - Estilo Gov.br */}
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-4xl font-bold text-govblue-800 mb-4">
               💼 Vagas em Destaque
             </h2>
-            <p className="text-xl text-slate-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-xl text-govgray-700 mb-6 max-w-2xl mx-auto font-medium">
               Vagas em Todo o Brasil atualizadas em tempo real
             </p>
 
-            {/* Status de atualização */}
+            {/* Status de atualização - Estilo Gov.br */}
             <div className="mb-6">
               {loading ? (
-                <p className="text-xl text-blue-400 mb-2">
+                <p className="text-xl text-govblue-600 mb-2 font-bold">
                   🔄 Carregando vagas...
                 </p>
               ) : jobs.length > 0 ? (
                 <>
-                  <p className="text-xl text-green-400 mb-2">
+                  <p className="text-xl text-govgreen-600 mb-2 font-bold">
                     ✅ {jobs.length} vagas disponíveis | Mostrando {Math.min(6, jobs.length)} em destaque
                   </p>
                   {lastUpdate && (
-                    <div className="text-sm text-slate-400 space-y-1">
+                    <div className="text-sm text-govgray-600 space-y-1 font-medium">
                       <p>Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}</p>
                       <p>Próxima atualização em: {formatCountdown(updateCountdown)}</p>
                       <p>🔄 Atualização automática a cada 20 minutos</p>
@@ -294,7 +294,7 @@ const HomePage = () => {
                   )}
                 </>
               ) : (
-                <p className="text-xl text-amber-400 mb-2">
+                <p className="text-xl text-govyellow-600 mb-2 font-bold">
                   ⏳ Buscando novas vagas...
                 </p>
               )}
@@ -432,7 +432,7 @@ const HomePage = () => {
           {/* Indicador de próxima atualização */}
           {!loading && jobs.length > 0 && (
             <div className="text-center mt-8">
-              <p className="text-slate-500 text-sm">
+              <p className="text-govgray-500 text-sm font-medium">
                 💡 Próxima busca por vagas em {formatCountdown(updateCountdown)}
               </p>
             </div>
@@ -440,14 +440,144 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Seção Calculadora Trabalhista */}
-      <section id="calculadora" className="min-h-screen bg-slate-900 py-20">
+      {/* Seção Direitos Trabalhistas - Estilo Gov.br */}
+      <section id="direitos" className="min-h-screen bg-white py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-4xl font-bold text-govblue-800 mb-4">
+              ⚖️ Conheça Seus Direitos Trabalhistas
+            </h2>
+            <p className="text-xl text-govgray-700 max-w-3xl mx-auto font-medium">
+              Informação é o primeiro passo para garantir seus direitos. 
+              Conheça os principais direitos garantidos pela CLT e Constituição Federal.
+            </p>
+          </div>
+
+          {/* Grid de Direitos */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {/* Direito 1 */}
+            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-govblue-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xl">💰</span>
+                </div>
+                <h3 className="text-lg font-bold text-govblue-800 ml-3">Salário Mínimo</h3>
+              </div>
+              <p className="text-govgray-700 text-sm font-medium">
+                Todo trabalhador tem direito a receber pelo menos um salário mínimo nacional, 
+                atualizado anualmente pelo governo federal.
+              </p>
+            </div>
+
+            {/* Direito 2 */}
+            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-govgreen-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xl">🏖️</span>
+                </div>
+                <h3 className="text-lg font-bold text-govblue-800 ml-3">Férias Remuneradas</h3>
+              </div>
+              <p className="text-govgray-700 text-sm font-medium">
+                Após 12 meses de trabalho, você tem direito a 30 dias de férias remuneradas 
+                com adicional de 1/3 do salário.
+              </p>
+            </div>
+
+            {/* Direito 3 */}
+            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-govyellow-500 rounded flex items-center justify-center">
+                  <span className="text-white text-xl">🎄</span>
+                </div>
+                <h3 className="text-lg font-bold text-govblue-800 ml-3">13º Salário</h3>
+              </div>
+              <p className="text-govgray-700 text-sm font-medium">
+                Gratificação natalina equivalente a um salário completo, 
+                paga em duas parcelas até dezembro.
+              </p>
+            </div>
+
+            {/* Direito 4 */}
+            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-govblue-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xl">🏦</span>
+                </div>
+                <h3 className="text-lg font-bold text-govblue-800 ml-3">FGTS</h3>
+              </div>
+              <p className="text-govgray-700 text-sm font-medium">
+                Fundo de Garantia: 8% do salário depositado mensalmente pelo empregador 
+                em conta vinculada na Caixa Econômica Federal.
+              </p>
+            </div>
+
+            {/* Direito 5 */}
+            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-govgreen-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xl">⏰</span>
+                </div>
+                <h3 className="text-lg font-bold text-govblue-800 ml-3">Horas Extras</h3>
+              </div>
+              <p className="text-govgray-700 text-sm font-medium">
+                Trabalho além das 8 horas diárias deve ser remunerado com adicional 
+                mínimo de 50% sobre o valor da hora normal.
+              </p>
+            </div>
+
+            {/* Direito 6 */}
+            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-govyellow-500 rounded flex items-center justify-center">
+                  <span className="text-white text-xl">🌙</span>
+                </div>
+                <h3 className="text-lg font-bold text-govblue-800 ml-3">Adicional Noturno</h3>
+              </div>
+              <p className="text-govgray-700 text-sm font-medium">
+                Trabalho entre 22h e 5h tem direito a adicional de 20% 
+                sobre o valor da hora diurna.
+              </p>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center">
+            <div className="bg-govblue-50 border-l-4 border-govblue-600 p-6 rounded-lg max-w-3xl mx-auto mb-8">
+              <h3 className="text-lg font-bold text-govblue-800 mb-2">
+                💡 Suspeita que seus direitos foram violados?
+              </h3>
+              <p className="text-govgray-700 font-medium mb-4">
+                Use nossa calculadora trabalhista para verificar valores ou entre em contato 
+                com nossos parceiros especializados para orientação gratuita.
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={() => document.getElementById('calculadora').scrollIntoView({ behavior: 'smooth' })}
+                className="bg-govblue-600 hover:bg-govblue-700 text-white font-bold px-8 py-3 rounded transition-all duration-200 shadow-md"
+              >
+                Usar Calculadora
+              </button>
+              <button 
+                onClick={() => document.getElementById('contato').scrollIntoView({ behavior: 'smooth' })}
+                className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold px-8 py-3 rounded transition-all duration-200 shadow-md"
+              >
+                Falar com Especialista
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção Calculadora Trabalhista - Estilo Gov.br */}
+      <section id="calculadora" className="min-h-screen bg-govgray-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-govblue-800 mb-4">
               🧮 Calculadora Trabalhista
             </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+            <p className="text-xl text-govgray-700 max-w-3xl mx-auto font-medium">
               Calcule seus direitos trabalhistas de forma rápida e precisa. 
               Ferramenta gratuita e atualizada com a legislação atual.
             </p>
@@ -457,54 +587,54 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Seção Contato */}
-      <section id="contato" className="min-h-screen bg-slate-800 py-20">
+      {/* Seção Contato - Estilo Gov.br */}
+      <section id="contato" className="min-h-screen bg-govgray-50 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-4xl font-bold text-govblue-800 mb-4">
               📞 Entre em Contato
             </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+            <p className="text-xl text-govgray-700 max-w-3xl mx-auto font-medium">
               Tem dúvidas sobre direitos trabalhistas, problemas com vagas ou sugestões? 
               Nossa equipe está pronta para ajudar você.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Informações de Contato */}
+            {/* Informações de Contato - Estilo Gov.br */}
             <div>
-              <h3 className="text-2xl font-bold text-white mb-8">Fale Conosco</h3>
+              <h3 className="text-2xl font-bold text-govblue-800 mb-8">Fale Conosco</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-govblue-600 rounded flex items-center justify-center">
                     <span className="text-xl">📧</span>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold">Email</h4>
-                    <p className="text-slate-400">contato@sitedotrabalhador.com.br</p>
-                    <p className="text-slate-400">suporte@sitedotrabalhador.com.br</p>
+                    <h4 className="text-govblue-800 font-bold">Email</h4>
+                    <p className="text-govgray-600 font-medium">contato@sitedotrabalhador.com.br</p>
+                    <p className="text-govgray-600 font-medium">suporte@sitedotrabalhador.com.br</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-govgreen-600 rounded flex items-center justify-center">
                     <span className="text-xl">📱</span>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold">WhatsApp</h4>
-                    <p className="text-slate-400">(11) 99999-9999</p>
-                    <p className="text-slate-500 text-sm">Atendimento: Seg a Sex, 8h às 18h</p>
+                    <h4 className="text-govblue-800 font-bold">WhatsApp</h4>
+                    <p className="text-govgray-600 font-medium">(11) 99999-9999</p>
+                    <p className="text-govgray-500 text-sm font-medium">Atendimento: Seg a Sex, 8h às 18h</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-govyellow-500 rounded flex items-center justify-center">
                     <span className="text-xl">🏢</span>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold">Endereço</h4>
-                    <p className="text-slate-400">São Paulo - SP, Brasil</p>
-                    <p className="text-slate-500 text-sm">Atendimento 100% digital</p>
+                    <h4 className="text-govblue-800 font-bold">Endereço</h4>
+                    <p className="text-govgray-600 font-medium">São Paulo - SP, Brasil</p>
+                    <p className="text-govgray-500 text-sm font-medium">Atendimento 100% digital</p>
                   </div>
                 </div>
               </div>
@@ -513,9 +643,9 @@ const HomePage = () => {
               <FAQSection />
             </div>
 
-            {/* Formulário de Contato */}
-            <div className="bg-slate-700 p-8 rounded-2xl">
-              <h3 className="text-2xl font-bold text-white mb-6">Envie sua Mensagem</h3>
+            {/* Formulário de Contato - Estilo Gov.br */}
+            <div className="bg-white p-8 rounded-lg shadow-lg border border-govgray-200">
+              <h3 className="text-2xl font-bold text-govblue-800 mb-6">Envie sua Mensagem</h3>
               <form className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>

@@ -85,18 +85,18 @@ const DashboardStats = () => {
   }
 
   const StatCard = ({ title, value, change, changeType, icon, color }) => (
-    <div className={`bg-slate-800 rounded-lg p-6 border-l-4 ${color}`}>
+    <div className={`bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-shadow ${color}`}>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-slate-400 text-sm font-medium">{title}</p>
-          <p className="text-white text-2xl font-bold mt-1">{value}</p>
+          <p className="text-govgray-600 text-sm font-medium">{title}</p>
+          <p className="text-govgray-800 text-2xl font-bold mt-1">{value}</p>
           {change && (
-            <p className={`text-sm mt-1 ${changeType === 'positive' ? 'text-green-400' : 'text-red-400'}`}>
+            <p className={`text-sm mt-1 ${changeType === 'positive' ? 'text-govgreen-600' : 'text-red-600'}`}>
               {changeType === 'positive' ? '↗' : '↘'} {change}
             </p>
           )}
         </div>
-        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${color.replace('border-', 'bg-').replace('-500', '-500/20')}`}>
+        <div className="w-12 h-12 bg-govblue-100 rounded-lg flex items-center justify-center">
           <span className="text-2xl">{icon}</span>
         </div>
       </div>
@@ -107,10 +107,10 @@ const DashboardStats = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="bg-slate-800 rounded-lg p-6 animate-pulse">
-            <div className="h-4 bg-slate-700 rounded mb-3"></div>
-            <div className="h-8 bg-slate-700 rounded mb-2"></div>
-            <div className="h-3 bg-slate-700 rounded w-2/3"></div>
+          <div key={i} className="bg-white rounded-xl p-6 animate-pulse shadow-lg border border-govgray-200">
+            <div className="h-4 bg-govgray-200 rounded mb-3"></div>
+            <div className="h-8 bg-govgray-200 rounded mb-2"></div>
+            <div className="h-3 bg-govgray-200 rounded w-2/3"></div>
           </div>
         ))}
       </div>
@@ -127,7 +127,7 @@ const DashboardStats = () => {
           change="+12% vs último mês"
           changeType="positive"
           icon="💼"
-          color="border-blue-500"
+          color="border-l-4 border-govblue-600"
         />
         <StatCard
           title="Vagas Ativas"
@@ -135,7 +135,7 @@ const DashboardStats = () => {
           change="+8% vs último mês"
           changeType="positive"
           icon="✅"
-          color="border-green-500"
+          color="border-l-4 border-govgreen-600"
         />
         <StatCard
           title="Total de Leads"
@@ -143,7 +143,7 @@ const DashboardStats = () => {
           change="+23% vs último mês"
           changeType="positive"
           icon="👥"
-          color="border-purple-500"
+          color="border-l-4 border-govyellow-500"
         />
         <StatCard
           title="Leads Hoje"
@@ -151,7 +151,7 @@ const DashboardStats = () => {
           change="+15% vs ontem"
           changeType="positive"
           icon="📈"
-          color="border-orange-500"
+          color="border-l-4 border-govblue-600"
         />
         <StatCard
           title="Acessos Hoje"
@@ -159,7 +159,7 @@ const DashboardStats = () => {
           change="+5% vs ontem"
           changeType="positive"
           icon="👁️"
-          color="border-cyan-500"
+          color="border-l-4 border-govgreen-600"
         />
         <StatCard
           title="Empresas"
@@ -167,7 +167,7 @@ const DashboardStats = () => {
           change="+2 esta semana"
           changeType="positive"
           icon="🏢"
-          color="border-yellow-500"
+          color="border-l-4 border-govyellow-500"
         />
         <StatCard
           title="Usuários Ativos"
@@ -175,7 +175,7 @@ const DashboardStats = () => {
           change="+18% vs último mês"
           changeType="positive"
           icon="👤"
-          color="border-pink-500"
+          color="border-l-4 border-govblue-600"
         />
         <StatCard
           title="Taxa de Conversão"
@@ -183,53 +183,53 @@ const DashboardStats = () => {
           change="+1.2% vs último mês"
           changeType="positive"
           icon="🎯"
-          color="border-indigo-500"
+          color="border-l-4 border-govgreen-600"
         />
       </div>
 
       {/* Atividade Recente */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-slate-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-white">Atividade Recente</h3>
+        <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-govblue-600">Atividade Recente</h3>
             <button
               onClick={loadDashboardData}
-              className="text-blue-400 hover:text-blue-300 text-sm"
+              className="text-govblue-600 hover:text-govblue-700 text-sm font-medium"
             >
               🔄 Atualizar
             </button>
           </div>
           <div className="space-y-3">
             {activities.map((activity) => (
-              <div key={activity.id} className="flex items-center space-x-3 p-3 bg-slate-700/50 rounded-lg">
+              <div key={activity.id} className="flex items-center space-x-3 p-3 bg-govgray-50 rounded-lg border border-govgray-100">
                 <span className="text-lg">{activity.icon}</span>
                 <div className="flex-1">
-                  <p className="text-slate-300 text-sm">{activity.message}</p>
-                  <p className="text-slate-500 text-xs">{activity.time}</p>
+                  <p className="text-govgray-700 text-sm font-medium">{activity.message}</p>
+                  <p className="text-govgray-500 text-xs">{activity.time}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-slate-800 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Resumo do Sistema</h3>
+        <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200">
+          <h3 className="text-xl font-semibold text-govblue-600 mb-6">Resumo do Sistema</h3>
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-slate-300">Status do Sistema</span>
-              <span className="text-green-400 text-sm">🟢 Online</span>
+            <div className="flex justify-between items-center py-2 border-b border-govgray-100">
+              <span className="text-govgray-700 font-medium">Status do Sistema</span>
+              <span className="text-govgreen-600 text-sm font-medium">🟢 Online</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-300">Último Backup</span>
-              <span className="text-slate-400 text-sm">3h atrás</span>
+            <div className="flex justify-between items-center py-2 border-b border-govgray-100">
+              <span className="text-govgray-700 font-medium">Último Backup</span>
+              <span className="text-govgray-600 text-sm">3h atrás</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-300">Vagas Sincronizadas</span>
-              <span className="text-blue-400 text-sm">21 vagas</span>
+            <div className="flex justify-between items-center py-2 border-b border-govgray-100">
+              <span className="text-govgray-700 font-medium">Vagas Sincronizadas</span>
+              <span className="text-govblue-600 text-sm font-medium">21 vagas</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-300">Próxima Atualização</span>
-              <span className="text-slate-400 text-sm">em 15 min</span>
+            <div className="flex justify-between items-center py-2">
+              <span className="text-govgray-700 font-medium">Próxima Atualização</span>
+              <span className="text-govgray-600 text-sm">em 15 min</span>
             </div>
           </div>
         </div>

@@ -91,33 +91,21 @@ const Header = () => {
           animation: shimmer 3s infinite;
         }
       `}</style>
-      <header className="bg-slate-800 shadow-lg fixed top-0 w-full z-50">
+      <header className="bg-govblue-600 shadow-xl fixed top-0 w-full z-50 border-b-4 border-govyellow-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* Logo - Com fundo de contraste e tamanho aumentado */}
+          <div className="flex justify-between items-center py-3">
+            {/* Logo - Estilo Gov.br */}
             <div className="flex items-center cursor-pointer" onClick={scrollToTop}>
               {siteConfig.logoUrl ? (
-                <div className="relative h-24 sm:h-28 w-40 sm:w-48 flex items-center group logo-container">
-                  {/* Background com fundo branco para logo aparecer bem */}
-                  <div className="absolute inset-0 bg-white rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-500 border-2 border-slate-200">
-                    {/* Camada de contraste sutil */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-green-50 to-blue-50 rounded-3xl"></div>
-                    {/* Efeito de brilho animado */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-100 to-transparent rounded-3xl shimmer-effect opacity-40"></div>
-                    {/* Borda interna colorida */}
-                    <div className="absolute inset-2 border border-blue-200 rounded-2xl"></div>
-                    {/* Sombra interna para profundidade */}
-                    <div className="absolute inset-0 rounded-3xl shadow-inner bg-gradient-to-t from-slate-100/50 to-transparent"></div>
-                    {/* Efeito de reflexo no topo */}
-                    <div className="absolute top-3 left-3 right-3 h-8 bg-gradient-to-b from-blue-50 to-transparent rounded-t-2xl blur-sm"></div>
+                <div className="relative h-16 sm:h-20 w-32 sm:w-40 flex items-center group logo-container">
+                  {/* Background branco minimalista */}
+                  <div className="absolute inset-0 bg-white rounded-lg shadow-md transform group-hover:scale-105 transition-all duration-300 border border-govgray-200">
                   </div>
-                  {/* Anel de luz externa para hover */}
-                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-green-400 rounded-3xl opacity-0 group-hover:opacity-60 blur transition-all duration-500"></div>
-                  {/* Logo com padding aumentado para garantir visibilidade total */}
+                  {/* Logo */}
                   <img 
                     src={`${siteConfig.logoUrl}?t=${Date.now()}`}
                     alt="Site do Trabalhador" 
-                    className="relative z-20 h-full w-full object-contain p-4 transition-all duration-500 group-hover:scale-110 filter drop-shadow-2xl"
+                    className="relative z-20 h-full w-full object-contain p-2 transition-all duration-300"
                     style={{ maxHeight: '100%', maxWidth: '100%' }}
                     onError={(e) => {
                       console.error('Erro ao carregar logo no header:', siteConfig.logoUrl)
@@ -135,29 +123,29 @@ const Header = () => {
               )}
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation - Estilo Gov.br */}
             {isHomePage ? (
               // Menus de navegação apenas na página inicial
-              <nav className="hidden md:flex space-x-8">
-                <button onClick={scrollToTop} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
+              <nav className="hidden md:flex space-x-6">
+                <button onClick={scrollToTop} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Início
                 </button>
-                <button onClick={() => router.push('/vagas')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
+                <button onClick={() => router.push('/vagas')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Vagas
                 </button>
-                <button onClick={() => scrollToSection('calculadora')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
+                <button onClick={() => scrollToSection('calculadora')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Calculadora
                 </button>
-                <button onClick={() => scrollToSection('contato')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
+                <button onClick={() => scrollToSection('contato')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Contato
                 </button>
               </nav>
             ) : (
-              // Botão "Ver Site" para outras páginas
+              // Botão "Ver Site" para outras páginas - Estilo Gov.br
               <div className="hidden md:flex">
                 <button 
                   onClick={goToHome}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors duration-200 flex items-center"
+                  className="px-6 py-2 bg-govgreen-600 text-white rounded font-medium transition-all duration-200 flex items-center hover:bg-govgreen-700 shadow-md"
                 >
                   <span className="mr-2">🏠</span>
                   Ver Site
@@ -165,23 +153,23 @@ const Header = () => {
               </div>
             )}
 
-            {/* Desktop Auth Buttons - apenas na home */}
+            {/* Desktop Auth Buttons - apenas na home - Estilo Gov.br */}
             {isHomePage && (
               <div className="hidden md:flex items-center space-x-4">
                 <button 
                   onClick={() => window.open('/empresas', '_blank')}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors duration-200"
+                  className="px-6 py-2 bg-govgreen-600 text-white rounded font-medium transition-all duration-200 hover:bg-govgreen-700 shadow-md"
                 >
                   Para Empresas
                 </button>
               </div>
             )}
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button - Estilo Gov.br */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-blue-400 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                className="inline-flex items-center justify-center p-2 rounded text-white hover:text-govyellow-400 hover:bg-govblue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-govyellow-400"
               >
                 <span className="sr-only">Abrir menu principal</span>
                 {!isMobileMenuOpen ? (
@@ -198,32 +186,32 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu - Estilo Gov.br */}
         {isMobileMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-slate-700">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-govblue-700 border-t border-govyellow-500">
               {isHomePage ? (
                 // Menus de navegação mobile apenas na página inicial
                 <>
-                  <button onClick={scrollToTop} className="block w-full text-left px-3 py-2 text-white hover:text-blue-400 font-medium">
+                  <button onClick={scrollToTop} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Início
                   </button>
-                  <button onClick={() => router.push('/vagas')} className="block w-full text-left px-3 py-2 text-white hover:text-blue-400 font-medium">
+                  <button onClick={() => router.push('/vagas')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Vagas
                   </button>
-                  <button onClick={() => scrollToSection('calculadora')} className="block w-full text-left px-3 py-2 text-white hover:text-blue-400 font-medium">
+                  <button onClick={() => scrollToSection('calculadora')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Calculadora
                   </button>
-                  <button onClick={() => scrollToSection('contato')} className="block w-full text-left px-3 py-2 text-white hover:text-blue-400 font-medium">
+                  <button onClick={() => scrollToSection('contato')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Contato
                   </button>
-                  <button onClick={() => window.open('/empresas', '_blank')} className="block w-full text-left px-3 py-2 text-green-400 hover:text-green-300 font-medium">
+                  <button onClick={() => window.open('/empresas', '_blank')} className="block w-full text-left px-3 py-2 text-govgreen-400 hover:text-govgreen-300 font-medium hover:bg-govblue-800 rounded">
                     Para Empresas
                   </button>
                 </>
               ) : (
                 // Botão "Ver Site" mobile para outras páginas
-                <button onClick={goToHome} className="block w-full text-left px-3 py-2 text-blue-400 hover:text-blue-300 font-medium">
+                <button onClick={goToHome} className="block w-full text-left px-3 py-2 text-govyellow-400 hover:text-govyellow-300 font-medium hover:bg-govblue-800 rounded">
                   🏠 Ver Site
                 </button>
               )}
