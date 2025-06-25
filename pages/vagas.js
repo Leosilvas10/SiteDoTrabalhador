@@ -1,7 +1,7 @@
 import Head from "next/head"
 import { useState, useEffect } from "react"
 import Header from "../src/components/Header/Header"
-import Footer from "../src/components/Footer/Footer"
+import SimpleCopyright from "../src/components/Copyright/SimpleCopyright"
 import LeadModal from "../src/components/LeadModal/LeadModal"
 
 const VagasPage = () => {
@@ -49,11 +49,12 @@ const VagasPage = () => {
       
       const data = await response.json()
       
-      if (data.success && data.jobs) {
-        console.log(`✅ ${data.jobs.length} vagas carregadas`)
+      if (data.success && (data.jobs || data.data)) {
+        const jobs = data.jobs || data.data;
+        console.log(`✅ ${jobs.length} vagas carregadas`)
         
         // Adicionar ID único se não existir
-        const jobsWithId = data.jobs.map((job, index) => ({
+        const jobsWithId = jobs.map((job, index) => ({
           ...job,
           id: job.id || `job-${index}`,
           timeAgo: calculateTimeAgo(job.datePosted || job.created_at || new Date())
@@ -480,7 +481,7 @@ const VagasPage = () => {
         )}
       </main>
 
-      <Footer />
+      <SimpleCopyright />
 
       {/* Modal de Candidatura */}
       {selectedJob && (
