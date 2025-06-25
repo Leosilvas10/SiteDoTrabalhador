@@ -31,7 +31,7 @@ const VagasPage = () => {
       
       console.log('🔄 Buscando vagas reais...')
       
-      const response = await fetch('/api/fetch-real-jobs')
+      const response = await fetch('/api/fetch-jobs')
       const data = await response.json()
       
       if (data.success && data.data.length > 0) {

@@ -74,16 +74,36 @@ const HomePage = () => {
       }
       setError(null)
 
-      console.log('🔄 Buscando vagas REAIS de todo o Brasil...')
+      console.log('🔄 Buscando vagas em todo o Brasil...')
 
-      // Usar nova API de vagas reais
+      // Verificar cache local primeiro (válido por 5 minutos)
+      const cachedData = localStorage.getItem('jobsCache')
+      const cacheTime = localStorage.getItem('jobsCacheTime')
+      const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
+
+      if (cachedData && cacheTime && parseInt(cacheTime) > fiveMinutesAgo) {
+        console.log('📦 Usando cache local para carregar vagas rapidamente...')
+        const jobs = JSON.parse(cachedData)
+        setJobs(jobs)
+        setLoading(false)
+        setLastUpdate(new Date(parseInt(cacheTime)))
+        return
+      }
+
+      // Usar nova API de vagas reais com timeout menor
       const timestamp = new Date().getTime()
-      const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}`, {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 8000) // 8 segundos timeout
+
+      const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}&limit=50`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
-        }
+        },
+        signal: controller.signal
       })
+
+      clearTimeout(timeoutId)
 
       if (!response.ok) {
         throw new Error(`Erro HTTP! status: ${response.status}`)
@@ -104,7 +124,7 @@ const HomePage = () => {
       // Se não há vagas reais, mostrar mensagem apropriada
       if (jobsData.length === 0) {
         setJobs([])
-        setError('Nenhuma vaga encontrada no momento. Estamos buscando novas oportunidades reais em todo o Brasil.')
+        setError('Nenhuma vaga encontrada no momento. Estamos buscando novas oportunidades em todo o Brasil.')
         console.log('⚠️ Nenhuma vaga encontrada')
       } else {
         // Processar vagas reais e adicionar campo de tempo calculado
@@ -114,7 +134,12 @@ const HomePage = () => {
         }))
 
         setJobs(processedJobs)
-        console.log(`✅ ${processedJobs.length} vagas REAIS carregadas de todo o Brasil`)
+        
+        // Salvar no cache local
+        localStorage.setItem('jobsCache', JSON.stringify(processedJobs))
+        localStorage.setItem('jobsCacheTime', Date.now().toString())
+        
+        console.log(`✅ ${processedJobs.length} vagas carregadas de todo o Brasil`)
         console.log(`📊 Fontes: ${data.meta?.sources?.join(', ') || 'Não informado'}`)
         console.log(`📈 Estatísticas:`, data.meta?.stats)
       }
@@ -129,9 +154,19 @@ const HomePage = () => {
       setUpdateCountdown(20 * 60)
 
     } catch (error) {
-      console.error("❌ Erro ao buscar vagas reais:", error)
-      setError(`Erro ao carregar vagas reais: ${error.message}`)
-      setJobs([])
+      console.error("❌ Erro ao buscar vagas:", error)
+      
+      // Tentar usar cache mesmo que esteja expirado em caso de erro
+      const cachedData = localStorage.getItem('jobsCache')
+      if (cachedData && error.name === 'AbortError') {
+        console.log('⏱️ Timeout - usando cache local...')
+        const jobs = JSON.parse(cachedData)
+        setJobs(jobs)
+        setError('Carregamento demorou mais que o esperado. Exibindo vagas em cache.')
+      } else {
+        setError(`Erro ao carregar vagas: ${error.message}`)
+        setJobs([])
+      }
     } finally {
       if (showLoadingState) {
         setLoading(false)
@@ -234,8 +269,8 @@ const HomePage = () => {
   return (
     <>
       <Head>
-        <title>Site do Trabalhador - Vagas REAIS de Todo o Brasil</title>
-        <meta name="description" content="Vagas REAIS de emprego em todo o Brasil: doméstica, porteiro, limpeza, cuidador, motorista e mais. Mais de 50 vagas atualizadas constantemente de fontes reais como Indeed, Vagas.com e mercado brasileiro." />
+        <title>Site do Trabalhador - Vagas de Todo o Brasil</title>
+        <meta name="description" content="Vagas de emprego em todo o Brasil: doméstica, porteiro, limpeza, cuidador, motorista e mais. Mais de 50 vagas atualizadas constantemente de fontes como Indeed, Vagas.com e mercado brasileiro." />
         <meta name="keywords" content="vagas emprego brasil real, doméstica, porteiro, auxiliar limpeza, cuidador, trabalho operacional, indeed brasil, vagas.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
@@ -255,22 +290,22 @@ const HomePage = () => {
           {/* Cabeçalho da Seção Vagas */}
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">
-              💼 Vagas REAIS em Destaque
+              💼 Vagas em Destaque
             </h2>
             <p className="text-xl text-slate-300 mb-6 max-w-2xl mx-auto">
-              Vagas reais de todo o Brasil, atualizadas em tempo real de fontes confiáveis
+              Vagas em Todo o Brasil atualizadas em tempo real
             </p>
 
             {/* Status de atualização */}
             <div className="mb-6">
               {loading ? (
                 <p className="text-xl text-blue-400 mb-2">
-                  🔄 Carregando vagas reais...
+                  🔄 Carregando vagas...
                 </p>
               ) : jobs.length > 0 ? (
                 <>
                   <p className="text-xl text-green-400 mb-2">
-                    ✅ {jobs.length} vagas reais disponíveis | Mostrando {Math.min(6, filteredJobs.length)} em destaque
+                    ✅ {jobs.length} vagas disponíveis | Mostrando {Math.min(6, filteredJobs.length)} em destaque
                   </p>
                   {lastUpdate && (
                     <div className="text-sm text-slate-400 space-y-1">
@@ -282,7 +317,7 @@ const HomePage = () => {
                 </>
               ) : (
                 <p className="text-xl text-amber-400 mb-2">
-                  ⏳ Buscando novas vagas reais...
+                  ⏳ Buscando novas vagas...
                 </p>
               )}
             </div>
@@ -291,7 +326,7 @@ const HomePage = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-4 rounded-xl text-center">
                 <div className="text-2xl font-bold text-white">{jobs.length}</div>
-                <div className="text-blue-200 text-sm">Vagas Reais</div>
+                <div className="text-blue-200 text-sm">Vagas</div>
               </div>
               <div className="bg-gradient-to-br from-green-600 to-green-800 p-4 rounded-xl text-center">
                 <div className="text-2xl font-bold text-white">100%</div>
@@ -412,8 +447,8 @@ const HomePage = () => {
               </h3>
               <p className="text-slate-400 mb-8 max-w-md mx-auto">
                 {jobs.length === 0 
-                  ? 'Estamos buscando novas vagas reais em tempo real. Tente novamente em alguns minutos.'
-                  : 'Não encontramos vagas reais que correspondam aos seus filtros. Tente ajustar os critérios de busca.'
+                  ? 'Estamos buscando novas vagas em tempo real. Tente novamente em alguns minutos.'
+                  : 'Não encontramos vagas que correspondam aos seus filtros. Tente ajustar os critérios de busca.'
                 }
               </p>
               <div className="space-y-4">
@@ -439,7 +474,7 @@ const HomePage = () => {
           {!loading && jobs.length > 0 && (
             <div className="text-center mt-8">
               <p className="text-slate-500 text-sm">
-                💡 Próxima busca por vagas reais em {formatCountdown(updateCountdown)}
+                💡 Próxima busca por vagas em {formatCountdown(updateCountdown)}
               </p>
             </div>
           )}

@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import EmpresasHeader from '../src/components/Header/EmpresasHeader'
+import EmpresasFooter from '../src/components/Footer/EmpresasFooter'
 
 const EmpresasPage = () => {
   const [formData, setFormData] = useState({
@@ -437,6 +438,8 @@ const EmpresasPage = () => {
           )}
         </div>
         </main>
+
+        <EmpresasFooter />
       </div>
     </>
   )

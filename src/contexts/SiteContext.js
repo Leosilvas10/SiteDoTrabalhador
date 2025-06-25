@@ -12,7 +12,7 @@ export const useSiteContext = () => {
 
 export const SiteProvider = ({ children }) => {
   const [siteConfig, setSiteConfig] = useState({
-    logoUrl: '/logo-site-trabalhador.svg', // Logo padrão
+    logoUrl: null, // Iniciar como null para verificar se há logo customizada
     heroTitulo: 'Encontre sua próxima oportunidade',
     heroSubtitulo: 'Conectamos trabalhadores a empresas em todo o Brasil',
     sobreTitulo: 'Sobre o Site do Trabalhador',
@@ -27,15 +27,9 @@ export const SiteProvider = ({ children }) => {
     if (savedConfig) {
       try {
         const config = JSON.parse(savedConfig)
-        // Garantir que sempre tenha uma logo
-        if (!config.logoUrl) {
-          config.logoUrl = '/logo-site-trabalhador.svg'
-        }
         setSiteConfig(prev => ({ ...prev, ...config }))
       } catch (error) {
         console.error('Erro ao carregar configurações do site:', error)
-        // Forçar logo padrão em caso de erro
-        setSiteConfig(prev => ({ ...prev, logoUrl: '/logo-site-trabalhador.svg' }))
       }
     }
   }, [])
@@ -49,38 +43,20 @@ export const SiteProvider = ({ children }) => {
 
   // Upload de logo
   const uploadLogo = async (file) => {
-    try {
-      const formData = new FormData()
-      formData.append('logo', file)
-
-      const response = await fetch('/api/upload-logo', {
-        method: 'POST',
-        body: formData
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Erro no upload')
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const logoDataUrl = e.target.result
+        const updatedConfig = { ...siteConfig, logoUrl: logoDataUrl }
+        setSiteConfig(updatedConfig)
+        localStorage.setItem('site_config', JSON.stringify(updatedConfig))
+        resolve(logoDataUrl)
       }
-
-      const result = await response.json()
-      const logoUrl = result.url
-
-      // Atualizar configuração com a nova URL
-      const updatedConfig = { ...siteConfig, logoUrl: logoUrl }
-      console.log('Configuração antes do upload:', siteConfig)
-      console.log('Nova configuração:', updatedConfig)
-      
-      setSiteConfig(updatedConfig)
-      localStorage.setItem('site_config', JSON.stringify(updatedConfig))
-
-      console.log('Upload realizado com sucesso:', logoUrl)
-      console.log('Configuração salva no localStorage')
-      return logoUrl
-    } catch (error) {
-      console.error('Erro no upload da logo:', error)
-      throw error
-    }
+      reader.onerror = () => {
+        reject(new Error('Erro ao processar arquivo'))
+      }
+      reader.readAsDataURL(file)
+    })
   }
 
   const value = {
