@@ -1,4 +1,3 @@
-
 // API para web scraping de vagas operacionais brasileiras
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
         title: 'Auxiliar de Limpeza - Hospital',
         company: {
           name: 'Hospital São José',
-          logo: '/logo.jpeg'
+          logo: '/logo.png'
         },
         location: 'Belo Horizonte, MG',
         salary: 'R$ 1.320,00',
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
         title: 'Zelador de Escola',
         company: {
           name: 'Escola Municipal Santos Dumont',
-          logo: '/logo.jpeg'
+          logo: '/logo.png'
         },
         location: 'Porto Alegre, RS',
         salary: 'R$ 1.450,00',
@@ -56,7 +55,7 @@ export default async function handler(req, res) {
         title: 'Cuidadora de Idosos - Período Integral',
         company: {
           name: 'Home Care Vida',
-          logo: '/logo.jpeg'
+          logo: '/logo.png'
         },
         location: 'Salvador, BA',
         salary: 'R$ 1.800,00 - R$ 2.200,00',
