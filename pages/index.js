@@ -2,14 +2,12 @@ import Head from "next/head"
 import { useState, useEffect, useCallback } from "react"
 import JobCard from "../src/components/JobCard/JobCard"
 import HeroSection from "../src/components/HeroSection/HeroSection"
-import SearchFilters from "../src/components/SearchFilters/SearchFilters"
 import LeadModal from "../src/components/LeadModal/LeadModal"
 import CalculadoraTrabalhista from "../src/components/CalculadoraTrabalhista/CalculadoraTrabalhista"
 import FAQSection from "../src/components/FAQ/FAQ"
 
 const HomePage = () => {
   const [jobs, setJobs] = useState([])
-  const [filteredJobs, setFilteredJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedJob, setSelectedJob] = useState(null)
@@ -17,22 +15,6 @@ const HomePage = () => {
   const [lastUpdate, setLastUpdate] = useState(null)
   const [nextUpdate, setNextUpdate] = useState(null)
   const [updateCountdown, setUpdateCountdown] = useState(20 * 60) // 20 minutos em segundos
-  const [filters, setFilters] = useState({
-    city: "",
-    area: "",
-    type: "",
-    search: ""
-  })
-  const [currentPage, setCurrentPage] = useState(1)
-  const jobsPerPage = 20
-
-  // Função para operações seguras com strings
-  const safeIncludes = (str, search) => {
-    if (!str || !search || typeof str !== 'string' || typeof search !== 'string') {
-      return false
-    }
-    return str.toLowerCase().includes(search.toLowerCase())
-  }
 
   const safeArray = (arr) => {
     return Array.isArray(arr) ? arr : []
@@ -246,53 +228,6 @@ const HomePage = () => {
     }
   }, [fetchJobs])
 
-  // Effect para filtrar vagas com tratamento de erro melhorado
-  useEffect(() => {
-    try {
-      if (!Array.isArray(jobs)) {
-        console.warn('Jobs não é um array:', jobs)
-        setFilteredJobs([])
-        return
-      }
-
-      let filtered = [...jobs]
-
-      if (filters.search) {
-        filtered = filtered.filter(job => {
-          if (!job) return false
-          return safeIncludes(job.title, filters.search) ||
-                 safeIncludes(job.company?.name, filters.search) ||
-                 safeIncludes(job.description, filters.search) ||
-                 safeIncludes(job.tags, filters.search)
-        })
-      }
-
-      if (filters.city) {
-        filtered = filtered.filter(job => 
-          job && safeIncludes(job.location, filters.city)
-        )
-      }
-
-      if (filters.area) {
-        filtered = filtered.filter(job => 
-          job && (safeIncludes(job.category, filters.area) || 
-                  safeIncludes(job.tags, filters.area))
-        )
-      }
-
-      if (filters.type) {
-        filtered = filtered.filter(job => 
-          job && safeIncludes(job.type, filters.type)
-        )
-      }
-
-      setFilteredJobs(filtered || [])
-    } catch (error) {
-      console.error("Erro ao filtrar vagas:", error)
-      setFilteredJobs(jobs || [])
-    }
-  }, [filters, jobs])
-
   // Função para abrir modal de candidatura
   const handleApplyClick = (job) => {
     setSelectedJob(job)
@@ -312,18 +247,6 @@ const HomePage = () => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
   }
 
-  // Filtros rápidos para vagas operacionais
-  const quickFilters = [
-    { label: '🏠 Doméstica', filter: { area: 'Serviços Domésticos' } },
-    { label: '🧹 Limpeza', filter: { area: 'Limpeza' } },
-    { label: '🛡️ Porteiro/Segurança', filter: { area: 'Segurança' } },
-    { label: '🔧 Manutenção', filter: { area: 'Manutenção' } },
-    { label: '👨‍⚕️ Cuidador', filter: { area: 'Cuidados' } },
-    { label: '🚗 Motorista', filter: { area: 'Transporte' } },
-    { label: '🍽️ Alimentação', filter: { area: 'Alimentação' } },
-    { label: '🔨 Construção', filter: { area: 'Construção Civil' } },
-  ]
-
   return (
     <>
       <Head>
@@ -336,15 +259,12 @@ const HomePage = () => {
 
       {/* Seção Início - Hero */}
       <section id="inicio" className="min-h-screen">
-        <HeroSection filters={filters} setFilters={setFilters} />
+        <HeroSection />
       </section>
 
       {/* Seção Vagas */}
       <section id="vagas" className="min-h-screen bg-slate-900">
         <div className="container mx-auto px-4 py-20">
-          {/* Filtros Avançados */}
-          <SearchFilters filters={filters} setFilters={setFilters} />
-
           {/* Cabeçalho da Seção Vagas */}
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -363,7 +283,7 @@ const HomePage = () => {
               ) : jobs.length > 0 ? (
                 <>
                   <p className="text-xl text-green-400 mb-2">
-                    ✅ {jobs.length} vagas disponíveis | Mostrando {Math.min(6, filteredJobs.length)} em destaque
+                    ✅ {jobs.length} vagas disponíveis | Mostrando {Math.min(6, jobs.length)} em destaque
                   </p>
                   {lastUpdate && (
                     <div className="text-sm text-slate-400 space-y-1">
@@ -398,25 +318,6 @@ const HomePage = () => {
                 <div className="text-2xl font-bold text-white">🇧🇷</div>
                 <div className="text-yellow-200 text-sm">Só Brasil</div>
               </div>
-            </div>
-
-            {/* Filtros rápidos */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              {quickFilters.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => setFilters(prev => ({ ...prev, ...item.filter }))}
-                  className="px-4 py-2 rounded-full text-sm bg-slate-800 text-slate-300 hover:bg-blue-600 hover:text-white transition-all duration-300"
-                >
-                  {item.label}
-                </button>
-              ))}
-              <button
-                onClick={() => setFilters({ city: "", area: "", type: "", search: "" })}
-                className="px-4 py-2 rounded-full text-sm bg-slate-700 text-slate-300 hover:bg-slate-600 transition-all duration-300"
-              >
-                🔄 Limpar
-              </button>
             </div>
           </div>
 
@@ -453,11 +354,11 @@ const HomePage = () => {
                 </div>
               ))}
             </div>
-          ) : filteredJobs.length > 0 ? (
+          ) : jobs.length > 0 ? (
             /* Listagem de Vagas em Destaque - Apenas 6 vagas */
             <>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {filteredJobs.slice(0, 6).map((job, index) => (
+                {jobs.slice(0, 6).map((job, index) => (
                   <div 
                     key={job.id} 
                     className="fade-in"
@@ -516,14 +417,12 @@ const HomePage = () => {
                 >
                   🔄 Buscar Novamente
                 </button>
-                {jobs.length > 0 && (
-                  <button
-                    onClick={() => setFilters({ city: "", area: "", type: "", search: "" })}
-                    className="btn-secondary"
-                  >
-                    🔄 Limpar Filtros
-                  </button>
-                )}
+                <button
+                  onClick={() => window.location.href = '/vagas'}
+                  className="btn-secondary"
+                >
+                  � Ver Todas as Vagas
+                </button>
               </div>
             </div>
           )}
