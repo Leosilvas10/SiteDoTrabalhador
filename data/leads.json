@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": "1750864630167",
+    "name": "Leonardo",
+    "whatsapp": "(31) 99199-8938",
+    "email": "leonardosilvas10@gmail.com",
+    "jobTitle": "Vendedor",
+    "jobCompany": "Lojas Renner",
+    "jobUrl": "https://www.empregos.com.br/vagas/vendedor/campinas",
+    "jobLocation": "Campinas, SP",
+    "jobSalary": "R$ 1.700,00",
+    "lastCompany": "aliar sistemas",
+    "workStatus": "Com carteira assinada",
+    "receivedRights": "Sim, recebi tudo certinho",
+    "workIssues": "nao",
+    "wantConsultation": "Sim, quero saber meus direitos",
+    "lgpdConsent": true,
+    "ip": "::ffff:172.22.192.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "createdAt": "2025-06-25T15:17:10.168Z",
+    "status": "novo"
+  }
+]
