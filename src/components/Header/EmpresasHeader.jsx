@@ -1,20 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSiteContext } from '../../contexts/SiteContext'
 
 const EmpresasHeader = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { siteConfig } = useSiteContext()
-
-  const scrollToSection = (sectionId) => {
-    // Redirecionar para a página principal com âncora
-    window.location.href = `/#${sectionId}`
-    setIsMobileMenuOpen(false)
-  }
 
   const scrollToTop = () => {
     // Redirecionar para a página principal
     window.location.href = '/'
-    setIsMobileMenuOpen(false)
   }
 
   return (
@@ -38,60 +30,22 @@ const EmpresasHeader = () => {
               <span className="text-xl font-bold text-white">Site do Trabalhador</span>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <button onClick={scrollToTop} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
-                Início
-              </button>
-              <button onClick={() => scrollToSection('vagas')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
-                Vagas
-              </button>
-              <button onClick={() => scrollToSection('calculadora')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
-                Calculadora
-              </button>
-              <button onClick={() => scrollToSection('contato')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
-                Contato
-              </button>
-            </nav>
-
+            {/* Desktop Navigation - removido da página empresas */}
+            
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
-              <span className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium">
-                Para Empresas
-              </span>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden p-2"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <span className="sr-only">Abrir menu</span>
-              <div className="w-6 h-6 relative">
-                <span className={`absolute top-0 left-0 w-full h-0.5 bg-gray-600 transform transition-transform ${isMobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
-                <span className={`absolute top-2.5 left-0 w-full h-0.5 bg-gray-600 transition-opacity ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
-                <span className={`absolute top-5 left-0 w-full h-0.5 bg-gray-600 transform transition-transform ${isMobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
-              </div>
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-slate-800 border-t border-slate-700">
-              <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={scrollToTop}>
-                Início
-              </button>
-              <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => scrollToSection('vagas')}>
-                Vagas
-              </button>
-              <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => scrollToSection('calculadora')}>
-                Calculadora
-              </button>
-              <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => scrollToSection('contato')}>
-                Contato
+              <button 
+                onClick={scrollToTop}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105"
+              >
+                Ver Site
               </button>
             </div>
+
+            {/* Mobile Menu Button - removido da página empresas */}
           </div>
+
+          {/* Mobile Menu - removido da página empresas */}
         </div>
       </header>
     </>

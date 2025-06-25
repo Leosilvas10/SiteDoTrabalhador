@@ -83,7 +83,7 @@ const ViewJob = () => {
                         ))}
                     </CompDetails>
                     <CompTagsArea>
-                        {tags.split(", ").map((item) => (
+                        {(Array.isArray(tags) ? tags : tags.split(", ")).map((item) => (
                             <TagBlock key={item} type="search">
                                 {item}
                             </TagBlock>

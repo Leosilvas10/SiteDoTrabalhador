@@ -55,12 +55,12 @@ const JobCard = ({ job, onApplyClick }) => {
       {tags && (
         <div className="mb-4">
           <div className="flex flex-wrap gap-2">
-            {tags.split(',').slice(0, 3).map((tag, index) => (
+            {(Array.isArray(tags) ? tags : tags.split(',')).slice(0, 3).map((tag, index) => (
               <span
                 key={index}
                 className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded"
               >
-                {tag.trim()}
+                {typeof tag === 'string' ? tag.trim() : tag}
               </span>
             ))}
           </div>

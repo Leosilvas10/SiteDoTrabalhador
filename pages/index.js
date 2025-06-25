@@ -16,7 +16,7 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [lastUpdate, setLastUpdate] = useState(null)
   const [nextUpdate, setNextUpdate] = useState(null)
-  const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
+  const [updateCountdown, setUpdateCountdown] = useState(20 * 60) // 20 minutos em segundos
   const [filters, setFilters] = useState({
     city: "",
     area: "",
@@ -74,11 +74,11 @@ const HomePage = () => {
       }
       setError(null)
 
-      console.log('🔄 Buscando vagas reais atualizadas...')
+      console.log('🔄 Buscando vagas REAIS de todo o Brasil...')
 
-      // Adicionar timestamp para evitar cache
+      // Usar nova API de vagas reais
       const timestamp = new Date().getTime()
-      const response = await fetch(`/api/fetch-jobs?t=${timestamp}`, {
+      const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
@@ -104,8 +104,8 @@ const HomePage = () => {
       // Se não há vagas reais, mostrar mensagem apropriada
       if (jobsData.length === 0) {
         setJobs([])
-        setError('Nenhuma vaga operacional encontrada no momento. Estamos buscando novas oportunidades em tempo real.')
-        console.log('⚠️ Nenhuma vaga real encontrada')
+        setError('Nenhuma vaga encontrada no momento. Estamos buscando novas oportunidades reais em todo o Brasil.')
+        console.log('⚠️ Nenhuma vaga encontrada')
       } else {
         // Processar vagas reais e adicionar campo de tempo calculado
         const processedJobs = jobsData.map(job => ({
@@ -114,22 +114,23 @@ const HomePage = () => {
         }))
 
         setJobs(processedJobs)
-        console.log(`✅ ${processedJobs.length} vagas reais carregadas com sucesso`)
-        console.log(`📊 Fontes: ${data.sources?.join(', ') || 'Não informado'}`)
+        console.log(`✅ ${processedJobs.length} vagas REAIS carregadas de todo o Brasil`)
+        console.log(`📊 Fontes: ${data.meta?.sources?.join(', ') || 'Não informado'}`)
+        console.log(`📈 Estatísticas:`, data.meta?.stats)
       }
 
       // Atualizar informações de timestamp
       setLastUpdate(new Date())
-      if (data.nextUpdate) {
-        setNextUpdate(new Date(data.nextUpdate))
+      if (data.meta?.nextUpdate) {
+        setNextUpdate(new Date(data.meta.nextUpdate))
       }
 
-      // Resetar countdown
-      setUpdateCountdown(30 * 60)
+      // Resetar countdown para 20 minutos
+      setUpdateCountdown(20 * 60)
 
     } catch (error) {
       console.error("❌ Erro ao buscar vagas reais:", error)
-      setError(`Erro ao carregar vagas: ${error.message}`)
+      setError(`Erro ao carregar vagas reais: ${error.message}`)
       setJobs([])
     } finally {
       if (showLoadingState) {
@@ -140,31 +141,24 @@ const HomePage = () => {
 
   // Effect para busca inicial e configuração de intervalos
   useEffect(() => {
-    // Buscar vagas inicialmente
+    // Buscar vagas reais em vez de usar vagas mockadas
     fetchJobs()
-
-    // Configurar atualização automática a cada 30 minutos (server-side)
-    const fetchInterval = setInterval(() => {
-      console.log('🔄 Atualização automática de vagas iniciada')
-      fetchJobs(false) // Não mostrar loading durante atualizações automáticas
-    }, 30 * 60 * 1000) // 30 minutos
-
-    // Configurar countdown visual (atualizado a cada minuto)
+    
+    // Configurar atualização automática a cada 20 minutos
+    const interval = setInterval(() => {
+      fetchJobs(false) // Não mostrar loading no auto-refresh
+    }, 20 * 60 * 1000) // 20 minutos
+    
+    // Configurar countdown
     const countdownInterval = setInterval(() => {
-      setUpdateCountdown(prev => {
-        if (prev <= 60) {
-          return 30 * 60 // Reset countdown
-        }
-        return prev - 60
-      })
-    }, 60 * 1000) // 1 minuto
-
-    // Cleanup
+      setUpdateCountdown(prev => prev > 0 ? prev - 1 : 20 * 60)
+    }, 1000)
+    
     return () => {
-      clearInterval(fetchInterval)
+      clearInterval(interval)
       clearInterval(countdownInterval)
     }
-  }, [fetchJobs])
+  }, [])
 
   // Effect para filtrar vagas
   useEffect(() => {
@@ -240,9 +234,9 @@ const HomePage = () => {
   return (
     <>
       <Head>
-        <title>Site do Trabalhador - Vagas Reais de Emprego no Brasil</title>
-        <meta name="description" content="Encontre vagas reais de trabalho operacional no Brasil: doméstica, porteiro, limpeza, cuidador e mais. Vagas atualizadas automaticamente." />
-        <meta name="keywords" content="vagas emprego brasil, doméstica, porteiro, auxiliar limpeza, cuidador, trabalho operacional" />
+        <title>Site do Trabalhador - Vagas REAIS de Todo o Brasil</title>
+        <meta name="description" content="Vagas REAIS de emprego em todo o Brasil: doméstica, porteiro, limpeza, cuidador, motorista e mais. Mais de 50 vagas atualizadas constantemente de fontes reais como Indeed, Vagas.com e mercado brasileiro." />
+        <meta name="keywords" content="vagas emprego brasil real, doméstica, porteiro, auxiliar limpeza, cuidador, trabalho operacional, indeed brasil, vagas.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
       </Head>
@@ -261,8 +255,11 @@ const HomePage = () => {
           {/* Cabeçalho da Seção Vagas */}
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">
-              💼 Vagas Reais Disponíveis
+              💼 Vagas REAIS em Destaque
             </h2>
+            <p className="text-xl text-slate-300 mb-6 max-w-2xl mx-auto">
+              Vagas reais de todo o Brasil, atualizadas em tempo real de fontes confiáveis
+            </p>
 
             {/* Status de atualização */}
             <div className="mb-6">
@@ -273,13 +270,13 @@ const HomePage = () => {
               ) : jobs.length > 0 ? (
                 <>
                   <p className="text-xl text-green-400 mb-2">
-                    ✅ {filteredJobs.length} vagas reais encontradas
+                    ✅ {jobs.length} vagas reais disponíveis | Mostrando {Math.min(6, filteredJobs.length)} em destaque
                   </p>
                   {lastUpdate && (
                     <div className="text-sm text-slate-400 space-y-1">
                       <p>Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}</p>
                       <p>Próxima atualização em: {formatCountdown(updateCountdown)}</p>
-                      <p className="text-xs">🔄 Atualização automática a cada 30 minutos</p>
+                      <p>🔄 Atualização automática a cada 20 minutos</p>
                     </div>
                   )}
                 </>
@@ -301,7 +298,7 @@ const HomePage = () => {
                 <div className="text-green-200 text-sm">Verificadas</div>
               </div>
               <div className="bg-gradient-to-br from-purple-600 to-purple-800 p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-white">30min</div>
+                <div className="text-2xl font-bold text-white">20min</div>
                 <div className="text-purple-200 text-sm">Atualização</div>
               </div>
               <div className="bg-gradient-to-br from-yellow-600 to-yellow-800 p-4 rounded-xl text-center">
@@ -364,21 +361,48 @@ const HomePage = () => {
               ))}
             </div>
           ) : filteredJobs.length > 0 ? (
-            /* Listagem de Vagas Reais */
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredJobs.map((job, index) => (
-                <div 
-                  key={job.id} 
-                  className="fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <JobCard 
-                    job={job} 
-                    onApplyClick={() => handleApplyClick(job)} 
-                  />
+            /* Listagem de Vagas em Destaque - Apenas 6 vagas */
+            <>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {filteredJobs.slice(0, 6).map((job, index) => (
+                  <div 
+                    key={job.id} 
+                    className="fade-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <JobCard 
+                      job={job} 
+                      onApplyClick={() => handleApplyClick(job)} 
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Botão Ver Todas as Vagas */}
+              {jobs.length > 6 && (
+                <div className="text-center mt-12">
+                  <div className="mb-4">
+                    <p className="text-slate-300 mb-2">
+                      Mostrando apenas 6 vagas em destaque
+                    </p>
+                    <p className="text-blue-400 font-semibold">
+                      {jobs.length - 6} vagas adicionais disponíveis
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => window.location.href = '/vagas'}
+                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+                  >
+                    <span className="mr-2">👀</span>
+                    Ver Todas as {jobs.length} Vagas
+                    <span className="ml-2">→</span>
+                  </button>
+                  <p className="text-sm text-slate-400 mt-3">
+                    Filtros avançados, busca por cidade e muito mais na página de vagas
+                  </p>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             /* Estado Vazio - Nenhuma vaga real encontrada */
             <div className="text-center py-20">

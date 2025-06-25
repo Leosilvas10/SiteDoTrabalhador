@@ -1,8 +1,6 @@
-import { useState } from 'react'
+import React from 'react'
 
 const HeroSection = ({ filters, setFilters }) => {
-  const [searchTerm, setSearchTerm] = useState('')
-
   // Estatísticas para exibir
   const stats = [
     { label: 'Vagas Ativas', value: '50K+', icon: '💼' },
@@ -20,12 +18,6 @@ const HeroSection = ({ filters, setFilters }) => {
     { name: 'Cuidados', icon: '👨‍⚕️', count: '4K+' },
     { name: 'Construção', icon: '🔨', count: '9K+' }
   ]
-
-  // Função para realizar busca
-  const handleSearch = (e) => {
-    e.preventDefault()
-    setFilters(prev => ({ ...prev, search: searchTerm }))
-  }
 
   return (
     <div className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
@@ -52,30 +44,31 @@ const HeroSection = ({ filters, setFilters }) => {
             </p>
           </div>
 
-          {/* Barra de busca principal */}
+          {/* CTA Principal - Ver Todas as Vagas */}
           <div className="mb-12 slide-up" style={{ animationDelay: '0.2s' }}>
-            <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-4 p-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                <div className="flex-1 flex items-center">
-                  <span className="text-2xl ml-4 mr-2">🔍</span>
-                  <input
-                    type="text"
-                    placeholder="Cargo, empresa ou palavra-chave..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 bg-transparent text-white placeholder-slate-300 border-none outline-none text-lg p-2"
-                  />
+            <div className="flex justify-center">
+              <button
+                onClick={() => window.location.href = '/vagas'}
+                className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-xl px-12 py-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/50 animate-pulse"
+              >
+                {/* Efeito de brilho animado */}
+                <div className="absolute inset-0 -top-1 -left-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                
+                {/* Conteúdo do botão */}
+                <div className="relative flex items-center space-x-3">
+                  <span className="text-3xl animate-bounce">💼</span>
+                  <span className="tracking-wide">Ver Todas as Vagas</span>
+                  <span className="text-2xl group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </div>
-                <div className="flex items-center">
-                  <button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                  >
-                    Buscar
-                  </button>
+                
+                {/* Efeito de partículas */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute top-2 left-8 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="absolute top-4 right-12 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.3s' }}></div>
+                  <div className="absolute bottom-3 left-16 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
                 </div>
-              </div>
-            </form>
+              </button>
+            </div>
           </div>
 
           {/* Categorias populares */}
@@ -121,7 +114,7 @@ const HeroSection = ({ filters, setFilters }) => {
           {/* Call to Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center slide-up" style={{ animationDelay: '0.8s' }}>
             <button 
-              onClick={() => document.getElementById('vagas').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => window.location.href = '/vagas'}
               className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25"
             >
               <span className="text-xl">💼</span>

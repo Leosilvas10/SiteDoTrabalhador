@@ -7,6 +7,12 @@ const Header = () => {
   const [user, setUser] = useState(null)
   const { siteConfig } = useSiteContext()
 
+  // Debug: Log das configurações do site
+  useEffect(() => {
+    console.log('Header - siteConfig atual:', siteConfig)
+    console.log('Header - logoUrl:', siteConfig.logoUrl)
+  }, [siteConfig])
+
   useEffect(() => {
     // Verificar se há usuário logado
     const userData = localStorage.getItem('user')
@@ -40,20 +46,26 @@ const Header = () => {
       <header className="bg-slate-800 shadow-lg fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* Logo */}
+            {/* Logo - Aumentada e otimizada */}
             <div className="flex items-center cursor-pointer" onClick={scrollToTop}>
               {siteConfig.logoUrl ? (
-                <img 
-                  src={siteConfig.logoUrl} 
-                  alt="Logo Site do Trabalhador" 
-                  className="w-10 h-10 rounded-lg mr-3 object-contain"
-                />
+                <div className="h-20 sm:h-24 w-32 sm:w-40 flex items-center">
+                  <img 
+                    src={`${siteConfig.logoUrl}?t=${Date.now()}`}
+                    alt="Site do Trabalhador" 
+                    className="h-full w-full object-contain transition-all duration-200 hover:scale-105"
+                    style={{ maxHeight: '100%', maxWidth: '100%' }}
+                    onError={(e) => {
+                      console.error('Erro ao carregar logo no header:', siteConfig.logoUrl)
+                      e.target.style.display = 'none'
+                    }}
+                  />
+                </div>
               ) : (
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-sm">ST</span>
+                <div className="h-20 sm:h-24 w-32 sm:w-40 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-2xl sm:text-3xl">ST</span>
                 </div>
               )}
-              <span className="text-xl font-bold text-white">Site do Trabalhador</span>
             </div>
 
             {/* Desktop Navigation */}
@@ -61,7 +73,7 @@ const Header = () => {
               <button onClick={scrollToTop} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
                 Início
               </button>
-              <button onClick={() => scrollToSection('vagas')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
+              <button onClick={() => window.location.href = '/vagas'} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
                 Vagas
               </button>
               <button onClick={() => scrollToSection('calculadora')} className="text-white hover:text-blue-400 font-medium transition-colors duration-200">
@@ -102,7 +114,7 @@ const Header = () => {
               <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={scrollToTop}>
                 Início
               </button>
-              <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => scrollToSection('vagas')}>
+              <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => { window.location.href = '/vagas'; setIsMobileMenuOpen(false); }}>
                 Vagas
               </button>
               <button className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-blue-400" onClick={() => scrollToSection('calculadora')}>
