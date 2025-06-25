@@ -17,10 +17,62 @@ const LeadModal = ({ job, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
+    
+    if (name === 'whatsapp') {
+      // Formatação automática do WhatsApp
+      const onlyNumbers = value.replace(/\D/g, '')
+      let formatted = onlyNumbers
+      
+      if (onlyNumbers.length >= 11) {
+        // Formato: (11) 99999-9999
+        formatted = `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2, 7)}-${onlyNumbers.slice(7, 11)}`
+      } else if (onlyNumbers.length >= 7) {
+        // Formato parcial: (11) 99999
+        formatted = `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2)}`
+      } else if (onlyNumbers.length >= 2) {
+        // Formato parcial: (11
+        formatted = `(${onlyNumbers.slice(0, 2)})`
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: formatted
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }))
+    }
+  }
+
+  const validateWhatsApp = (whatsapp) => {
+    // Remove tudo que não é número
+    const onlyNumbers = whatsapp.replace(/\D/g, '')
+    
+    // Deve ter 11 dígitos (DDD + 9 dígitos)
+    if (onlyNumbers.length !== 11) {
+      return false
+    }
+    
+    // DDD deve estar entre 11 e 99
+    const ddd = parseInt(onlyNumbers.substring(0, 2))
+    if (ddd < 11 || ddd > 99) {
+      return false
+    }
+    
+    // Primeiro dígito do número deve ser 9 (celular)
+    const firstDigit = onlyNumbers.charAt(2)
+    if (firstDigit !== '9') {
+      return false
+    }
+    
+    // Não pode ter todos os dígitos iguais
+    if (onlyNumbers.split('').every(digit => digit === onlyNumbers[0])) {
+      return false
+    }
+    
+    return true
   }
 
   const handleSubmit = async (e) => {
@@ -28,6 +80,12 @@ const LeadModal = ({ job, onClose }) => {
     
     if (!formData.lgpdConsent) {
       alert('Você deve aceitar os termos para continuar.')
+      return
+    }
+
+    // Validação rigorosa do WhatsApp
+    if (!formData.whatsapp || !validateWhatsApp(formData.whatsapp)) {
+      alert('❌ Por favor, insira um número de WhatsApp válido com DDD.\nExemplo: (11) 99999-9999')
       return
     }
 
@@ -59,16 +117,50 @@ const LeadModal = ({ job, onClose }) => {
         // Criar mensagem personalizada
         let successMessage = '✅ Candidatura enviada com sucesso! Nossa equipe entrará em contato em breve.'
         
-        if (job.url) {
-          successMessage += '\n\n🔗 Agora você será redirecionado para a vaga original para se candidatar diretamente na empresa também!'
+        // Tentar redirecionar para a vaga real sempre que possível
+        const redirectUrl = job.url || job.link || job.apply_url || job.original_url
+        
+        if (redirectUrl && redirectUrl !== '#' && redirectUrl !== '' && redirectUrl !== 'null') {
+          successMessage += '\n\n🔗 Agora você será redirecionado para buscar vagas similares nos principais sites de emprego do Brasil!'
           
           alert(successMessage)
           
-          // Redirecionar imediatamente
+          // Redirecionamento mais robusto com múltiplas tentativas
           setTimeout(() => {
-            console.log('Redirecionando para:', job.url)
-            window.open(job.url, '_blank')
-          }, 1000)
+            console.log('🔗 Iniciando redirecionamento para:', redirectUrl)
+            
+            // Criar elemento de link temporário para garantir redirecionamento
+            const link = document.createElement('a')
+            link.href = redirectUrl
+            link.target = '_blank'
+            link.rel = 'noopener noreferrer'
+            
+            // Adicionar ao DOM temporariamente
+            document.body.appendChild(link)
+            
+            try {
+              // Primeira tentativa: Click programático
+              link.click()
+              console.log('✅ Redirecionamento via click() executado')
+            } catch (error) {
+              console.log('⚠️ Click falhou, tentando window.open...')
+              try {
+                // Segunda tentativa: window.open
+                const newWindow = window.open(redirectUrl, '_blank', 'noopener,noreferrer')
+                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                  throw new Error('Popup bloqueado')
+                }
+                console.log('✅ Redirecionamento via window.open executado')
+              } catch (finalError) {
+                console.log('⚠️ Window.open falhou, usando location.href...')
+                // Terceira tentativa: location.href
+                window.location.href = redirectUrl
+              }
+            } finally {
+              // Remover link temporário
+              document.body.removeChild(link)
+            }
+          }, 1500)
         } else {
           alert(successMessage)
         }

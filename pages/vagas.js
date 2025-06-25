@@ -396,15 +396,33 @@ const VagasPage = () => {
         {!loading && !error && currentJobs.length === 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="text-center">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-white mb-2">Nenhuma vaga encontrada</h3>
-              <p className="text-slate-300 mb-6">Tente ajustar os filtros ou aguarde novas vagas</p>
-              <button
-                onClick={clearFilters}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                🗑️ Limpar Filtros
-              </button>
+              <div className="text-6xl mb-6">🔍</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Nenhuma vaga encontrada</h3>
+              <p className="text-slate-400 mb-8 max-w-md mx-auto">
+                {filteredJobs.length === 0 && jobs.length === 0 
+                  ? 'Não há vagas disponíveis no momento. Nossas fontes estão sendo atualizadas constantemente.'
+                  : 'Nenhuma vaga corresponde aos filtros aplicados. Tente ajustar os critérios de busca.'
+                }
+              </p>
+              <div className="space-y-4">
+                <button
+                  onClick={clearFilters}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg mr-4"
+                >
+                  🗑️ Limpar Todos os Filtros
+                </button>
+                <button
+                  onClick={fetchJobs}
+                  disabled={loading}
+                  className="px-8 py-4 bg-slate-700 text-white font-bold rounded-xl hover:bg-slate-600 transition-all duration-300 shadow-lg disabled:opacity-50"
+                >
+                  {loading ? '🔄 Buscando...' : '🔄 Buscar Novamente'}
+                </button>
+              </div>
+              <div className="mt-8 text-sm text-slate-500">
+                <p>💡 Dica: Experimente termos mais gerais na busca</p>
+                <p>📍 Ou remova filtros de localização para ver mais opções</p>
+              </div>
             </div>
           </section>
         )}

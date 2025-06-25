@@ -402,27 +402,29 @@ const HomePage = () => {
             <div className="text-center py-20">
               <div className="text-6xl mb-6">🔍</div>
               <h3 className="text-2xl font-bold text-white mb-4">
-                Nenhuma vaga real encontrada
+                Buscando novas oportunidades...
               </h3>
               <p className="text-slate-400 mb-8 max-w-md mx-auto">
-                {jobs.length === 0 
-                  ? 'Estamos buscando novas vagas em tempo real. Tente novamente em alguns minutos.'
-                  : 'Não encontramos vagas que correspondam aos seus filtros. Tente ajustar os critérios de busca.'
-                }
+                Não encontramos vagas disponíveis no momento. Nossas fontes estão sendo atualizadas constantemente com novas oportunidades em todo o Brasil.
               </p>
               <div className="space-y-4">
                 <button
                   onClick={() => fetchJobs()}
-                  className="btn-primary mr-4"
+                  disabled={loading}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mr-4"
                 >
-                  🔄 Buscar Novamente
+                  {loading ? '🔄 Buscando...' : '🔄 Buscar Novamente'}
                 </button>
                 <button
                   onClick={() => window.location.href = '/vagas'}
-                  className="btn-secondary"
+                  className="px-8 py-4 bg-slate-700 text-white font-bold rounded-xl hover:bg-slate-600 transition-all duration-300 shadow-lg"
                 >
-                  � Ver Todas as Vagas
+                  📋 Ver Página de Vagas
                 </button>
+              </div>
+              <div className="mt-8 text-sm text-slate-500">
+                <p>💡 Dica: Nossas vagas são atualizadas a cada 20 minutos</p>
+                <p>📱 Enquanto isso, confira a calculadora trabalhista abaixo</p>
               </div>
             </div>
           )}

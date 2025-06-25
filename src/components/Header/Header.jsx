@@ -63,23 +63,68 @@ const Header = () => {
 
   return (
     <>
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        @keyframes floating {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes glow {
+          0%, 100% { filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5)); }
+          50% { filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.8)); }
+        }
+        
+        .logo-container {
+          animation: floating 3s ease-in-out infinite;
+        }
+        
+        .logo-container:hover {
+          animation: floating 1s ease-in-out infinite, glow 2s ease-in-out infinite;
+        }
+        
+        .shimmer-effect {
+          animation: shimmer 3s infinite;
+        }
+      `}</style>
       <header className="bg-slate-800 shadow-lg fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* Logo - Aumentada e otimizada */}
+            {/* Logo - Com fundo charmoso e inovador */}
             <div className="flex items-center cursor-pointer" onClick={scrollToTop}>
               {siteConfig.logoUrl ? (
-                <div className="h-20 sm:h-24 w-32 sm:w-40 flex items-center">
+                <div className="relative h-20 sm:h-24 w-32 sm:w-40 flex items-center group logo-container">
+                  {/* Background com múltiplas camadas de efeito */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-green-500 to-blue-800 rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+                    {/* Efeito de brilho animado */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-3xl shimmer-effect opacity-60"></div>
+                    {/* Borda interna brilhante */}
+                    <div className="absolute inset-1 border border-white/20 rounded-3xl"></div>
+                    {/* Sombra interna para profundidade */}
+                    <div className="absolute inset-0 rounded-3xl shadow-inner bg-gradient-to-t from-black/20 to-transparent"></div>
+                    {/* Efeito de reflexo no topo */}
+                    <div className="absolute top-2 left-2 right-2 h-6 bg-gradient-to-b from-white/30 to-transparent rounded-t-3xl blur-sm"></div>
+                  </div>
+                  {/* Anel de luz externa para hover */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-green-400 rounded-3xl opacity-0 group-hover:opacity-75 blur transition-all duration-500"></div>
+                  {/* Logo */}
                   <img 
                     src={`${siteConfig.logoUrl}?t=${Date.now()}`}
                     alt="Site do Trabalhador" 
-                    className="h-full w-full object-contain transition-all duration-200 hover:scale-105"
+                    className="relative z-20 h-full w-full object-contain p-3 transition-all duration-500 group-hover:scale-110 filter drop-shadow-2xl"
                     style={{ maxHeight: '100%', maxWidth: '100%' }}
                     onError={(e) => {
                       console.error('Erro ao carregar logo no header:', siteConfig.logoUrl)
                       e.target.style.display = 'none'
                     }}
                   />
+                  {/* Pontos de luz decorativos */}
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-300 rounded-full animate-ping opacity-75"></div>
+                  <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
                 </div>
               ) : (
                 <div className="h-20 sm:h-24 w-32 sm:w-40 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-lg">
