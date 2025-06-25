@@ -12,7 +12,7 @@ const ConteudoAdmin = () => {
     sobreTexto: 'Plataforma dedicada a conectar trabalhadores e empresas.',
     contatoEmail: 'contato@sitedotrabalhador.com.br',
     contatoTelefone: '(11) 99999-9999',
-    logoUrl: '/logo.png' // Logo atual
+    logoUrl: '/logo.jpeg' // Nova logo padrão
   })
 
   const [logoFile, setLogoFile] = useState(null)

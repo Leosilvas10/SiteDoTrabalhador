@@ -12,7 +12,7 @@ export const useSiteContext = () => {
 
 export const SiteProvider = ({ children }) => {
   const [siteConfig, setSiteConfig] = useState({
-    logoUrl: null, // Iniciar como null para verificar se há logo customizada
+    logoUrl: '/logo.jpeg', // Nova logo padrão
     heroTitulo: 'Encontre sua próxima oportunidade',
     heroSubtitulo: 'Conectamos trabalhadores a empresas em todo o Brasil',
     sobreTitulo: 'Sobre o Site do Trabalhador',
