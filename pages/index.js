@@ -77,39 +77,52 @@ const HomePage = () => {
       console.log('🔄 Buscando vagas em todo o Brasil...')
 
       // Verificar cache local primeiro (válido por 5 minutos)
-      const cachedData = localStorage.getItem('jobsCache')
-      const cacheTime = localStorage.getItem('jobsCacheTime')
+      let cachedData = null
+      let cacheTime = null
+      
+      try {
+        cachedData = localStorage.getItem('jobsCache')
+        cacheTime = localStorage.getItem('jobsCacheTime')
+      } catch (error) {
+        console.warn('Erro ao acessar localStorage:', error)
+      }
+      
       const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
 
       if (cachedData && cacheTime && parseInt(cacheTime) > fiveMinutesAgo) {
         console.log('📦 Usando cache local para carregar vagas rapidamente...')
-        const jobs = JSON.parse(cachedData)
-        setJobs(jobs)
-        setLoading(false)
-        setLastUpdate(new Date(parseInt(cacheTime)))
-        return
+        try {
+          const jobs = JSON.parse(cachedData)
+          if (Array.isArray(jobs)) {
+            setJobs(jobs)
+            setLoading(false)
+            setLastUpdate(new Date(parseInt(cacheTime)))
+            return
+          }
+        } catch (error) {
+          console.warn('Erro ao parsear cache:', error)
+        }
       }
 
-      // Usar nova API de vagas reais com timeout menor
+      // Usar nova API de vagas com tratamento melhorado
       const timestamp = new Date().getTime()
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 8000) // 8 segundos timeout
-
+      
+      console.log('🔗 Fazendo requisição para API de vagas...')
       const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}&limit=50`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
-        },
-        signal: controller.signal
+        }
       })
 
-      clearTimeout(timeoutId)
+      console.log('📡 Resposta da API recebida, status:', response.status)
 
       if (!response.ok) {
         throw new Error(`Erro HTTP! status: ${response.status}`)
       }
 
       const data = await response.json()
+      console.log('🔍 Dados recebidos da API:', { success: data.success, dataLength: data.data?.length })
 
       if (!data || !data.hasOwnProperty('success')) {
         throw new Error('Formato de resposta da API inválido')
@@ -120,6 +133,7 @@ const HomePage = () => {
       }
 
       const jobsData = safeArray(data.data)
+      console.log('📊 Processando vagas:', jobsData.length)
 
       // Se não há vagas reais, mostrar mensagem apropriada
       if (jobsData.length === 0) {
@@ -135,9 +149,13 @@ const HomePage = () => {
 
         setJobs(processedJobs)
         
-        // Salvar no cache local
-        localStorage.setItem('jobsCache', JSON.stringify(processedJobs))
-        localStorage.setItem('jobsCacheTime', Date.now().toString())
+        // Salvar no cache local com tratamento de erro
+        try {
+          localStorage.setItem('jobsCache', JSON.stringify(processedJobs))
+          localStorage.setItem('jobsCacheTime', Date.now().toString())
+        } catch (error) {
+          console.warn('Erro ao salvar cache:', error)
+        }
         
         console.log(`✅ ${processedJobs.length} vagas carregadas de todo o Brasil`)
         console.log(`📊 Fontes: ${data.meta?.sources?.join(', ') || 'Não informado'}`)
@@ -157,12 +175,28 @@ const HomePage = () => {
       console.error("❌ Erro ao buscar vagas:", error)
       
       // Tentar usar cache mesmo que esteja expirado em caso de erro
-      const cachedData = localStorage.getItem('jobsCache')
-      if (cachedData && error.name === 'AbortError') {
-        console.log('⏱️ Timeout - usando cache local...')
-        const jobs = JSON.parse(cachedData)
-        setJobs(jobs)
-        setError('Carregamento demorou mais que o esperado. Exibindo vagas em cache.')
+      let cachedData = null
+      try {
+        cachedData = localStorage.getItem('jobsCache')
+      } catch (error) {
+        console.warn('Erro ao acessar localStorage em fallback:', error)
+      }
+      
+      if (cachedData) {
+        console.log('🔄 Usando cache local como fallback...')
+        try {
+          const jobs = JSON.parse(cachedData)
+          if (Array.isArray(jobs) && jobs.length > 0) {
+            setJobs(jobs)
+            setError('Erro na busca em tempo real. Exibindo vagas em cache.')
+          } else {
+            throw new Error('Cache vazio ou inválido')
+          }
+        } catch (parseError) {
+          console.warn('Erro ao parsear cache em fallback:', parseError)
+          setError(`Erro ao carregar vagas: ${error.message}`)
+          setJobs([])
+        }
       } else {
         setError(`Erro ao carregar vagas: ${error.message}`)
         setJobs([])
@@ -176,6 +210,23 @@ const HomePage = () => {
 
   // Effect para busca inicial e configuração de intervalos
   useEffect(() => {
+    // Limpar cache antigo/corrompido na primeira execução
+    try {
+      const cachedData = localStorage.getItem('jobsCache')
+      if (cachedData) {
+        const jobs = JSON.parse(cachedData)
+        if (!Array.isArray(jobs)) {
+          console.log('🧹 Limpando cache corrompido...')
+          localStorage.removeItem('jobsCache')
+          localStorage.removeItem('jobsCacheTime')
+        }
+      }
+    } catch (error) {
+      console.log('🧹 Limpando cache inválido...')
+      localStorage.removeItem('jobsCache')
+      localStorage.removeItem('jobsCacheTime')
+    }
+    
     // Buscar vagas reais em vez de usar vagas mockadas
     fetchJobs()
     
@@ -193,45 +244,52 @@ const HomePage = () => {
       clearInterval(interval)
       clearInterval(countdownInterval)
     }
-  }, [])
+  }, [fetchJobs])
 
-  // Effect para filtrar vagas
+  // Effect para filtrar vagas com tratamento de erro melhorado
   useEffect(() => {
     try {
+      if (!Array.isArray(jobs)) {
+        console.warn('Jobs não é um array:', jobs)
+        setFilteredJobs([])
+        return
+      }
+
       let filtered = [...jobs]
 
       if (filters.search) {
-        filtered = filtered.filter(job => 
-          safeIncludes(job.title, filters.search) ||
-          safeIncludes(job.company.name, filters.search) ||
-          safeIncludes(job.description, filters.search) ||
-          safeIncludes(job.tags, filters.search)
-        )
+        filtered = filtered.filter(job => {
+          if (!job) return false
+          return safeIncludes(job.title, filters.search) ||
+                 safeIncludes(job.company?.name, filters.search) ||
+                 safeIncludes(job.description, filters.search) ||
+                 safeIncludes(job.tags, filters.search)
+        })
       }
 
       if (filters.city) {
         filtered = filtered.filter(job => 
-          safeIncludes(job.location, filters.city)
+          job && safeIncludes(job.location, filters.city)
         )
       }
 
       if (filters.area) {
         filtered = filtered.filter(job => 
-          safeIncludes(job.category, filters.area) || 
-          safeIncludes(job.tags, filters.area)
+          job && (safeIncludes(job.category, filters.area) || 
+                  safeIncludes(job.tags, filters.area))
         )
       }
 
       if (filters.type) {
         filtered = filtered.filter(job => 
-          safeIncludes(job.type, filters.type)
+          job && safeIncludes(job.type, filters.type)
         )
       }
 
-      setFilteredJobs(filtered)
+      setFilteredJobs(filtered || [])
     } catch (error) {
       console.error("Erro ao filtrar vagas:", error)
-      setFilteredJobs(jobs)
+      setFilteredJobs(jobs || [])
     }
   }, [filters, jobs])
 

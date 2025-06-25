@@ -31,18 +31,33 @@ const VagasPage = () => {
       
       console.log('🔄 Buscando vagas reais...')
       
-      const response = await fetch('/api/fetch-jobs')
+      // Usar a mesma API da página inicial
+      const timestamp = new Date().getTime()
+      const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}`)
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       
-      if (data.success && data.data.length > 0) {
+      if (!data || !data.hasOwnProperty('success')) {
+        throw new Error('Formato de resposta da API inválido')
+      }
+      
+      if (!data.success) {
+        throw new Error(data.message || 'Erro na API')
+      }
+      
+      if (data.success && Array.isArray(data.data) && data.data.length > 0) {
         const processedJobs = data.data.map(job => ({
           ...job,
-          timeAgo: getTimeAgo(job.publishedDate)
+          timeAgo: getTimeAgo(job.publishedDate || job.start)
         }))
         
         setJobs(processedJobs)
         setFilteredJobs(processedJobs)
-        console.log(`✅ ${processedJobs.length} vagas reais carregadas`)
+        console.log(`✅ ${processedJobs.length} vagas reais carregadas na página de vagas`)
       } else {
         setError('Nenhuma vaga encontrada no momento')
         setJobs([])
