@@ -59,15 +59,19 @@ export default async function handler(req, res) {
     }
 
     // Salvar o lead
+    console.log('🔄 Processando lead na API...')
     const result = await addLead(leadData)
+    console.log('📊 Resultado do addLead:', result)
 
     if (result.success) {
+      console.log('✅ Lead salvo com sucesso via API')
       res.status(201).json({
         success: true,
         message: 'Lead cadastrado com sucesso!',
         leadId: result.lead.id
       })
     } else {
+      console.error('❌ Erro ao salvar lead via API:', result.error)
       res.status(500).json({
         success: false,
         message: result.error || 'Erro interno do servidor'
