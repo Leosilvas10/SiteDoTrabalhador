@@ -13,6 +13,24 @@ const JobCard = ({ job, onApplyClick }) => {
   const source = job?.source || 'Fonte não informada';
   const timeAgo = job?.timeAgo || 'Recente';
 
+  // Função para ocultar cidade específica e mostrar apenas região/estado
+  const getHiddenLocation = (fullLocation) => {
+    if (!fullLocation || fullLocation === 'Local não informado') {
+      return 'Brasil';
+    }
+    
+    // Extrair apenas o estado (parte depois da vírgula)
+    const parts = fullLocation.split(',');
+    if (parts.length > 1) {
+      const state = parts[parts.length - 1].trim();
+      return `${state} - Brasil`;
+    }
+    
+    return 'Brasil';
+  };
+
+  const hiddenLocation = getHiddenLocation(location);
+
   return (
     <div className="job-card bg-slate-800 border border-slate-700 rounded-xl p-6 hover:bg-slate-750 transition-all duration-300 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20">
       {/* Cabeçalho com logo e informações da empresa */}
@@ -28,7 +46,7 @@ const JobCard = ({ job, onApplyClick }) => {
           </h3>
           <p className="text-slate-400 text-sm mb-1">{companyName}</p>
           <div className="flex items-center gap-3 text-xs text-slate-500">
-            <span>📍 {location}</span>
+            <span>📍 {hiddenLocation}</span>
             <span>⏰ {timeAgo}</span>
           </div>
         </div>
@@ -86,6 +104,11 @@ const JobCard = ({ job, onApplyClick }) => {
           <span>Quero me candidatar</span>
           <span>🔗</span>
         </button>
+        
+        {/* Informação sobre localização */}
+        <p className="text-xs text-slate-500 text-center mt-2">
+          📍 Localização completa revelada após candidatura
+        </p>
       </div>
     </div>
   );

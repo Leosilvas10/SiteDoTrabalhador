@@ -98,18 +98,18 @@ const Header = () => {
             <div className="flex items-center cursor-pointer" onClick={scrollToTop}>
               {siteConfig.logoUrl ? (
                 <div className="relative h-24 sm:h-28 w-40 sm:w-48 flex items-center group logo-container">
-                  {/* Background com contraste forte e múltiplas camadas de efeito */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-500 border-2 border-white/20">
-                    {/* Camada de contraste adicional */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-green-500/30 to-blue-800/30 rounded-3xl"></div>
+                  {/* Background com fundo branco para logo aparecer bem */}
+                  <div className="absolute inset-0 bg-white rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-500 border-2 border-slate-200">
+                    {/* Camada de contraste sutil */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-green-50 to-blue-50 rounded-3xl"></div>
                     {/* Efeito de brilho animado */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-3xl shimmer-effect opacity-60"></div>
-                    {/* Borda interna brilhante */}
-                    <div className="absolute inset-2 border border-white/30 rounded-2xl"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-100 to-transparent rounded-3xl shimmer-effect opacity-40"></div>
+                    {/* Borda interna colorida */}
+                    <div className="absolute inset-2 border border-blue-200 rounded-2xl"></div>
                     {/* Sombra interna para profundidade */}
-                    <div className="absolute inset-0 rounded-3xl shadow-inner bg-gradient-to-t from-black/30 to-transparent"></div>
+                    <div className="absolute inset-0 rounded-3xl shadow-inner bg-gradient-to-t from-slate-100/50 to-transparent"></div>
                     {/* Efeito de reflexo no topo */}
-                    <div className="absolute top-3 left-3 right-3 h-8 bg-gradient-to-b from-white/20 to-transparent rounded-t-2xl blur-sm"></div>
+                    <div className="absolute top-3 left-3 right-3 h-8 bg-gradient-to-b from-blue-50 to-transparent rounded-t-2xl blur-sm"></div>
                   </div>
                   {/* Anel de luz externa para hover */}
                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-green-400 rounded-3xl opacity-0 group-hover:opacity-60 blur transition-all duration-500"></div>
