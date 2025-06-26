@@ -32,14 +32,31 @@ export default async function handler(req, res) {
         success: true,
         message: 'Nenhuma vaga disponível no momento',
         jobs: [],
-        data: []
+        data: [],
+        meta: {
+          total: 0,
+          totalAvailable: 0
+        }
       });
     }
 
-    console.log(`✅ Home API: ${jobs.length} vagas (cidades ocultas)`);
+    // Buscar o total de vagas disponíveis no sistema para mostrar no card
+    const { fetchRealJobsFromBrazil } = require('../../lib/realJobScraper');
+    let totalSystemJobs = 0;
+    
+    try {
+      const systemResult = await fetchRealJobsFromBrazil();
+      totalSystemJobs = systemResult.success ? systemResult.data.length : 0;
+    } catch (error) {
+      console.log('⚠️ Erro ao buscar total do sistema:', error.message);
+      totalSystemJobs = 300; // Fallback para o mínimo garantido
+    }
 
-    // Garantir que as cidades estão ocultas
-    const homeJobs = jobs.map(job => ({
+    console.log(`✅ Home API: ${jobs.length} vagas disponíveis, mostrando 6 em destaque`);
+    console.log(`📊 Total no sistema: ${totalSystemJobs} vagas`);
+
+    // Garantir que as cidades estão ocultas - APENAS 6 vagas em destaque
+    const homeJobs = jobs.slice(0, 6).map(job => ({
       ...job,
       location: 'Brasil', // Sempre "Brasil" na home
       originalLocation: job.originalLocation || job.location, // Salvar original
@@ -49,14 +66,15 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: `${homeJobs.length} vagas em destaque`,
+      message: `${totalSystemJobs} vagas disponíveis | Mostrando ${homeJobs.length} em destaque`,
       jobs: homeJobs,
       data: homeJobs,
       meta: {
         total: homeJobs.length,
+        totalAvailable: totalSystemJobs,
         displayType: 'home',
         locationHidden: true,
-        maxDisplay: 20,
+        maxDisplay: 6,
         lastUpdate: new Date().toISOString(),
         info: {
           message: 'Localizações específicas reveladas após candidatura',

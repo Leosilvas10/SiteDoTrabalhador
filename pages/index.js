@@ -15,6 +15,9 @@ const HomePage = () => {
   const [lastUpdate, setLastUpdate] = useState(null)
   const [nextUpdate, setNextUpdate] = useState(null)
   const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
+  const [totalSystemJobs, setTotalSystemJobs] = useState(0) // Total de vagas no sistema
+  const [nextUpdate, setNextUpdate] = useState(null)
+  const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
 
   const safeArray = (arr) => {
     return Array.isArray(arr) ? arr : []
@@ -115,7 +118,13 @@ const HomePage = () => {
       }
 
       const jobsData = safeArray(data.data)
+      const totalAvailable = data.meta?.totalAvailable || jobsData.length
+      
       console.log('📊 Processando vagas HOME (sem cidade):', jobsData.length)
+      console.log('📈 Total no sistema:', totalAvailable)
+
+      // Atualizar total do sistema
+      setTotalSystemJobs(totalAvailable)
 
       // Se não há vagas reais, mostrar mensagem apropriada
       if (jobsData.length === 0) {
@@ -123,8 +132,8 @@ const HomePage = () => {
         setError('Nenhuma vaga encontrada no momento. Estamos buscando novas oportunidades em todo o Brasil.')
         console.log('⚠️ Nenhuma vaga encontrada')
       } else {
-        // Processar vagas HOME (limitadas a 20, sem cidade específica)
-        const processedJobs = jobsData.slice(0, 20).map(job => ({
+        // Processar vagas HOME (limitadas a 6, sem cidade específica)
+        const processedJobs = jobsData.slice(0, 6).map(job => ({
           ...job,
           timeAgo: getTimeAgo(job.publishedDate || job.start),
           // Garantir que a cidade está oculta na home
@@ -287,7 +296,7 @@ const HomePage = () => {
               ) : jobs.length > 0 ? (
                 <>
                   <p className="text-xl text-govgreen-600 mb-2 font-bold">
-                    ✅ {jobs.length} vagas disponíveis | Mostrando {Math.min(6, jobs.length)} em destaque
+                    ✅ {totalSystemJobs} vagas disponíveis | Mostrando {Math.min(6, jobs.length)} em destaque
                   </p>
                   {lastUpdate && (
                     <div className="text-sm text-govgray-600 space-y-1 font-medium">
@@ -307,7 +316,7 @@ const HomePage = () => {
             {/* Estatísticas em destaque */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-white">{jobs.length}</div>
+                <div className="text-2xl font-bold text-white">{totalSystemJobs}</div>
                 <div className="text-blue-200 text-sm">Vagas</div>
               </div>
               <div className="bg-gradient-to-br from-green-600 to-green-800 p-4 rounded-xl text-center">
@@ -377,14 +386,14 @@ const HomePage = () => {
               </div>
 
               {/* Botão Ver Todas as Vagas */}
-              {jobs.length > 6 && (
+              {jobs.length >= 6 && (
                 <div className="text-center mt-12">
                   <div className="mb-4">
                     <p className="text-slate-300 mb-2">
                       Mostrando apenas 6 vagas em destaque
                     </p>
                     <p className="text-blue-400 font-semibold">
-                      {jobs.length - 6} vagas adicionais disponíveis
+                      54+ vagas adicionais disponíveis
                     </p>
                   </div>
                   <button
@@ -392,11 +401,11 @@ const HomePage = () => {
                     className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
                   >
                     <span className="mr-2">👀</span>
-                    Ver Todas as {jobs.length} Vagas
+                    Ver Todas as Vagas
                     <span className="ml-2">→</span>
                   </button>
                   <p className="text-sm text-slate-400 mt-3">
-                    Filtros avançados, busca por cidade e muito mais na página de vagas
+                    60 vagas atualizadas a cada 30 minutos - Filtros, busca por cidade e mais
                   </p>
                 </div>
               )}

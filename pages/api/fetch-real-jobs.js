@@ -37,8 +37,8 @@ export default async function handler(req, res) {
 
     const { data: allJobs, sources, cached, total, nextUpdate, stats } = result;
 
-    // Limitar para página de vagas (60 vagas - quantidade adequada para navegação)
-    const jobs = allJobs.slice(0, 60);
+    // Limitar para página de vagas (120 vagas - quantidade otimizada para navegação)
+    const jobs = allJobs.slice(0, 120);
 
     console.log(`✅ API respondendo com ${jobs.length} vagas reais`);
     console.log(`📊 Fontes utilizadas: ${sources.join(', ')}`);
