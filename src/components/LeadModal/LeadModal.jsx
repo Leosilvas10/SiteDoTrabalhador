@@ -92,85 +92,96 @@ const LeadModal = ({ job, onClose }) => {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('/api/leads', {
+      const leadSubmission = {
+        // Dados do formulário
+        nome: formData.name,
+        email: formData.email,
+        telefone: formData.whatsapp,
+        experiencia: `Última empresa: ${formData.lastCompany}. Status atual: ${formData.workStatus}. Recebeu direitos: ${formData.receivedRights}. Problemas no trabalho: ${formData.workIssues}. Deseja consultoria: ${formData.wantConsultation}`,
+        lgpdConsent: formData.lgpdConsent,
+        
+        // Dados da vaga para redirecionamento  
+        jobId: job.id,
+        jobTitle: job.title,
+        company: job.company?.name || job.company,
+        jobLink: job.url || job.link || job.apply_url || job.original_url,
+        originalLocation: job.originalLocation || job.location,
+        
+        // Metadados
+        timestamp: new Date().toISOString(),
+        source: 'Site do Trabalhador - Home'
+      }
+
+      console.log('📤 Enviando lead:', leadSubmission)
+
+      const response = await fetch('/api/submit-lead', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          jobTitle: job.title,
-          jobCompany: job.company?.name || job.company,
-          jobUrl: job.url || '',
-          jobLocation: job.location || '',
-          jobSalary: job.salary || '',
-          timestamp: new Date().toISOString()
-        }),
+        body: JSON.stringify(leadSubmission),
       })
 
       const result = await response.json()
+      console.log('📥 Resposta do lead:', result)
 
       if (result.success) {
         // Fechar modal primeiro
         onClose()
         
-        // Criar mensagem personalizada
-        let successMessage = '✅ Candidatura enviada com sucesso! Nossa equipe entrará em contato em breve.'
-        
-        // Tentar redirecionar para a vaga real sempre que possível
-        const redirectUrl = job.url || job.link || job.apply_url || job.original_url
-        
-        if (redirectUrl && redirectUrl !== '#' && redirectUrl !== '' && redirectUrl !== 'null') {
-          successMessage += '\n\n🔗 Agora você será redirecionado para buscar vagas similares nos principais sites de emprego do Brasil!'
+        // Verificar se há dados de redirecionamento
+        if (result.redirect && result.redirect.url) {
+          const { url, originalLocation, company, jobTitle, message } = result.redirect
+          
+          // Mostrar mensagem com informações da vaga real
+          let successMessage = '✅ Candidatura enviada com sucesso!'
+          
+          if (originalLocation && originalLocation !== 'Brasil') {
+            successMessage += `\n\n📍 Localização da vaga: ${originalLocation}`
+          }
+          
+          if (company) {
+            successMessage += `\n🏢 Empresa: ${company}`
+          }
+          
+          successMessage += `\n\n${message || 'Você será redirecionado para a vaga original em instantes...'}`
           
           alert(successMessage)
           
-          // Redirecionamento mais robusto com múltiplas tentativas
+          // Redirecionamento com delay
           setTimeout(() => {
-            console.log('🔗 Iniciando redirecionamento para:', redirectUrl)
-            
-            // Criar elemento de link temporário para garantir redirecionamento
-            const link = document.createElement('a')
-            link.href = redirectUrl
-            link.target = '_blank'
-            link.rel = 'noopener noreferrer'
-            
-            // Adicionar ao DOM temporariamente
-            document.body.appendChild(link)
+            console.log('🔗 Redirecionando para:', url)
             
             try {
-              // Primeira tentativa: Click programático
-              link.click()
-              console.log('✅ Redirecionamento via click() executado')
-            } catch (error) {
-              console.log('⚠️ Click falhou, tentando window.open...')
-              try {
-                // Segunda tentativa: window.open
-                const newWindow = window.open(redirectUrl, '_blank', 'noopener,noreferrer')
-                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                  throw new Error('Popup bloqueado')
-                }
-                console.log('✅ Redirecionamento via window.open executado')
-              } catch (finalError) {
-                console.log('⚠️ Window.open falhou, usando location.href...')
-                // Terceira tentativa: location.href
-                window.location.href = redirectUrl
+              // Tentar abrir em nova aba
+              const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+              
+              if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                // Se popup bloqueado, usar location.href
+                console.log('⚠️ Popup bloqueado, redirecionando na mesma aba...')
+                window.location.href = url
+              } else {
+                console.log('✅ Redirecionamento em nova aba realizado')
               }
-            } finally {
-              // Remover link temporário
-              document.body.removeChild(link)
+            } catch (error) {
+              console.error('❌ Erro no redirecionamento:', error)
+              // Fallback: redirecionar na mesma aba
+              window.location.href = url
             }
-          }, 1500)
+          }, 2000) // 2 segundos de delay
+          
         } else {
-          alert(successMessage)
+          // Sem redirecionamento específico
+          alert('✅ Candidatura enviada com sucesso!\n\nNossa equipe entrará em contato em breve.')
         }
+        
       } else {
         alert('❌ Erro ao enviar candidatura: ' + (result.message || 'Tente novamente'))
       }
 
     } catch (error) {
-      console.error('Erro ao enviar lead:', error)
-      alert('❌ Erro ao enviar candidatura. Tente novamente.')
+      console.error('❌ Erro ao enviar lead:', error)
+      alert('❌ Erro ao enviar candidatura. Verifique sua conexão e tente novamente.')
     } finally {
       setIsSubmitting(false)
     }

@@ -1,4 +1,8 @@
 
+// API para submissão de leads com redirecionamento para vaga original
+const fs = require('fs').promises;
+const path = require('path');
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -36,7 +40,7 @@ export default async function handler(req, res) {
       });
     }
     
-    // Adicionar informações de rastreamento
+    // Adicionar informações de rastreamento e redirecionamento
     const submissionData = {
       ...leadData,
       timestamp: new Date().toLocaleString('pt-BR'),
@@ -45,7 +49,14 @@ export default async function handler(req, res) {
       userAgent: req.headers['user-agent'],
       leadId: `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       source: 'Site do Trabalhador',
-      validated: true
+      validated: true,
+      
+      // Dados da vaga para redirecionamento
+      jobId: leadData.jobId,
+      jobLink: leadData.jobLink || leadData.originalJobUrl,
+      originalLocation: leadData.originalLocation,
+      company: leadData.company,
+      jobTitle: leadData.jobTitle
     };
 
     // Log detalhado do lead
@@ -56,36 +67,75 @@ export default async function handler(req, res) {
       telefone: submissionData.telefone,
       vaga: submissionData.jobTitle,
       empresa: submissionData.company,
+      originalLocation: submissionData.originalLocation,
       timestamp: submissionData.timestamp
     });
 
-    // You can integrate with:
-    // 1. Google Sheets API directly
-    // 2. SheetDB (https://sheetdb.io/)
-    // 3. Google Apps Script Web App
+    // Salvar lead em arquivo JSON local (backup)
+    try {
+      const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
+      
+      let existingLeads = [];
+      try {
+        const fileContent = await fs.readFile(leadsFilePath, 'utf8');
+        existingLeads = JSON.parse(fileContent);
+      } catch (err) {
+        // Arquivo não existe ou está vazio, começar com array vazio
+        console.log('Criando novo arquivo de leads...');
+      }
+
+      existingLeads.push(submissionData);
+      
+      // Manter apenas os últimos 1000 leads para evitar arquivo muito grande
+      if (existingLeads.length > 1000) {
+        existingLeads = existingLeads.slice(-1000);
+      }
+
+      await fs.writeFile(leadsFilePath, JSON.stringify(existingLeads, null, 2));
+      console.log(`💾 Lead salvo localmente: ${submissionData.leadId}`);
+    } catch (saveError) {
+      console.error('⚠️ Erro ao salvar lead localmente:', saveError.message);
+      // Não bloquear o processo se falhar ao salvar
+    }
+
+    // Preparar resposta com dados de redirecionamento
+    const response = {
+      success: true,
+      message: 'Candidatura enviada com sucesso!',
+      leadId: submissionData.leadId,
+      redirect: {
+        url: submissionData.jobLink,
+        originalLocation: submissionData.originalLocation,
+        company: submissionData.company,
+        jobTitle: submissionData.jobTitle,
+        message: 'Você será redirecionado para a vaga original em instantes...'
+      }
+    };
+
+    // Se não houver link da vaga, criar um link de busca genérico
+    if (!response.redirect.url || response.redirect.url === '#') {
+      const encodedTitle = encodeURIComponent(submissionData.jobTitle || 'emprego');
+      const encodedLocation = encodeURIComponent((submissionData.originalLocation || 'brasil').split(',')[0]);
+      
+      response.redirect.url = `https://www.indeed.com.br/jobs?q=${encodedTitle}&l=${encodedLocation}`;
+      response.redirect.message = 'Você será redirecionado para buscar vagas similares...';
+    }
+
+    console.log('🔗 Redirecionamento preparado:', response.redirect);
+
+    // Future integrations:
+    // 1. Google Sheets API
+    // 2. CRM integration  
+    // 3. Email notifications
+    // 4. WhatsApp notifications
+
+    res.status(200).json(response);
     
-    // Example SheetDB integration:
-    // const response = await fetch('https://sheetdb.io/api/v1/YOUR_SHEET_ID', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(submissionData)
-    // });
-
-    // Send email notification (you can use EmailJS, Resend, or similar)
-    // await sendEmailNotification(submissionData);
-
-    res.status(200).json({ 
-      success: true, 
-      message: 'Lead submitted successfully' 
-    });
   } catch (error) {
-    console.error('Error submitting lead:', error);
+    console.error('❌ Erro ao submeter lead:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Error submitting lead' 
+      message: 'Erro interno do servidor. Tente novamente.' 
     });
   }
 }

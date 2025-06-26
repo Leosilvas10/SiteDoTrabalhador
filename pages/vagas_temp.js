@@ -1,7 +1,7 @@
 import Head from "next/head"
 import { useState, useEffect } from "react"
 import Header from "../src/components/Header/Header"
-import SimpleCopyright from "../src/components/Copyright/SimpleCopyright"
+import Footer from "../src/components/Footer/Footer"
 import LeadModal from "../src/components/LeadModal/LeadModal"
 
 const VagasPage = () => {
@@ -39,7 +39,7 @@ const VagasPage = () => {
       
       console.log('🔄 Buscando vagas reais...')
       
-      // Usar API real que retorna vagas com localização completa
+      // Usar a mesma API da página inicial
       const timestamp = new Date().getTime()
       const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}`)
       
@@ -49,12 +49,11 @@ const VagasPage = () => {
       
       const data = await response.json()
       
-      if (data.success && (data.jobs || data.data)) {
-        const jobs = data.jobs || data.data;
-        console.log(`✅ ${jobs.length} vagas carregadas`)
+      if (data.success && data.jobs) {
+        console.log(`✅ ${data.jobs.length} vagas carregadas`)
         
         // Adicionar ID único se não existir
-        const jobsWithId = jobs.map((job, index) => ({
+        const jobsWithId = data.jobs.map((job, index) => ({
           ...job,
           id: job.id || `job-${index}`,
           timeAgo: calculateTimeAgo(job.datePosted || job.created_at || new Date())
@@ -481,7 +480,7 @@ const VagasPage = () => {
         )}
       </main>
 
-      <SimpleCopyright />
+      <Footer />
 
       {/* Modal de Candidatura */}
       {selectedJob && (

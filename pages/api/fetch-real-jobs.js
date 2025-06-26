@@ -1,4 +1,4 @@
-// API para buscar vagas REAIS do Brasil
+// API ROBUSTA para buscar 300+ vagas REAIS do Brasil
 const { fetchRealJobsFromBrazil } = require('../../lib/realJobScraper');
 
 export default async function handler(req, res) {
@@ -20,38 +20,35 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log('🇧🇷 === API VAGAS REAIS DO BRASIL ===');
+    console.log('🇧🇷 === API VAGAS ROBUSTA 300+ ===');
     console.log('📅 Timestamp:', new Date().toISOString());
     
-    // FORÇAR USO DO GERADOR POR ENQUANTO PARA DEBUG
-    console.log('🔧 MODO DEBUG: Usando gerador de vagas brasileiro');
-    const { generateBrazilianMarketJobs } = require('../../lib/realJobScraper');
-    const jobs = generateBrazilianMarketJobs(50);
+    // Buscar vagas reais usando o sistema robusto
+    const result = await fetchRealJobsFromBrazil();
     
-    console.log(`✅ API respondendo com ${jobs.length} vagas geradas`);
-    
-    // Buscar vagas reais usando o scraper robusto (comentado temporariamente)
-    // const result = await fetchRealJobsFromBrazil();
-    
-    // if (!result.success) {
-    //   console.error('❌ Erro na busca de vagas:', result.message);
-    //   return res.status(500).json({
-    //     success: false,
-    //     message: 'Erro interno do servidor ao buscar vagas',
-    //     data: []
-    //   });
-    // }
+    if (!result.success) {
+      console.error('❌ Erro na busca de vagas:', result.message);
+      return res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor ao buscar vagas',
+        data: []
+      });
+    }
 
-    // const { data: jobs, sources, cached, total, nextUpdate } = result;
+    const { data: allJobs, sources, cached, total, nextUpdate, stats } = result;
 
-    // console.log(`✅ API respondendo com ${jobs.length} vagas reais`);
-    // console.log(`📊 Fontes utilizadas: ${sources.join(', ')}`);
-    // console.log(`💾 Cache: ${cached ? 'SIM' : 'NÃO'}`);
+    // Limitar para página de vagas (60 vagas - quantidade adequada para navegação)
+    const jobs = allJobs.slice(0, 60);
+
+    console.log(`✅ API respondendo com ${jobs.length} vagas reais`);
+    console.log(`📊 Fontes utilizadas: ${sources.join(', ')}`);
+    console.log(`💾 Cache: ${cached ? 'SIM' : 'NÃO'}`);
+    console.log(`🎯 Limitado para página de vagas: ${jobs.length} de ${allJobs.length} disponíveis`);
 
     // Estatísticas das vagas
-    const stats = {
+    const finalStats = {
       total: jobs.length,
-      bySource: { 'Gerador Brasileiro': jobs.length },
+      bySource: stats?.bySource || {},
       byCategory: {},
       byLocation: {},
       recentJobs: jobs.filter(job => {
@@ -61,17 +58,16 @@ export default async function handler(req, res) {
       }).length
     };
 
-    // Contar por fonte
+    // Contar por categoria e localização
     jobs.forEach(job => {
-      stats.bySource[job.source] = (stats.bySource[job.source] || 0) + 1;
-      stats.byCategory[job.category] = (stats.byCategory[job.category] || 0) + 1;
+      finalStats.byCategory[job.category] = (finalStats.byCategory[job.category] || 0) + 1;
       
       // Extrair estado da localização
       const state = job.location.split(',').pop()?.trim() || 'N/A';
-      stats.byLocation[state] = (stats.byLocation[state] || 0) + 1;
+      finalStats.byLocation[state] = (finalStats.byLocation[state] || 0) + 1;
     });
 
-    console.log('📈 Estatísticas das vagas:', stats);
+    console.log('📈 Estatísticas das vagas:', finalStats);
 
     return res.status(200).json({
       success: true,
@@ -84,12 +80,15 @@ export default async function handler(req, res) {
         cached: cached,
         lastUpdate: new Date().toISOString(),
         nextUpdate: nextUpdate,
-        stats: stats,
+        updateInterval: '30 minutos',
+        stats: finalStats,
         searchInfo: {
           scope: 'Todo o Brasil',
-          jobTypes: 'Vagas simples e operacionais',
-          realData: true,
-          autoUpdate: '20 minutos'
+          jobTypes: 'Vagas diversas e trabalhos simples',
+          realData: !result.fallback,
+          autoUpdate: true,
+          minJobs: 300,
+          maxJobs: 500
         }
       }
     });
@@ -99,11 +98,11 @@ export default async function handler(req, res) {
     
     // Em caso de erro, retornar ao menos algumas vagas de emergência
     const { generateBrazilianMarketJobs } = require('../../lib/realJobScraper');
-    const emergencyJobs = generateBrazilianMarketJobs(25);
+    const emergencyJobs = generateBrazilianMarketJobs(300);
 
     return res.status(200).json({
       success: true,
-      message: 'Vagas de emergência carregadas',
+      message: 'Sistema de emergência ativo - vagas carregadas',
       jobs: emergencyJobs,
       data: emergencyJobs,
       meta: {
@@ -112,10 +111,12 @@ export default async function handler(req, res) {
         cached: false,
         lastUpdate: new Date().toISOString(),
         error: error.message,
+        fallback: true,
         searchInfo: {
           scope: 'Todo o Brasil',
           jobTypes: 'Dados de emergência',
-          realData: false
+          realData: false,
+          emergency: true
         }
       }
     });

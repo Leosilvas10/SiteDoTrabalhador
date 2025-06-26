@@ -86,25 +86,25 @@ const HomePage = () => {
         }
       }
 
-      // Usar nova API de vagas com tratamento melhorado
+      // Usar nova API específica para HOME (sem cidades específicas)
       const timestamp = new Date().getTime()
       
-      console.log('🔗 Fazendo requisição para API de vagas...')
-      const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}&limit=50`, {
+      console.log('🏠 Fazendo requisição para API de vagas HOME...')
+      const response = await fetch(`/api/fetch-home-jobs?t=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
         }
       })
 
-      console.log('📡 Resposta da API recebida, status:', response.status)
+      console.log('📡 Resposta da API HOME recebida, status:', response.status)
 
       if (!response.ok) {
         throw new Error(`Erro HTTP! status: ${response.status}`)
       }
 
       const data = await response.json()
-      console.log('🔍 Dados recebidos da API:', { success: data.success, dataLength: data.data?.length })
+      console.log('🔍 Dados HOME recebidos:', { success: data.success, dataLength: data.data?.length })
 
       if (!data || !data.hasOwnProperty('success')) {
         throw new Error('Formato de resposta da API inválido')
@@ -115,7 +115,7 @@ const HomePage = () => {
       }
 
       const jobsData = safeArray(data.data)
-      console.log('📊 Processando vagas:', jobsData.length)
+      console.log('📊 Processando vagas HOME (sem cidade):', jobsData.length)
 
       // Se não há vagas reais, mostrar mensagem apropriada
       if (jobsData.length === 0) {
@@ -123,10 +123,14 @@ const HomePage = () => {
         setError('Nenhuma vaga encontrada no momento. Estamos buscando novas oportunidades em todo o Brasil.')
         console.log('⚠️ Nenhuma vaga encontrada')
       } else {
-        // Processar vagas reais e adicionar campo de tempo calculado
-        const processedJobs = jobsData.map(job => ({
+        // Processar vagas HOME (limitadas a 20, sem cidade específica)
+        const processedJobs = jobsData.slice(0, 20).map(job => ({
           ...job,
-          timeAgo: getTimeAgo(job.publishedDate || job.start)
+          timeAgo: getTimeAgo(job.publishedDate || job.start),
+          // Garantir que a cidade está oculta na home
+          location: 'Brasil',
+          originalLocation: job.originalLocation || job.location,
+          showLocation: false
         }))
 
         setJobs(processedJobs)
