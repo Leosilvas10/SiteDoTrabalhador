@@ -14,7 +14,7 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [lastUpdate, setLastUpdate] = useState(null)
   const [nextUpdate, setNextUpdate] = useState(null)
-  const [updateCountdown, setUpdateCountdown] = useState(20 * 60) // 20 minutos em segundos
+  const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
 
   const safeArray = (arr) => {
     return Array.isArray(arr) ? arr : []
@@ -150,8 +150,8 @@ const HomePage = () => {
         setNextUpdate(new Date(data.meta.nextUpdate))
       }
 
-      // Resetar countdown para 20 minutos
-      setUpdateCountdown(20 * 60)
+      // Resetar countdown para 30 minutos
+      setUpdateCountdown(30 * 60)
 
     } catch (error) {
       console.error("❌ Erro ao buscar vagas:", error)
@@ -212,14 +212,14 @@ const HomePage = () => {
     // Buscar vagas reais em vez de usar vagas mockadas
     fetchJobs()
     
-    // Configurar atualização automática a cada 20 minutos
+    // Configurar atualização automática a cada 30 minutos
     const interval = setInterval(() => {
       fetchJobs(false) // Não mostrar loading no auto-refresh
-    }, 20 * 60 * 1000) // 20 minutos
+    }, 30 * 60 * 1000) // 30 minutos
     
     // Configurar countdown
     const countdownInterval = setInterval(() => {
-      setUpdateCountdown(prev => prev > 0 ? prev - 1 : 20 * 60)
+      setUpdateCountdown(prev => prev > 0 ? prev - 1 : 30 * 60)
     }, 1000)
     
     return () => {
@@ -289,7 +289,7 @@ const HomePage = () => {
                     <div className="text-sm text-govgray-600 space-y-1 font-medium">
                       <p>Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}</p>
                       <p>Próxima atualização em: {formatCountdown(updateCountdown)}</p>
-                      <p>🔄 Atualização automática a cada 20 minutos</p>
+                      <p>🔄 Atualização automática a cada 30 minutos</p>
                     </div>
                   )}
                 </>
@@ -311,7 +311,7 @@ const HomePage = () => {
                 <div className="text-green-200 text-sm">Verificadas</div>
               </div>
               <div className="bg-gradient-to-br from-purple-600 to-purple-800 p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-white">20min</div>
+                <div className="text-2xl font-bold text-white">30min</div>
                 <div className="text-purple-200 text-sm">Atualização</div>
               </div>
               <div className="bg-gradient-to-br from-yellow-600 to-yellow-800 p-4 rounded-xl text-center">
