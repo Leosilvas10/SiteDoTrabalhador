@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Header from '../src/components/Header/Header'
 import SimpleCopyright from '../src/components/Copyright/SimpleCopyright'
+import LeadModal from '../src/components/LeadModal/LeadModal'
 
 const VagasPage = () => {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedJob, setSelectedJob] = useState(null)
+  const jobsPerPage = 9
 
   useEffect(() => {
     // Buscar vagas da API
@@ -25,6 +30,22 @@ const VagasPage = () => {
         setLoading(false)
       })
   }, [])
+
+  // Cálculos de paginação
+  const totalPages = Math.ceil(jobs.length / jobsPerPage)
+  const startIndex = (currentPage - 1) * jobsPerPage
+  const endIndex = startIndex + jobsPerPage
+  const currentJobs = jobs.slice(startIndex, endIndex)
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleApply = (job) => {
+    setSelectedJob(job)
+    setIsModalOpen(true)
+  }
 
   return (
     <>
@@ -73,11 +94,11 @@ const VagasPage = () => {
           </section>
         )}
 
-        {/* Lista de Vagas Simples */}
+        {/* Lista de Vagas com Paginação */}
         {!loading && !error && jobs.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {jobs.slice(0, 12).map((job, index) => (
+              {currentJobs.map((job, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-govgray-800 mb-1">{job.title || 'Vaga sem título'}</h3>
@@ -99,24 +120,50 @@ const VagasPage = () => {
                     {job.description || 'Descrição não disponível'}
                   </p>
 
-                  <div className="flex gap-2">
-                    <button className="flex-1 bg-govblue-600 text-white py-2 px-4 rounded-lg hover:bg-govblue-700 transition-colors font-medium">
-                      ✅ Ver Vaga
-                    </button>
-                    {job.url && (
-                      <a
-                        href={job.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-govgray-100 text-govgray-700 py-2 px-3 rounded-lg hover:bg-govgray-200 transition-colors font-medium"
-                      >
-                        🔗
-                      </a>
-                    )}
-                  </div>
+                  <button 
+                    onClick={() => handleApply(job)}
+                    className="w-full bg-govgreen-600 text-white py-3 px-4 rounded-lg hover:bg-govgreen-700 transition-colors font-medium shadow-md"
+                  >
+                    ✨ Quero me Candidatar
+                  </button>
                 </div>
               ))}
             </div>
+
+            {/* Paginação */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center mt-12 space-x-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-govgray-100 text-govgray-700 rounded-lg hover:bg-govgray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  ← Anterior
+                </button>
+                
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      currentPage === i + 1
+                        ? 'bg-govblue-600 text-white'
+                        : 'bg-govgray-100 text-govgray-700 hover:bg-govgray-200'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-govgray-100 text-govgray-700 rounded-lg hover:bg-govgray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Próxima →
+                </button>
+              </div>
+            )}
           </section>
         )}
 
@@ -135,12 +182,19 @@ const VagasPage = () => {
       </main>
 
       {/* Espaço branco antes do footer */}
-      <div className="bg-white py-12">
+      <div className="bg-govgray-50 py-12">
         {/* Espaço em branco intencional */}
       </div>
 
       {/* Footer simples */}
       <SimpleCopyright />
+
+      {/* Modal de Lead */}
+      <LeadModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        jobData={selectedJob}
+      />
     </>
   )
 }

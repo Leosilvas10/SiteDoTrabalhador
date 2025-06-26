@@ -158,7 +158,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'rescisao')} className="space-y-4">
             <div>
-              <label className="block text-slate-300 mb-2">Salário Bruto (R$)</label>
+              <label className="block text-govgray-200 mb-2">Salário Bruto (R$)</label>
               <input 
                 type="number" 
                 name="salario"
@@ -169,7 +169,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Tempo de Trabalho (meses)</label>
+              <label className="block text-govgray-200 mb-2">Tempo de Trabalho (meses)</label>
               <input 
                 type="number" 
                 name="meses"
@@ -179,7 +179,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Tipo de Rescisão</label>
+              <label className="block text-govgray-200 mb-2">Tipo de Rescisão</label>
               <select name="tipo" className="form-input w-full" required>
                 <option value="demissao-sem-justa-causa">Demissão sem justa causa</option>
                 <option value="pedido-demissao">Pedido de demissão</option>
@@ -197,7 +197,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'ferias')} className="space-y-4">
             <div>
-              <label className="block text-slate-300 mb-2">Salário Mensal (R$)</label>
+              <label className="block text-govgray-200 mb-2">Salário Mensal (R$)</label>
               <input 
                 type="number" 
                 name="salario"
@@ -208,7 +208,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Dias Trabalhados no Período</label>
+              <label className="block text-govgray-200 mb-2">Dias Trabalhados no Período</label>
               <input 
                 type="number" 
                 name="diasTrabalhados"
@@ -227,7 +227,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'horasextras')} className="space-y-4">
             <div>
-              <label className="block text-slate-300 mb-2">Valor Hora Normal (R$)</label>
+              <label className="block text-govgray-200 mb-2">Valor Hora Normal (R$)</label>
               <input 
                 type="number" 
                 name="salarioHora"
@@ -238,7 +238,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Quantidade de Horas Extras</label>
+              <label className="block text-govgray-200 mb-2">Quantidade de Horas Extras</label>
               <input 
                 type="number" 
                 name="horasExtras"
@@ -248,7 +248,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Percentual de Adicional (%)</label>
+              <label className="block text-govgray-200 mb-2">Percentual de Adicional (%)</label>
               <select name="percentual" className="form-input w-full" required>
                 <option value="50">50% (dias úteis)</option>
                 <option value="100">100% (domingos e feriados)</option>
@@ -264,7 +264,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'adicionalnoturno')} className="space-y-4">
             <div>
-              <label className="block text-slate-300 mb-2">Valor Hora Normal (R$)</label>
+              <label className="block text-govgray-200 mb-2">Valor Hora Normal (R$)</label>
               <input 
                 type="number" 
                 name="salarioHora"
@@ -275,7 +275,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Horas Noturnas Trabalhadas</label>
+              <label className="block text-govgray-200 mb-2">Horas Noturnas Trabalhadas</label>
               <input 
                 type="number" 
                 name="horasNoturnas"
@@ -284,7 +284,7 @@ const CalculadoraTrabalhista = () => {
                 required 
               />
             </div>
-            <div className="text-sm text-slate-400 bg-slate-800/50 p-3 rounded">
+            <div className="text-sm text-govgray-300 bg-govgray-700/80 p-3 rounded border border-govgray-600">
               💡 Adicional noturno: 20% sobre o valor da hora normal (22h às 5h)
             </div>
             <button type="submit" className="btn-primary w-full">
@@ -297,7 +297,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'salarioliquido')} className="space-y-4">
             <div>
-              <label className="block text-slate-300 mb-2">Salário Bruto (R$)</label>
+              <label className="block text-govgray-200 mb-2">Salário Bruto (R$)</label>
               <input 
                 type="number" 
                 name="salarioBruto"
@@ -308,7 +308,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 mb-2">Número de Dependentes</label>
+              <label className="block text-govgray-200 mb-2">Número de Dependentes</label>
               <input 
                 type="number" 
                 name="dependentes"
@@ -323,7 +323,7 @@ const CalculadoraTrabalhista = () => {
                 id="valeTransporte"
                 className="form-checkbox"
               />
-              <label htmlFor="valeTransporte" className="text-slate-300">Desconta Vale Transporte (6%)</label>
+              <label htmlFor="valeTransporte" className="text-govgray-200">Desconta Vale Transporte (6%)</label>
             </div>
             <button type="submit" className="btn-primary w-full">
               📊 Calcular Salário Líquido
@@ -346,7 +346,7 @@ const CalculadoraTrabalhista = () => {
         <div className="space-y-2 text-sm">
           {Object.entries(result).map(([key, value]) => (
             <div key={key} className="flex justify-between">
-              <span className="text-slate-300 capitalize">
+              <span className="text-govgray-200 capitalize">
                 {key.replace(/([A-Z])/g, ' $1').toLowerCase()}:
               </span>
               <span className="text-white font-medium">
@@ -362,26 +362,28 @@ const CalculadoraTrabalhista = () => {
   return (
     <div className="grid md:grid-cols-2 gap-8">
       {/* Lista de Calculadoras */}
-      <div className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 p-8 rounded-2xl border border-slate-700">
-        <h3 className="text-2xl font-bold text-white mb-6">Calculadoras Disponíveis</h3>
+      <div className="bg-gradient-to-br from-govblue-100 to-govblue-50 p-8 rounded-2xl border border-govblue-200 shadow-lg">
+        <h3 className="text-2xl font-bold text-govblue-800 mb-6">Calculadoras Disponíveis</h3>
         <div className="space-y-4">
           {calculadoras.map((calc) => (
             <div 
               key={calc.id}
               onClick={() => setActiveCalc(calc.id)}
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 cursor-pointer ${
+              className={`flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 cursor-pointer ${
                 activeCalc === calc.id 
-                  ? 'bg-blue-600/50 border border-blue-400' 
-                  : 'bg-slate-800/50 hover:bg-slate-700/50'
+                  ? 'bg-govblue-600 text-white border border-govblue-500 shadow-md' 
+                  : 'bg-white hover:bg-govblue-50 text-govgray-700 border border-govgray-200'
               }`}
             >
               <span className="text-2xl">{calc.icon}</span>
               <div>
-                <div className="text-white font-medium">{calc.name}</div>
-                <div className="text-slate-400 text-sm">{calc.desc}</div>
+                <div className="font-medium">{calc.name}</div>
+                <div className={`text-sm ${activeCalc === calc.id ? 'text-blue-100' : 'text-govgray-500'}`}>
+                  {calc.desc}
+                </div>
               </div>
               {activeCalc === calc.id && (
-                <span className="ml-auto text-blue-400">▶</span>
+                <span className="ml-auto text-govyellow-400">▶</span>
               )}
             </div>
           ))}
@@ -389,7 +391,7 @@ const CalculadoraTrabalhista = () => {
       </div>
 
       {/* Formulário da Calculadora Ativa */}
-      <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+      <div className="bg-govgray-800 p-8 rounded-2xl border border-govgray-600 shadow-lg">
         <h3 className="text-2xl font-bold text-white mb-6">
           {calculadoras.find(c => c.id === activeCalc)?.name}
         </h3>
