@@ -13,6 +13,7 @@ function AppContent({ Component, pageProps }) {
   
   // Páginas que não devem ter Header/Footer padrão
   const excludeLayout = [
+    '/vagas',
     '/empresas',
     '/admin',
     '/admin/login',
@@ -44,7 +45,7 @@ function AppContent({ Component, pageProps }) {
         // Páginas com layout padrão
         <div className="min-h-screen bg-slate-900 text-white">
           <Header />
-          <main className="pt-16">
+          <main className="pt-28">
             <Component {...pageProps} />
           </main>
           <Footer />

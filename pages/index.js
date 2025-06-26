@@ -16,8 +16,6 @@ const HomePage = () => {
   const [nextUpdate, setNextUpdate] = useState(null)
   const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
   const [totalSystemJobs, setTotalSystemJobs] = useState(0) // Total de vagas no sistema
-  const [nextUpdate, setNextUpdate] = useState(null)
-  const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
 
   const safeArray = (arr) => {
     return Array.isArray(arr) ? arr : []
@@ -51,48 +49,61 @@ const HomePage = () => {
     }
   }
 
-  // Função para buscar vagas reais com cache busting
+  // Função para buscar vagas reais com cache instantâneo
   const fetchJobs = useCallback(async (showLoadingState = true) => {
+    try {
+      // 🚀 CACHE INSTANTÂNEO - Mostrar dados imediatamente se disponível
+      const cachedData = localStorage.getItem('jobsCache')
+      const cacheTime = localStorage.getItem('jobsCacheTime')
+      const totalCached = localStorage.getItem('totalSystemJobs')
+      const now = Date.now()
+      const cacheMaxAge = 3 * 60 * 1000 // 3 minutos para cache válido
+      
+      // Se há cache válido, usar IMEDIATAMENTE
+      if (cachedData && cacheTime && (now - parseInt(cacheTime)) < cacheMaxAge) {
+        try {
+          const jobs = JSON.parse(cachedData)
+          if (Array.isArray(jobs) && jobs.length > 0) {
+            console.log('⚡ CACHE INSTANTÂNEO carregado:', jobs.length, 'vagas')
+            setJobs(jobs.slice(0, 6))
+            setTotalSystemJobs(parseInt(totalCached) || jobs.length)
+            setLoading(false)
+            setError(null)
+            setLastUpdate(new Date(parseInt(cacheTime)))
+            
+            // Buscar atualizações em BACKGROUND (sem loading)
+            setTimeout(() => fetchJobsFromAPI(false), 500)
+            return
+          }
+        } catch (parseError) {
+          console.warn('Cache corrompido, removendo...')
+          localStorage.removeItem('jobsCache')
+          localStorage.removeItem('jobsCacheTime')
+          localStorage.removeItem('totalSystemJobs')
+        }
+      }
+      
+      // Se não há cache válido, buscar com loading normal
+      await fetchJobsFromAPI(showLoadingState)
+      
+    } catch (error) {
+      console.error("❌ Erro geral na busca:", error)
+      setError(`Erro ao carregar vagas: ${error.message}`)
+      setLoading(false)
+    }
+  }, [])
+
+  // Função separada para buscar da API (pode ser chamada em background)
+  const fetchJobsFromAPI = async (showLoadingState = true) => {
     try {
       if (showLoadingState) {
         setLoading(true)
-      }
-      setError(null)
-
-      console.log('🔄 Buscando vagas em todo o Brasil...')
-
-      // Verificar cache local primeiro (válido por 5 minutos)
-      let cachedData = null
-      let cacheTime = null
-      
-      try {
-        cachedData = localStorage.getItem('jobsCache')
-        cacheTime = localStorage.getItem('jobsCacheTime')
-      } catch (error) {
-        console.warn('Erro ao acessar localStorage:', error)
-      }
-      
-      const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
-
-      if (cachedData && cacheTime && parseInt(cacheTime) > fiveMinutesAgo) {
-        console.log('📦 Usando cache local para carregar vagas rapidamente...')
-        try {
-          const jobs = JSON.parse(cachedData)
-          if (Array.isArray(jobs)) {
-            setJobs(jobs)
-            setLoading(false)
-            setLastUpdate(new Date(parseInt(cacheTime)))
-            return
-          }
-        } catch (error) {
-          console.warn('Erro ao parsear cache:', error)
-        }
+        setError(null)
       }
 
-      // Usar nova API específica para HOME (sem cidades específicas)
-      const timestamp = new Date().getTime()
+      console.log('📡 Buscando vagas da API HOME...')
       
-      console.log('🏠 Fazendo requisição para API de vagas HOME...')
+      const timestamp = Date.now()
       const response = await fetch(`/api/fetch-home-jobs?t=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
@@ -144,10 +155,12 @@ const HomePage = () => {
 
         setJobs(processedJobs)
         
-        // Salvar no cache local com tratamento de erro
+        // 💾 Salvar no cache local para carregamento instantâneo futuro
         try {
           localStorage.setItem('jobsCache', JSON.stringify(processedJobs))
           localStorage.setItem('jobsCacheTime', Date.now().toString())
+          localStorage.setItem('totalSystemJobs', totalAvailable.toString())
+          console.log('💾 Cache atualizado com', processedJobs.length, 'vagas')
         } catch (error) {
           console.warn('Erro ao salvar cache:', error)
         }
@@ -167,41 +180,43 @@ const HomePage = () => {
       setUpdateCountdown(30 * 60)
 
     } catch (error) {
-      console.error("❌ Erro ao buscar vagas:", error)
+      console.error("❌ Erro ao buscar vagas da API:", error)
       
-      // Tentar usar cache mesmo que esteja expirado em caso de erro
-      let cachedData = null
-      try {
-        cachedData = localStorage.getItem('jobsCache')
-      } catch (error) {
-        console.warn('Erro ao acessar localStorage em fallback:', error)
-      }
-      
-      if (cachedData) {
-        console.log('🔄 Usando cache local como fallback...')
+      if (showLoadingState) {
+        // Tentar usar cache mesmo que esteja expirado em caso de erro
+        let cachedData = null
         try {
-          const jobs = JSON.parse(cachedData)
-          if (Array.isArray(jobs) && jobs.length > 0) {
-            setJobs(jobs)
-            setError('Erro na busca em tempo real. Exibindo vagas em cache.')
-          } else {
-            throw new Error('Cache vazio ou inválido')
+          cachedData = localStorage.getItem('jobsCache')
+        } catch (error) {
+          console.warn('Erro ao acessar localStorage em fallback:', error)
+        }
+        
+        if (cachedData) {
+          console.log('🔄 Usando cache local como fallback...')
+          try {
+            const jobs = JSON.parse(cachedData)
+            if (Array.isArray(jobs) && jobs.length > 0) {
+              setJobs(jobs)
+              setError('Erro na busca em tempo real. Exibindo vagas em cache.')
+            } else {
+              throw new Error('Cache vazio ou inválido')
+            }
+          } catch (parseError) {
+            console.warn('Erro ao parsear cache em fallback:', parseError)
+            setError(`Erro ao carregar vagas: ${error.message}`)
+            setJobs([])
           }
-        } catch (parseError) {
-          console.warn('Erro ao parsear cache em fallback:', parseError)
+        } else {
           setError(`Erro ao carregar vagas: ${error.message}`)
           setJobs([])
         }
-      } else {
-        setError(`Erro ao carregar vagas: ${error.message}`)
-        setJobs([])
       }
     } finally {
       if (showLoadingState) {
         setLoading(false)
       }
     }
-  }, [])
+  }
 
   // Effect para busca inicial e configuração de intervalos
   useEffect(() => {

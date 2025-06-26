@@ -90,7 +90,7 @@ const EmpresasPage = () => {
       <div className="min-h-screen bg-govblue-50">
         <EmpresasHeader />
         
-        <main className="min-h-screen bg-govblue-50 pt-20">
+        <main className="min-h-screen bg-govblue-50 pt-28">
         <div className="container mx-auto px-4 py-12">
           
           {/* Hero Section */}

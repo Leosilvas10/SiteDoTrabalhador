@@ -20,10 +20,8 @@ const VagasPage = () => {
 
   // Função helper para busca segura em strings
   const safeIncludes = (str, search) => {
-    if (!str || !search || typeof str !== 'string' || typeof search !== 'string') {
-      return false
-    }
-    return str.toLowerCase().includes(search.toLowerCase())
+    if (!str || !search) return true
+    return str.toString().toLowerCase().includes(search.toLowerCase())
   }
 
   // Buscar vagas reais da API
@@ -86,22 +84,24 @@ const VagasPage = () => {
       
       console.log('🔄 Buscando vagas reais...')
       
-      // Usar API real que retorna vagas com localização completa
-      const timestamp = new Date().getTime()
-      const response = await fetch(`/api/fetch-real-jobs?t=${timestamp}`)
+      const timestamp = Date.now()
+      const response = await fetch(`/api/fetch-real-jobs?limit=120&t=${timestamp}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      })
       
       if (!response.ok) {
-        throw new Error(`Erro HTTP! status: ${response.status}`)
+        throw new Error(`Erro na API: ${response.status}`)
       }
       
       const data = await response.json()
       
-      if (data.success && (data.jobs || data.data)) {
-        const jobs = data.jobs || data.data;
-        console.log(`✅ ${jobs.length} vagas carregadas`)
+      if (data.success && Array.isArray(data.jobs)) {
+        console.log('✅ Vagas carregadas:', data.jobs.length)
         
-        // Adicionar ID único se não existir
-        const jobsWithId = jobs.map((job, index) => ({
+        const jobsWithId = data.jobs.map((job, index) => ({
           ...job,
           id: job.id || `job-${index}`,
           timeAgo: calculateTimeAgo(job.datePosted || job.created_at || new Date())
@@ -141,27 +141,18 @@ const VagasPage = () => {
 
   // Calcular tempo decorrido
   const calculateTimeAgo = (dateString) => {
-    try {
-      const jobDate = new Date(dateString)
-      const now = new Date()
-      const diffTime = Math.abs(now - jobDate)
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-      
-      if (diffDays === 0) {
-        return 'Hoje'
-      } else if (diffDays === 1) {
-        return 'Ontem'
-      } else if (diffDays <= 7) {
-        return `${diffDays} dias atrás`
-      } else if (diffDays <= 30) {
-        const weeks = Math.floor(diffDays / 7)
-        return weeks === 1 ? '1 semana atrás' : `${weeks} semanas atrás`
-      } else {
-        return diffDays === 1 ? 'há 1 dia' : `há ${diffDays} dias`
-      }
-    } catch (error) {
-      return 'Recente'
-    }
+    const now = new Date()
+    const posted = new Date(dateString)
+    const diffInHours = Math.floor((now - posted) / (1000 * 60 * 60))
+    
+    if (diffInHours < 1) return 'Agora mesmo'
+    if (diffInHours < 24) return `${diffInHours}h atrás`
+    
+    const diffInDays = Math.floor(diffInHours / 24)
+    if (diffInDays < 7) return `${diffInDays}d atrás`
+    
+    const diffInWeeks = Math.floor(diffInDays / 7)
+    return `${diffInWeeks}sem atrás`
   }
 
   // Aplicar filtros nas vagas reais
@@ -172,7 +163,7 @@ const VagasPage = () => {
     }
 
     let filtered = jobs.filter(job => {
-      // Filtro de busca por título, empresa, descrição ou tags
+      // Filtro por busca de texto
       const searchMatch = !filters.search || 
         safeIncludes(job.title, filters.search) ||
         safeIncludes(job.company?.name || job.company, filters.search) ||
@@ -180,13 +171,13 @@ const VagasPage = () => {
         safeIncludes(job.tags, filters.search)
 
       // Filtro por área/categoria
-      // Filtro por área/categoria
       const areaMatch = !filters.area || 
         job.category === filters.area ||
         safeIncludes(job.category, filters.area) ||
         safeIncludes(job.tags, filters.area)
 
       return searchMatch && areaMatch
+    })
 
     setFilteredJobs(filtered)
     setCurrentPage(1)
@@ -210,24 +201,24 @@ const VagasPage = () => {
     }))
   }
 
-  // Modal de candidatura
+  // Paginação
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage)
+  const startIndex = (currentPage - 1) * jobsPerPage
+  const endIndex = startIndex + jobsPerPage
+  const currentJobs = filteredJobs.slice(startIndex, endIndex)
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Modal functions
   const openJobModal = (job) => {
     setSelectedJob(job)
   }
 
   const closeJobModal = () => {
     setSelectedJob(null)
-  }
-
-  // Paginação
-  const indexOfLastJob = currentPage * jobsPerPage
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage
-  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob)
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage)
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -285,12 +276,6 @@ const VagasPage = () => {
               Filtros de Busca
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {/* Busca por palavra-chave */}
-              <div>
-                <label className="block text-govgray-700 text-sm font-medium mb-2">
-                  Buscar
-                </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {/* Busca por palavra-chave */}
               <div>
@@ -328,6 +313,12 @@ const VagasPage = () => {
                 </select>
               </div>
             </div>
+
+            <div className="flex flex-wrap gap-3 pt-4 border-t border-govgray-200">
+              <button
+                onClick={clearFilters}
+                className="flex items-center px-4 py-2 bg-govgray-100 text-govgray-700 rounded-lg hover:bg-govgray-200 transition-colors font-medium"
+              >
                 🗑️ Limpar Filtros
               </button>
               <button
@@ -387,7 +378,7 @@ const VagasPage = () => {
 
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center text-govgray-600">
-                      <span className="mr-3 text-govblue-600"></span>
+                      <span className="mr-3 text-govblue-600">💰</span>
                       <span className="text-sm font-semibold text-govgreen-600">{job.salary || 'Salário a combinar'}</span>
                     </div>
                     <div className="flex items-center text-govgray-600">
@@ -400,17 +391,8 @@ const VagasPage = () => {
                     {job.description || 'Descrição não disponível'}
                   </p>
 
-                  <div className="flex flex-wrap gap-2 mb-4">
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center text-govgray-600">
-                      <span className="mr-3 text-govblue-600">💰</span>
-                      <span className="text-sm font-semibold text-govgreen-600">{job.salary || 'Salário a combinar'}</span>
-                    </div>
-                    <div className="flex items-center text-govgray-600">
-                      <span className="mr-3 text-govblue-600">⏰</span>
-                      <span className="text-sm">{job.timeAgo || 'Recente'}</span>
-                    </div>
-                  </div>ton
+                  <div className="flex gap-2">
+                    <button
                       onClick={() => openJobModal(job)}
                       className="flex-1 bg-govblue-600 text-white py-2 px-4 rounded-lg hover:bg-govblue-700 transition-colors font-medium"
                     >
@@ -433,7 +415,7 @@ const VagasPage = () => {
           </section>
         )}
 
-        {/* Sem vagas encontradas */}
+        {/* Empty State */}
         {!loading && !error && currentJobs.length === 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="text-center bg-white rounded-xl p-12 shadow-lg">
@@ -462,7 +444,7 @@ const VagasPage = () => {
               </div>
               <div className="mt-8 text-sm text-govgray-500">
                 <p>💡 Dica: Experimente termos mais gerais na busca</p>
-                <p>📍 Ou remova filtros de localização para ver mais opções</p>
+                <p>🔍 Ou experimente buscar por área de interesse</p>
               </div>
             </div>
           </section>
@@ -478,10 +460,10 @@ const VagasPage = () => {
                     onClick={() => paginate(currentPage - 1)}
                     className="px-4 py-2 bg-white text-govgray-700 border border-govgray-300 rounded-lg hover:bg-govgray-50 transition-colors font-medium"
                   >
-              <div className="mt-8 text-sm text-govgray-500">
-                <p>💡 Dica: Experimente termos mais gerais na busca</p>
-                <p>🔍 Ou experimente buscar por área de interesse</p>
-              </div>
+                    ← Anterior
+                  </button>
+                )}
+                
                 {[...Array(Math.min(5, totalPages))].map((_, index) => {
                   const pageNumber = Math.max(1, currentPage - 2) + index
                   if (pageNumber > totalPages) return null
@@ -490,10 +472,10 @@ const VagasPage = () => {
                     <button
                       key={pageNumber}
                       onClick={() => paginate(pageNumber)}
-                      className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                      className={`px-4 py-2 border rounded-lg font-medium transition-colors ${
                         currentPage === pageNumber
-                          ? 'bg-govblue-600 text-white'
-                          : 'bg-white text-govgray-700 border border-govgray-300 hover:bg-govgray-50'
+                          ? 'bg-govblue-600 text-white border-govblue-600'
+                          : 'bg-white text-govgray-700 border-govgray-300 hover:bg-govgray-50'
                       }`}
                     >
                       {pageNumber}

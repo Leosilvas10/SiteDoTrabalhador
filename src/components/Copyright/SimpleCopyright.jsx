@@ -4,7 +4,7 @@ const SimpleCopyright = () => {
   const currentYear = new Date().getFullYear()
   
   return (
-    <div className="bg-govblue-900 py-4 mt-8">
+    <div className="bg-govblue-900 py-4">
       <div className="container mx-auto px-4">
         <div className="text-center">
           <p className="text-white text-sm">

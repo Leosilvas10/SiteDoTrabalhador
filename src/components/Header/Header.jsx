@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSiteContext } from '../../contexts/SiteContext'
+import UnifiedLogo from '../Logo/UnifiedLogo'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -93,35 +94,12 @@ const Header = () => {
       `}</style>
       <header className="bg-govblue-600 shadow-xl fixed top-0 w-full z-50 border-b-4 border-govyellow-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-3">
-            {/* Logo - Estilo Gov.br */}
-            <div className="flex items-center cursor-pointer" onClick={scrollToTop}>
-              {siteConfig.logoUrl ? (
-                <div className="relative h-16 sm:h-20 w-32 sm:w-40 flex items-center group logo-container">
-                  {/* Background branco minimalista */}
-                  <div className="absolute inset-0 bg-white rounded-lg shadow-md transform group-hover:scale-105 transition-all duration-300 border border-govgray-200">
-                  </div>
-                  {/* Logo */}
-                  <img 
-                    src={`${siteConfig.logoUrl}?t=${Date.now()}`}
-                    alt="Site do Trabalhador" 
-                    className="relative z-20 h-full w-full object-contain p-2 transition-all duration-300"
-                    style={{ maxHeight: '100%', maxWidth: '100%' }}
-                    onError={(e) => {
-                      console.error('Erro ao carregar logo no header:', siteConfig.logoUrl)
-                      e.target.style.display = 'none'
-                    }}
-                  />
-                  {/* Pontos de luz decorativos */}
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-300 rounded-full animate-ping opacity-75"></div>
-                  <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-                </div>
-              ) : (
-                <div className="h-24 sm:h-28 w-40 sm:w-48 bg-gradient-to-br from-slate-800 to-slate-700 rounded-3xl flex items-center justify-center shadow-2xl border-2 border-white/20">
-                  <span className="text-white font-bold text-2xl sm:text-3xl">ST</span>
-                </div>
-              )}
-            </div>
+          <div className="flex justify-between items-center py-2">
+            {/* Logo Unificada - Estilo Gov.br simples e destacada */}
+            <UnifiedLogo 
+              onClick={scrollToTop}
+              className="transform hover:scale-105 transition-all duration-300"
+            />
 
             {/* Desktop Navigation - Estilo Gov.br */}
             {isHomePage ? (
