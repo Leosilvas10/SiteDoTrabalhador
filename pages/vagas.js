@@ -11,6 +11,13 @@ const VagasPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedJob, setSelectedJob] = useState(null)
+  const [filters, setFilters] = useState({
+    search: '',
+    category: '',
+    salary: '',
+    type: ''
+  })
+  const [filteredJobs, setFilteredJobs] = useState([])
   const jobsPerPage = 9
 
   useEffect(() => {
@@ -20,6 +27,7 @@ const VagasPage = () => {
       .then(data => {
         if (data.success) {
           setJobs(data.jobs || [])
+          setFilteredJobs(data.jobs || [])
         } else {
           setError('Erro ao carregar vagas')
         }
@@ -31,11 +39,103 @@ const VagasPage = () => {
       })
   }, [])
 
-  // Cálculos de paginação
-  const totalPages = Math.ceil(jobs.length / jobsPerPage)
+  // Effect para aplicar filtros
+  useEffect(() => {
+    let filtered = [...jobs]
+
+    // Filtro de busca (título ou empresa)
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase()
+      filtered = filtered.filter(job => 
+        job.title?.toLowerCase().includes(searchTerm) ||
+        job.company?.name?.toLowerCase().includes(searchTerm) ||
+        job.company?.toLowerCase().includes(searchTerm)
+      )
+    }
+
+    // Filtro por categoria (baseado no título da vaga)
+    if (filters.category) {
+      filtered = filtered.filter(job => {
+        const title = job.title?.toLowerCase() || ''
+        switch (filters.category) {
+          case 'vendas':
+            return title.includes('vend') || title.includes('comercial')
+          case 'administrativo':
+            return title.includes('admin') || title.includes('assist') || title.includes('auxiliar')
+          case 'servicos':
+            return title.includes('serv') || title.includes('atend') || title.includes('recep')
+          case 'operacional':
+            return title.includes('oper') || title.includes('produc') || title.includes('fabric')
+          case 'saude':
+            return title.includes('enferm') || title.includes('medic') || title.includes('saude')
+          default:
+            return true
+        }
+      })
+    }
+
+    // Filtro por faixa salarial
+    if (filters.salary) {
+      filtered = filtered.filter(job => {
+        const salary = job.salary?.toLowerCase() || ''
+        switch (filters.salary) {
+          case 'ate-2k':
+            return salary.includes('1.') || salary.includes('salário') || salary.includes('combinar')
+          case '2k-5k':
+            return salary.includes('2.') || salary.includes('3.') || salary.includes('4.')
+          case 'acima-5k':
+            return salary.includes('5.') || salary.includes('6.') || salary.includes('7.') || salary.includes('8.')
+          default:
+            return true
+        }
+      })
+    }
+
+    // Filtro por tipo de contrato
+    if (filters.type) {
+      filtered = filtered.filter(job => {
+        const description = (job.description || '').toLowerCase()
+        const title = (job.title || '').toLowerCase()
+        switch (filters.type) {
+          case 'clt':
+            return description.includes('clt') || title.includes('efetiv')
+          case 'pj':
+            return description.includes('pj') || description.includes('pessoa jurídica')
+          case 'temporario':
+            return description.includes('temp') || description.includes('contrato')
+          case 'estagio':
+            return title.includes('estag') || title.includes('jovem aprendiz')
+          default:
+            return true
+        }
+      })
+    }
+
+    setFilteredJobs(filtered)
+    setCurrentPage(1) // Reset para primeira página quando filtrar
+  }, [jobs, filters])
+
+  // Cálculos de paginação usando jobs filtrados
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage)
   const startIndex = (currentPage - 1) * jobsPerPage
   const endIndex = startIndex + jobsPerPage
-  const currentJobs = jobs.slice(startIndex, endIndex)
+  const currentJobs = filteredJobs.slice(startIndex, endIndex)
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }))
+  }
+
+  const clearFilters = () => {
+    setFilters({
+      search: '',
+      category: '',
+      salary: '',
+      type: ''
+    })
+  }
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
@@ -67,11 +167,98 @@ const VagasPage = () => {
                 💼 Vagas em Destaque
               </h1>
               <p className="text-xl text-blue-100 mb-8">
-                {loading ? "Carregando vagas..." : `${jobs.length} vagas em destaque de todo o Brasil`}
+                {loading ? "Carregando vagas..." : `${filteredJobs.length} vagas encontradas de ${jobs.length} disponíveis`}
               </p>
             </div>
           </div>
         </section>
+
+        {/* Seção de Filtros */}
+        {!loading && !error && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 mb-8">
+              <div className="flex flex-wrap items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-govgray-800">🔍 Filtrar Vagas</h3>
+                <button
+                  onClick={clearFilters}
+                  className="text-govblue-600 hover:text-govblue-700 text-sm font-medium transition-colors"
+                >
+                  🗑️ Limpar Filtros
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Busca por palavra-chave */}
+                <div>
+                  <label className="block text-sm font-medium text-govgray-700 mb-2">
+                    Buscar por cargo ou empresa
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ex: vendedor, assistente..."
+                    value={filters.search}
+                    onChange={(e) => handleFilterChange('search', e.target.value)}
+                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
+                  />
+                </div>
+
+                {/* Categoria */}
+                <div>
+                  <label className="block text-sm font-medium text-govgray-700 mb-2">
+                    Área de atuação
+                  </label>
+                  <select
+                    value={filters.category}
+                    onChange={(e) => handleFilterChange('category', e.target.value)}
+                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Todas as áreas</option>
+                    <option value="vendas">💼 Vendas e Comercial</option>
+                    <option value="administrativo">📋 Administrativo</option>
+                    <option value="servicos">🤝 Atendimento e Serviços</option>
+                    <option value="operacional">⚙️ Operacional</option>
+                    <option value="saude">🏥 Saúde</option>
+                  </select>
+                </div>
+
+                {/* Faixa Salarial */}
+                <div>
+                  <label className="block text-sm font-medium text-govgray-700 mb-2">
+                    Faixa salarial
+                  </label>
+                  <select
+                    value={filters.salary}
+                    onChange={(e) => handleFilterChange('salary', e.target.value)}
+                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Todos os salários</option>
+                    <option value="ate-2k">💰 Até R$ 2.000</option>
+                    <option value="2k-5k">💰 R$ 2.000 - R$ 5.000</option>
+                    <option value="acima-5k">💰 Acima de R$ 5.000</option>
+                  </select>
+                </div>
+
+                {/* Tipo de Contrato */}
+                <div>
+                  <label className="block text-sm font-medium text-govgray-700 mb-2">
+                    Tipo de contrato
+                  </label>
+                  <select
+                    value={filters.type}
+                    onChange={(e) => handleFilterChange('type', e.target.value)}
+                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Todos os tipos</option>
+                    <option value="clt">📄 CLT</option>
+                    <option value="pj">🏢 Pessoa Jurídica</option>
+                    <option value="temporario">⏰ Temporário</option>
+                    <option value="estagio">🎓 Estágio</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Loading State */}
         {loading && (
@@ -95,7 +282,7 @@ const VagasPage = () => {
         )}
 
         {/* Lista de Vagas com Paginação */}
-        {!loading && !error && jobs.length > 0 && (
+        {!loading && !error && filteredJobs.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {currentJobs.map((job, index) => (
@@ -168,6 +355,25 @@ const VagasPage = () => {
         )}
 
         {/* Empty State */}
+        {!loading && !error && filteredJobs.length === 0 && jobs.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="text-center bg-white rounded-xl p-12 shadow-lg">
+              <div className="text-6xl mb-6">🔍</div>
+              <h3 className="text-2xl font-bold text-govgray-800 mb-4">Nenhuma vaga encontrada</h3>
+              <p className="text-govgray-600 mb-8 max-w-md mx-auto">
+                Não encontramos vagas com os filtros aplicados. Tente ajustar os critérios de busca.
+              </p>
+              <button
+                onClick={clearFilters}
+                className="bg-govblue-600 text-white px-6 py-3 rounded-lg hover:bg-govblue-700 transition-colors font-medium"
+              >
+                🗑️ Limpar Filtros
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* Empty State - Nenhuma vaga disponível */}
         {!loading && !error && jobs.length === 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="text-center bg-white rounded-xl p-12 shadow-lg">

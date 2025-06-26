@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const LeadModal = ({ job, onClose }) => {
+const LeadModal = ({ isOpen, onClose, jobData }) => {
   const [formData, setFormData] = useState({
     name: '',
     whatsapp: '',
@@ -14,6 +14,9 @@ const LeadModal = ({ job, onClose }) => {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Se o modal não está aberto, não renderiza nada
+  if (!isOpen) return null
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -101,15 +104,15 @@ const LeadModal = ({ job, onClose }) => {
         lgpdConsent: formData.lgpdConsent,
         
         // Dados da vaga para redirecionamento  
-        jobId: job.id,
-        jobTitle: job.title,
-        company: job.company?.name || job.company,
-        jobLink: job.url || job.link || job.apply_url || job.original_url,
-        originalLocation: job.originalLocation || job.location,
+        jobId: jobData?.id,
+        jobTitle: jobData?.title,
+        company: jobData?.company?.name || jobData?.company,
+        jobLink: jobData?.url || jobData?.link || jobData?.apply_url || jobData?.original_url,
+        originalLocation: jobData?.originalLocation || jobData?.location,
         
         // Metadados
         timestamp: new Date().toISOString(),
-        source: 'Site do Trabalhador - Home'
+        source: 'Site do Trabalhador - Página de Vagas'
       }
 
       console.log('📤 Enviando lead:', leadSubmission)
@@ -191,7 +194,7 @@ const LeadModal = ({ job, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-govgray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-govgray-600">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Cabeçalho */}
           <div className="flex justify-between items-start mb-6">
@@ -199,17 +202,17 @@ const LeadModal = ({ job, onClose }) => {
               <h2 className="text-xl font-bold text-white mb-2">
                 💼 Interessado na vaga?
               </h2>
-              <p className="text-slate-300 text-sm">
-                <strong>{job.title}</strong> - {job.company?.name || job.company}
+              <p className="text-govgray-200 text-sm">
+                <strong>{jobData?.title || 'Vaga de Emprego'}</strong> - {jobData?.company?.name || jobData?.company || 'Empresa não informada'}
               </p>
-              <p className="text-green-400 text-sm mt-1">
-                💰 {job.salary} | 📍 {job.location}
+              <p className="text-govgreen-400 text-sm mt-1">
+                💰 {jobData?.salary || 'Salário a combinar'} | 📍 Brasil
               </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="text-slate-400 hover:text-white text-2xl"
+              className="text-govgray-400 hover:text-white text-2xl transition-colors"
             >
               ×
             </button>
