@@ -421,17 +421,6 @@ const VagasPage = () => {
               </div>
             </div>
           </section>
-        )}        className="px-8 py-4 bg-slate-700 text-white font-bold rounded-xl hover:bg-slate-600 transition-all duration-300 shadow-lg disabled:opacity-50"
-                >
-                  {loading ? '🔄 Buscando...' : '🔄 Buscar Novamente'}
-                </button>
-              </div>
-              <div className="mt-8 text-sm text-slate-500">
-                <p>💡 Dica: Experimente termos mais gerais na busca</p>
-                <p>📍 Ou remova filtros de localização para ver mais opções</p>
-              </div>
-            </div>
-          </section>
         )}
 
         {/* Paginação */}
