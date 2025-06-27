@@ -88,6 +88,8 @@ const DashboardStats = () => {
       localStorage.removeItem('dashboardResetFlag')
     }
   }
+
+  const loadDashboardData = async () => {
     try {
       setLoading(true)
       

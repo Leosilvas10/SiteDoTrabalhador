@@ -54,5 +54,33 @@
     "timestampISO": "2025-06-27T00:07:16.847Z",
     "ip": "::1",
     "validated": true
+  },
+  {
+    "nome": "LEONARDO SILVA SEVERINO",
+    "email": "leonardosilvas10@gmail.com",
+    "telefone": "31991998938",
+    "whatsapp": "31991998938",
+    "ultimaEmpresa": "logtiva",
+    "statusAtual": "Com carteira assinada",
+    "recebeuDireitos": "Sim, recebi tudo certinho",
+    "problemasTrabalho": "Não",
+    "desejaConsultoria": "Sim, quero saber meus direitos",
+    "experiencia": "Última empresa: logtiva. Status atual: Com carteira assinada. Recebeu direitos: Sim, recebi tudo certinho. Problemas no trabalho: Não. Deseja consultoria: Sim, quero saber meus direitos",
+    "lgpdConsent": true,
+    "jobId": "market_br_1750983521790_110_7yyc2asva",
+    "jobTitle": "Motorista",
+    "company": "Farmácias Populares",
+    "jobLink": "https://www.catho.com.br/vagas/motorista/?cidade=Londrina",
+    "originalLocation": "Londrina, PR",
+    "fonte": "Site do Trabalhador",
+    "paginaOrigem": "http://localhost:3000/vagas",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "timestamp": "26/06/2025, 21:19:13",
+    "source": "Site do Trabalhador",
+    "id": "lead_1750983553094_c8n7njrtn",
+    "leadId": "lead_1750983553094_c8n7njrtn",
+    "timestampISO": "2025-06-27T00:19:13.095Z",
+    "ip": "::1",
+    "validated": true
   }
 ]
