@@ -19,6 +19,46 @@ const CalculadoraPage = () => {
     lgpdConsent: true
   })
 
+  // Função para lidar com envio de dados antes do WhatsApp
+  const handleWhatsAppContact = async () => {
+    if (!userData.name || !userData.phone) {
+      alert('Por favor, preencha pelo menos seu nome e WhatsApp antes de entrar em contato.')
+      setShowDataForm(true)
+      return
+    }
+
+    try {
+      // Salvar lead no sistema
+      const leadData = {
+        nome: userData.name,
+        telefone: userData.phone,
+        email: userData.email,
+        problema: userData.problem,
+        source: 'Calculadora Trabalhista',
+        calculator: selectedCalculator,
+        result: result,
+        lgpdConsent: userData.lgpdConsent,
+        timestamp: new Date().toISOString()
+      }
+
+      await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(leadData),
+      })
+
+      // Redirecionar para WhatsApp
+      const message = `Olá! Usei a calculadora trabalhista do Site do Trabalhador. ${userData.problem ? `Minha situação: ${userData.problem}` : 'Preciso de ajuda com meus direitos trabalhistas.'}`
+      window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(message)}`, '_blank')
+    } catch (error) {
+      console.error('Erro ao salvar lead:', error)
+      // Mesmo com erro, permite contato via WhatsApp
+      window.open(`https://wa.me/5511999999999?text=Olá! Preciso de ajuda com meus direitos trabalhistas.`, '_blank')
+    }
+  }
+
   const calculators = [
     {
       id: 'rescisao',
@@ -499,20 +539,131 @@ const CalculadoraPage = () => {
                   </button>
                 </Link>
                 
-                <a 
-                  href="https://wa.me/5511999999999?text=Olá! Preciso de ajuda com meus direitos trabalhistas." 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <button 
+                  onClick={handleWhatsAppContact}
+                  className="bg-govyellow-500 hover:bg-govyellow-600 text-govblue-800 font-bold py-4 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
-                  <button className="bg-govyellow-500 hover:bg-govyellow-600 text-govblue-800 font-bold py-4 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl">
-                    💬 WhatsApp Direto
-                  </button>
-                </a>
+                  💬 WhatsApp Direto
+                </button>
               </div>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Modal de Dados do Usuário */}
+      {showDataForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-md w-full shadow-2xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold text-govblue-800">
+                  📋 Seus Dados
+                </h3>
+                <button
+                  onClick={() => setShowDataForm(false)}
+                  className="text-govgray-500 hover:text-govgray-700 text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <p className="text-govgray-600 mb-6">
+                Para que possamos te ajudar melhor, preencha seus dados básicos:
+              </p>
+              
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-govblue-800 font-medium mb-2">Nome *</label>
+                  <input
+                    type="text"
+                    value={userData.name}
+                    onChange={(e) => setUserData({...userData, name: e.target.value})}
+                    className="w-full px-4 py-3 border border-govgray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-govblue-500 focus:border-transparent"
+                    placeholder="Seu nome completo"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-govblue-800 font-medium mb-2">WhatsApp *</label>
+                  <input
+                    type="tel"
+                    value={userData.phone}
+                    onChange={(e) => setUserData({...userData, phone: e.target.value})}
+                    className="w-full px-4 py-3 border border-govgray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-govblue-500 focus:border-transparent"
+                    placeholder="(11) 99999-9999"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-govblue-800 font-medium mb-2">Email (opcional)</label>
+                  <input
+                    type="email"
+                    value={userData.email}
+                    onChange={(e) => setUserData({...userData, email: e.target.value})}
+                    className="w-full px-4 py-3 border border-govgray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-govblue-500 focus:border-transparent"
+                    placeholder="seu@email.com"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-govblue-800 font-medium mb-2">Descreva sua situação (opcional)</label>
+                  <textarea
+                    value={userData.problem}
+                    onChange={(e) => setUserData({...userData, problem: e.target.value})}
+                    className="w-full px-4 py-3 border border-govgray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-govblue-500 focus:border-transparent h-20 resize-none"
+                    placeholder="Ex: Fui demitido e tenho dúvidas sobre FGTS..."
+                  />
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <input
+                    type="checkbox"
+                    id="lgpdConsent"
+                    checked={userData.lgpdConsent}
+                    onChange={(e) => setUserData({...userData, lgpdConsent: e.target.checked})}
+                    className="mt-1"
+                  />
+                  <label htmlFor="lgpdConsent" className="text-sm text-govgray-600">
+                    Aceito o tratamento dos meus dados conforme a{' '}
+                    <Link href="/politica-privacidade" className="text-govblue-600 hover:underline">
+                      Política de Privacidade
+                    </Link>{' '}
+                    e{' '}
+                    <Link href="/lgpd" className="text-govblue-600 hover:underline">
+                      LGPD
+                    </Link>
+                    .
+                  </label>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowDataForm(false)}
+                    className="flex-1 px-6 py-3 border border-govgray-300 text-govgray-700 rounded-lg hover:bg-govgray-50 font-medium"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowDataForm(false)
+                      handleWhatsAppContact()
+                    }}
+                    disabled={!userData.name || !userData.phone || !userData.lgpdConsent}
+                    className="flex-1 px-6 py-3 bg-govgreen-600 text-white rounded-lg hover:bg-govgreen-700 font-medium disabled:bg-govgray-300 disabled:cursor-not-allowed"
+                  >
+                    💬 Continuar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal Educacional */}
       {showEducationalModal && selectedEducationalTopic && (

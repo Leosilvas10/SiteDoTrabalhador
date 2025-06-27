@@ -9,28 +9,70 @@ const Contato = () => {
     email: '',
     phone: '',
     subject: '',
-    message: ''
+    message: '',
+    lgpdConsent: false
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // Aqui você implementaria a lógica de envio
-    alert('Mensagem enviada com sucesso! Entraremos em contato em breve.')
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    })
+    
+    if (!formData.name || !formData.email || !formData.subject || !formData.message || !formData.lgpdConsent) {
+      alert('Por favor, preencha todos os campos obrigatórios e aceite os termos.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const leadData = {
+        nome: formData.name,
+        telefone: formData.phone,
+        email: formData.email,
+        assunto: formData.subject,
+        mensagem: formData.message,
+        source: 'Página de Contato',
+        lgpdConsent: formData.lgpdConsent,
+        timestamp: new Date().toISOString()
+      }
+
+      const response = await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(leadData),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        alert('✅ Mensagem enviada com sucesso! Entraremos em contato em breve.')
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+          lgpdConsent: false
+        })
+      } else {
+        throw new Error(data.message || 'Erro ao enviar mensagem')
+      }
+    } catch (error) {
+      console.error('Erro ao enviar formulário de contato:', error)
+      alert('❌ Erro ao enviar mensagem. Tente novamente ou entre em contato via WhatsApp.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -149,11 +191,35 @@ const Contato = () => {
                     />
                   </div>
 
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      id="lgpdConsent"
+                      name="lgpdConsent"
+                      checked={formData.lgpdConsent}
+                      onChange={handleInputChange}
+                      className="mt-1"
+                      required
+                    />
+                    <label htmlFor="lgpdConsent" className="text-sm text-govgray-700">
+                      Aceito o tratamento dos meus dados conforme a{' '}
+                      <a href="/politica-privacidade" className="text-govblue-600 hover:underline" target="_blank">
+                        Política de Privacidade
+                      </a>{' '}
+                      e{' '}
+                      <a href="/lgpd" className="text-govblue-600 hover:underline" target="_blank">
+                        LGPD
+                      </a>
+                      . *
+                    </label>
+                  </div>
+
                   <button
                     type="submit"
-                    className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-lg"
+                    disabled={isSubmitting}
+                    className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-lg disabled:bg-govgray-400 disabled:cursor-not-allowed"
                   >
-                    📤 Enviar Mensagem
+                    {isSubmitting ? '📤 Enviando...' : '📤 Enviar Mensagem'}
                   </button>
                 </form>
               </div>

@@ -17,6 +17,16 @@ const HomePage = () => {
   const [nextUpdate, setNextUpdate] = useState(null)
   const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
   const [totalSystemJobs, setTotalSystemJobs] = useState(0) // Total de vagas no sistema
+  
+  // Estado do formulário de contato
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+    lgpdConsent: false
+  })
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false)
 
   const safeArray = (arr) => {
     return Array.isArray(arr) ? arr : []
@@ -274,6 +284,59 @@ const HomePage = () => {
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+  }
+
+  // Função para lidar com envio do formulário de contato
+  const handleContactSubmit = async (e) => {
+    e.preventDefault()
+    
+    if (!contactForm.name || !contactForm.email || !contactForm.subject || !contactForm.message || !contactForm.lgpdConsent) {
+      alert('Por favor, preencha todos os campos obrigatórios e aceite os termos.')
+      return
+    }
+
+    setIsSubmittingContact(true)
+
+    try {
+      const leadData = {
+        nome: contactForm.name,
+        email: contactForm.email,
+        telefone: '', // Não temos WhatsApp no formulário de contato
+        assunto: contactForm.subject,
+        mensagem: contactForm.message,
+        source: 'Formulário de Contato - Página Inicial',
+        lgpdConsent: contactForm.lgpdConsent,
+        timestamp: new Date().toISOString()
+      }
+
+      const response = await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(leadData),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        alert('✅ Mensagem enviada com sucesso! Entraremos em contato em breve.')
+        setContactForm({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+          lgpdConsent: false
+        })
+      } else {
+        throw new Error(data.message || 'Erro ao enviar mensagem')
+      }
+    } catch (error) {
+      console.error('Erro ao enviar formulário de contato:', error)
+      alert('❌ Erro ao enviar mensagem. Tente novamente ou entre em contato via WhatsApp.')
+    } finally {
+      setIsSubmittingContact(false)
+    }
   }
 
   return (
@@ -589,21 +652,40 @@ const HomePage = () => {
             {/* Formulário de Contato - Estilo Gov.br */}
             <div className="bg-white p-8 rounded-lg shadow-lg border-2 border-govblue-600">
               <h3 className="text-2xl font-bold text-govblue-800 mb-6">Envie sua Mensagem</h3>
-              <form className="space-y-4">
+              <form onSubmit={handleContactSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-govblue-800 mb-2 font-medium">Nome *</label>
-                    <input type="text" className="form-input w-full" placeholder="Seu nome completo" required />
+                    <input 
+                      type="text" 
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
+                      className="form-input w-full" 
+                      placeholder="Seu nome completo" 
+                      required 
+                    />
                   </div>
                   <div>
                     <label className="block text-govblue-800 mb-2 font-medium">Email *</label>
-                    <input type="email" className="form-input w-full" placeholder="seu@email.com" required />
+                    <input 
+                      type="email" 
+                      value={contactForm.email}
+                      onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
+                      className="form-input w-full" 
+                      placeholder="seu@email.com" 
+                      required 
+                    />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-govblue-800 mb-2 font-medium">Assunto *</label>
-                  <select className="form-input w-full" required>
+                  <select 
+                    value={contactForm.subject}
+                    onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
+                    className="form-input w-full" 
+                    required
+                  >
                     <option value="">Selecione o assunto</option>
                     <option>Dúvida sobre direitos trabalhistas</option>
                     <option>Problema com vaga de emprego</option>
@@ -617,6 +699,8 @@ const HomePage = () => {
                 <div>
                   <label className="block text-govblue-800 mb-2 font-medium">Mensagem *</label>
                   <textarea 
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
                     className="form-input w-full h-32 resize-none" 
                     placeholder="Descreva sua mensagem detalhadamente..." 
                     required
@@ -624,14 +708,24 @@ const HomePage = () => {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <input type="checkbox" className="mt-1" required />
+                  <input 
+                    type="checkbox" 
+                    checked={contactForm.lgpdConsent}
+                    onChange={(e) => setContactForm({...contactForm, lgpdConsent: e.target.checked})}
+                    className="mt-1" 
+                    required 
+                  />
                   <label className="text-govblue-700 text-sm">
                     Aceito o tratamento dos meus dados conforme a <Link href="/politica-privacidade" className="text-govblue-600 hover:text-govblue-800 hover:underline">Política de Privacidade</Link> e <Link href="/lgpd" className="text-govblue-600 hover:text-govblue-800 hover:underline">LGPD</Link>.
                   </label>
                 </div>
 
-                <button type="submit" className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
-                  📤 Enviar Mensagem
+                <button 
+                  type="submit" 
+                  disabled={isSubmittingContact}
+                  className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md disabled:bg-govgray-400 disabled:cursor-not-allowed"
+                >
+                  {isSubmittingContact ? '📤 Enviando...' : '📤 Enviar Mensagem'}
                 </button>
               </form>
             </div>

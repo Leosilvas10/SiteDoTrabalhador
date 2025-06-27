@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
+import AdminLayout from '../../src/components/Admin/AdminLayout'
 
 const AdminLeads = () => {
   const [leads, setLeads] = useState([])
@@ -123,28 +124,26 @@ const AdminLeads = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando leads...</p>
+      <AdminLayout title="Administração de Leads">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Carregando leads...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <>
-      <Head>
-        <title>Administração de Leads - Site do Trabalhador</title>
-      </Head>
-
-      <div className="min-h-screen bg-gray-50">
+    <AdminLayout title="Administração de Leads">
+      <div className="space-y-6">
         {/* Header */}
-        <div className="bg-white shadow">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-6">
+        <div className="bg-white shadow rounded-lg">
+          <div className="px-6 py-4">
+            <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-gray-900">
                   Administração de Leads
                 </h1>
                 <p className="mt-1 text-sm text-gray-500">
@@ -176,8 +175,7 @@ const AdminLeads = () => {
         </div>
 
         {/* Stats */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white overflow-hidden shadow rounded-lg">
               <div className="p-5">
                 <div className="flex items-center">
@@ -500,8 +498,7 @@ const AdminLeads = () => {
             </div>
           </div>
         )}
-      </div>
-    </>
+    </AdminLayout>
   )
 }
 
