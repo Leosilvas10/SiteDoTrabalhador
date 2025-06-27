@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import EmpresasHeader from '../src/components/Header/EmpresasHeader'
-import SimpleCopyright from '../src/components/Copyright/SimpleCopyright'
+import Footer from '../src/components/Footer/Footer'
 
 const EmpresasPage = () => {
   const [formData, setFormData] = useState({
@@ -439,7 +439,7 @@ const EmpresasPage = () => {
         </div>
         </main>
 
-        <SimpleCopyright />
+        <Footer />
       </div>
     </>
   )

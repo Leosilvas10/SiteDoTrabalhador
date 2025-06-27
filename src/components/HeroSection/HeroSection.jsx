@@ -38,14 +38,15 @@ const HeroSection = () => {
           {/* Título principal - Estilo Gov.br */}
           <div className="mb-8 fade-in">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Encontre sua próxima
+              Encontre a Sua Vaga Ideal
               <span className="block text-govyellow-400">
-                oportunidade de trabalho
+                e Conheça Seus Direitos!
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-govgray-100 max-w-4xl mx-auto leading-relaxed mb-8 font-medium">
-              Portal oficial de vagas de emprego. Mais de 50 mil oportunidades atualizadas, 
-              orientação completa sobre direitos trabalhistas e ferramenta gratuita.
+              Milhares de vagas de empregos simples te esperam! Doméstica, Cuidador(a), Porteiro, Limpeza, Jardineiro, Cozinheiro(a) e muito mais. 
+              Aqui, você não só encontra a oportunidade perfeita, mas também aprende sobre seus direitos trabalhistas de forma fácil e gratuita. 
+              <span className="text-govyellow-300 font-bold">Sua próxima chance de trabalho e a segurança dos seus direitos estão a um clique!</span>
             </p>
             
             {/* Botão Ver Todas as Vagas - Estilo Gov.br */}
@@ -66,9 +67,9 @@ const HeroSection = () => {
 
           {/* Categorias populares - Estilo Gov.br */}
           <div className="mb-16 bounce-in" style={{ animationDelay: '0.4s' }}>
-            <h3 className="text-lg font-bold text-govyellow-400 mb-6">
-              🔥 Categorias Mais Procuradas
-            </h3>
+            <h2 className="text-lg font-bold text-govyellow-400 mb-6">
+              🔥 As Vagas Mais Buscadas por Quem Quer Crescer!
+            </h2>
             <div className="flex flex-wrap justify-center gap-3">
               {popularCategories.map((category) => (
                 <button
@@ -102,24 +103,6 @@ const HeroSection = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Call to Actions - Estilo Gov.br */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center slide-up" style={{ animationDelay: '0.8s' }}>
-            <button 
-              onClick={() => document.getElementById('direitos').scrollIntoView({ behavior: 'smooth' })}
-              className="flex items-center space-x-2 bg-govyellow-500 hover:bg-govyellow-600 text-govblue-800 font-bold px-8 py-4 rounded transition-all duration-200 shadow-lg"
-            >
-              <span className="text-xl">⚖️</span>
-              <span>Direitos Trabalhistas</span>
-            </button>
-            <button 
-              onClick={() => document.getElementById('calculadora').scrollIntoView({ behavior: 'smooth' })}
-              className="flex items-center space-x-2 bg-white hover:bg-govgray-50 text-govblue-600 font-bold px-8 py-4 rounded transition-all duration-200 shadow-lg border-2 border-govblue-600"
-            >
-              <span className="text-xl">🧮</span>
-              <span>Calculadora</span>
-            </button>
           </div>
 
           {/* Indicador de scroll - Estilo Gov.br */}

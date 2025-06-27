@@ -1,8 +1,7 @@
+import { useState, useEffect } from 'react'
 
-import { useState } from 'react'
-
-const CalculadoraTrabalhista = () => {
-  const [activeCalc, setActiveCalc] = useState('rescisao')
+const CalculadoraTrabalhista = ({ selectedCalculator, onCalculate }) => {
+  const [activeCalc, setActiveCalc] = useState(selectedCalculator || 'rescisao')
   const [results, setResults] = useState({})
 
   const calculadoras = [
@@ -123,40 +122,61 @@ const CalculadoraTrabalhista = () => {
     }
   }
 
-  const handleCalculate = (e, calcId) => {
+  // Atualizar calculadora ativa quando selectedCalculator mudar
+  useEffect(() => {
+    if (selectedCalculator) {
+      setActiveCalc(selectedCalculator)
+    }
+  }, [selectedCalculator])
+
+  // Função para processar formulário
+  const processFormCalculate = (calcType, e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
-    const dados = Object.fromEntries(formData.entries())
-
-    let resultado
-    switch (calcId) {
+    const data = Object.fromEntries(formData.entries())
+    
+    let result
+    switch (calcType) {
       case 'rescisao':
-        resultado = calcularRescisao(dados)
+        result = calcularRescisao(data)
         break
       case 'ferias':
-        resultado = calcularFerias(dados)
+        result = calcularFerias(data)
         break
       case 'horasextras':
-        resultado = calcularHorasExtras(dados)
+        result = calcularHorasExtras(data)
         break
       case 'adicionalnoturno':
-        resultado = calcularAdicionalNoturno(dados)
+        result = calcularAdicionalNoturno(data)
         break
       case 'salarioliquido':
-        resultado = calcularSalarioLiquido(dados)
+        result = calcularSalarioLiquido(data)
         break
       default:
-        resultado = {}
+        return
     }
+    
+    handleCalculate(calcType, result)
+  }
 
-    setResults(prev => ({ ...prev, [calcId]: resultado }))
+  // Função para tratar o cálculo e retornar resultado para a página
+  const handleCalculate = (calcType, result) => {
+    setResults(prev => ({
+      ...prev,
+      [calcType]: result
+    }))
+    
+    // Chamar callback da página pai se fornecido
+    if (onCalculate) {
+      onCalculate(result)
+    }
   }
 
   const renderForm = () => {
     switch (activeCalc) {
       case 'rescisao':
         return (
-          <form onSubmit={(e) => handleCalculate(e, 'rescisao')} className="space-y-4">
+          <form onSubmit={(e) => processFormCalculate('rescisao', e)} className="space-y-4">
             <div>
               <label className="block text-govblue-800 mb-2 font-medium">Salário Bruto (R$)</label>
               <input 
@@ -187,6 +207,9 @@ const CalculadoraTrabalhista = () => {
                 <option value="termino-contrato">Término de contrato</option>
               </select>
             </div>
+            <div className="text-sm text-govblue-700 bg-govblue-50 p-3 rounded border border-govblue-200">
+              💡 Inclui aviso prévio, férias proporcionais, 13º proporcional e FGTS
+            </div>
             <button type="submit" className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               🧮 Calcular Rescisão
             </button>
@@ -195,7 +218,7 @@ const CalculadoraTrabalhista = () => {
 
       case 'ferias':
         return (
-          <form onSubmit={(e) => handleCalculate(e, 'ferias')} className="space-y-4">
+          <form onSubmit={(e) => processFormCalculate('ferias', e)} className="space-y-4">
             <div>
               <label className="block text-govblue-800 mb-2 font-medium">Salário Mensal (R$)</label>
               <input 
@@ -217,6 +240,9 @@ const CalculadoraTrabalhista = () => {
                 required 
               />
             </div>
+            <div className="text-sm text-govblue-700 bg-govblue-50 p-3 rounded border border-govblue-200">
+              💡 Férias = Salário + 1/3 constitucional proporcional aos dias trabalhados
+            </div>
             <button type="submit" className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               🏖️ Calcular Férias
             </button>
@@ -225,9 +251,9 @@ const CalculadoraTrabalhista = () => {
 
       case 'horasextras':
         return (
-          <form onSubmit={(e) => handleCalculate(e, 'horasextras')} className="space-y-4">
+          <form onSubmit={(e) => processFormCalculate('horasextras', e)} className="space-y-4">
             <div>
-              <label className="block text-govgray-200 mb-2">Valor Hora Normal (R$)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Valor Hora Normal (R$)</label>
               <input 
                 type="number" 
                 name="salarioHora"
@@ -238,7 +264,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Quantidade de Horas Extras</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Quantidade de Horas Extras</label>
               <input 
                 type="number" 
                 name="horasExtras"
@@ -248,11 +274,14 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Percentual de Adicional (%)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Percentual de Adicional (%)</label>
               <select name="percentual" className="form-input w-full" required>
                 <option value="50">50% (dias úteis)</option>
                 <option value="100">100% (domingos e feriados)</option>
               </select>
+            </div>
+            <div className="text-sm text-govblue-700 bg-govblue-50 p-3 rounded border border-govblue-200">
+              💡 Horas extras devem ser pagas com adicional mínimo de 50% sobre a hora normal
             </div>
             <button type="submit" className="w-full bg-govyellow-500 hover:bg-govyellow-600 text-govblue-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               ⏰ Calcular Horas Extras
@@ -262,9 +291,9 @@ const CalculadoraTrabalhista = () => {
 
       case 'adicionalnoturno':
         return (
-          <form onSubmit={(e) => handleCalculate(e, 'adicionalnoturno')} className="space-y-4">
+          <form onSubmit={(e) => processFormCalculate('adicionalnoturno', e)} className="space-y-4">
             <div>
-              <label className="block text-govgray-200 mb-2">Valor Hora Normal (R$)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Valor Hora Normal (R$)</label>
               <input 
                 type="number" 
                 name="salarioHora"
@@ -275,7 +304,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Horas Noturnas Trabalhadas</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Horas Noturnas Trabalhadas</label>
               <input 
                 type="number" 
                 name="horasNoturnas"
@@ -284,10 +313,10 @@ const CalculadoraTrabalhista = () => {
                 required 
               />
             </div>
-            <div className="text-sm text-govgray-300 bg-govgray-700/80 p-3 rounded border border-govgray-600">
+            <div className="text-sm text-govblue-700 bg-govblue-50 p-3 rounded border border-govblue-200">
               💡 Adicional noturno: 20% sobre o valor da hora normal (22h às 5h)
             </div>
-            <button type="submit" className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
+            <button type="submit" className="w-full bg-govpurple-600 hover:bg-govpurple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               🌙 Calcular Adicional Noturno
             </button>
           </form>
@@ -295,9 +324,9 @@ const CalculadoraTrabalhista = () => {
 
       case 'salarioliquido':
         return (
-          <form onSubmit={(e) => handleCalculate(e, 'salarioliquido')} className="space-y-4">
+          <form onSubmit={(e) => processFormCalculate('salarioliquido', e)} className="space-y-4">
             <div>
-              <label className="block text-govgray-200 mb-2">Salário Bruto (R$)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Salário Bruto (R$)</label>
               <input 
                 type="number" 
                 name="salarioBruto"
@@ -308,7 +337,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Número de Dependentes</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Número de Dependentes</label>
               <input 
                 type="number" 
                 name="dependentes"
@@ -321,9 +350,12 @@ const CalculadoraTrabalhista = () => {
                 type="checkbox" 
                 name="valeTransporte"
                 id="valeTransporte"
-                className="form-checkbox"
+                className="form-checkbox text-govblue-600 focus:ring-govblue-500"
               />
-              <label htmlFor="valeTransporte" className="text-govgray-200">Desconta Vale Transporte (6%)</label>
+              <label htmlFor="valeTransporte" className="text-govblue-800 font-medium">Desconta Vale Transporte (6%)</label>
+            </div>
+            <div className="text-sm text-govblue-700 bg-govblue-50 p-3 rounded border border-govblue-200">
+              💡 Cálculo baseado nas alíquotas de INSS e IRRF vigentes em 2025
             </div>
             <button type="submit" className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               📊 Calcular Salário Líquido
@@ -360,41 +392,9 @@ const CalculadoraTrabalhista = () => {
   }
 
   return (
-    <div className="grid md:grid-cols-2 gap-8">
-      {/* Lista de Calculadoras */}
-      <div className="bg-gradient-to-br from-govblue-100 to-govblue-50 p-8 rounded-2xl border border-govblue-200 shadow-lg">
-        <h3 className="text-2xl font-bold text-govblue-800 mb-6">Calculadoras Disponíveis</h3>
-        <div className="space-y-4">
-          {calculadoras.map((calc) => (
-            <div 
-              key={calc.id}
-              onClick={() => setActiveCalc(calc.id)}
-              className={`flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 cursor-pointer ${
-                activeCalc === calc.id 
-                  ? 'bg-govblue-600 text-white border border-govblue-500 shadow-md' 
-                  : 'bg-white hover:bg-govblue-50 text-govgray-700 border border-govgray-200'
-              }`}
-            >
-              <span className="text-2xl">{calc.icon}</span>
-              <div>
-                <div className="font-medium">{calc.name}</div>
-                <div className={`text-sm ${activeCalc === calc.id ? 'text-blue-100' : 'text-govgray-500'}`}>
-                  {calc.desc}
-                </div>
-              </div>
-              {activeCalc === calc.id && (
-                <span className="ml-auto text-govyellow-400">▶</span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
+    <div className="space-y-6">
       {/* Formulário da Calculadora Ativa */}
-      <div className="bg-white p-8 rounded-2xl border-2 border-govblue-600 shadow-lg">
-        <h3 className="text-2xl font-bold text-govblue-800 mb-6">
-          {calculadoras.find(c => c.id === activeCalc)?.name}
-        </h3>
+      <div>
         {renderForm()}
         {renderResults()}
       </div>

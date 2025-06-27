@@ -111,10 +111,10 @@ const Header = () => {
                 <button onClick={() => router.push('/vagas')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Vagas
                 </button>
-                <button onClick={() => scrollToSection('calculadora')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
+                <button onClick={() => router.push('/calculadora')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Calculadora
                 </button>
-                <button onClick={() => scrollToSection('contato')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
+                <button onClick={() => router.push('/contato')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
                   Contato
                 </button>
               </nav>
@@ -135,7 +135,7 @@ const Header = () => {
             {isHomePage && (
               <div className="hidden md:flex items-center space-x-4">
                 <button 
-                  onClick={() => window.open('/empresas', '_blank')}
+                  onClick={() => router.push('/empresas')}
                   className="px-6 py-2 bg-govgreen-600 text-white rounded font-medium transition-all duration-200 hover:bg-govgreen-700 shadow-md"
                 >
                   Para Empresas
@@ -177,13 +177,13 @@ const Header = () => {
                   <button onClick={() => router.push('/vagas')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Vagas
                   </button>
-                  <button onClick={() => scrollToSection('calculadora')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
+                  <button onClick={() => router.push('/calculadora')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Calculadora
                   </button>
-                  <button onClick={() => scrollToSection('contato')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
+                  <button onClick={() => router.push('/contato')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
                     Contato
                   </button>
-                  <button onClick={() => window.open('/empresas', '_blank')} className="block w-full text-left px-3 py-2 text-govgreen-400 hover:text-govgreen-300 font-medium hover:bg-govblue-800 rounded">
+                  <button onClick={() => router.push('/empresas')} className="block w-full text-left px-3 py-2 text-govgreen-400 hover:text-govgreen-300 font-medium hover:bg-govblue-800 rounded">
                     Para Empresas
                   </button>
                 </>

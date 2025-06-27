@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Header from '../src/components/Header/Header'
-import SimpleCopyright from '../src/components/Copyright/SimpleCopyright'
+import Footer from '../src/components/Footer/Footer'
 import LeadModal from '../src/components/LeadModal/LeadModal'
 
 const VagasPage = () => {
@@ -391,9 +391,6 @@ const VagasPage = () => {
       <div className="bg-white py-12">
         {/* Espaço em branco intencional */}
       </div>
-
-      {/* Footer simples */}
-      <SimpleCopyright />
 
       {/* Modal de Lead */}
       <LeadModal 

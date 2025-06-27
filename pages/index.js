@@ -1,12 +1,13 @@
 import Head from "next/head"
+import Link from "next/link"
 import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/router"
 import JobCard from "../src/components/JobCard/JobCard"
 import HeroSection from "../src/components/HeroSection/HeroSection"
 import LeadModal from "../src/components/LeadModal/LeadModal"
-import CalculadoraTrabalhista from "../src/components/CalculadoraTrabalhista/CalculadoraTrabalhista"
-import FAQSection from "../src/components/FAQ/FAQ"
 
 const HomePage = () => {
+  const router = useRouter()
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -412,7 +413,7 @@ const HomePage = () => {
                     </p>
                   </div>
                   <button
-                    onClick={() => window.location.href = '/vagas'}
+                    onClick={() => router.push('/vagas')}
                     className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
                   >
                     <span className="mr-2">👀</span>
@@ -444,7 +445,7 @@ const HomePage = () => {
                   {loading ? '🔄 Buscando...' : '🔄 Buscar Novamente'}
                 </button>
                 <button
-                  onClick={() => window.location.href = '/vagas'}
+                  onClick={() => router.push('/vagas')}
                   className="px-8 py-4 bg-slate-700 text-white font-bold rounded-xl hover:bg-slate-600 transition-all duration-300 shadow-lg"
                 >
                   📋 Ver Página de Vagas
@@ -452,7 +453,7 @@ const HomePage = () => {
               </div>
               <div className="mt-8 text-sm text-slate-500">
                 <p>💡 Dica: Nossas vagas são atualizadas a cada 20 minutos</p>
-                <p>📱 Enquanto isso, confira a calculadora trabalhista abaixo</p>
+                <p>📱 Enquanto isso, conheça seus direitos trabalhistas abaixo</p>
               </div>
             </div>
           )}
@@ -468,150 +469,67 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Seção Direitos Trabalhistas - Estilo Gov.br */}
-      <section id="direitos" className="min-h-screen bg-white py-20">
+      {/* Seção Calculadora de Direitos - Conversão de Leads */}
+      <section id="direitos" className="min-h-screen bg-gradient-to-br from-govblue-600 via-govblue-700 to-govblue-800 py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-govblue-800 mb-4">
-              ⚖️ Conheça Seus Direitos Trabalhistas
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Título Principal - Focado na Dor do Usuário */}
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+              🚨 Será que Seus Direitos Estão Sendo Respeitados? Descubra Agora!
             </h2>
-            <p className="text-xl text-govgray-700 max-w-3xl mx-auto font-medium">
-              Informação é o primeiro passo para garantir seus direitos. 
-              Conheça os principais direitos garantidos pela CLT e Constituição Federal.
+
+            {/* Parágrafo Principal - Criando a Dor */}
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 mb-8">
+              <p className="text-xl text-white mb-6 font-medium leading-relaxed">
+                Você trabalhou duro, mas tem dúvidas se recebeu <strong>tudo o que era seu por direito?</strong> 
+                FGTS, seguro-desemprego, horas extras, rescisão... Infelizmente, <span className="text-govyellow-300 font-bold">muitos trabalhadores perdem dinheiro</span> simplesmente por falta de informação. 
+                <strong className="text-govyellow-300">Não deixe isso acontecer com você!</strong>
+              </p>
+
+              <p className="text-lg text-blue-100 mb-8 leading-relaxed">
+                Use nossa <strong>Calculadora de Direitos Trabalhistas GRATUITA</strong> e tenha uma estimativa clara do que te pertence. 
+                É uma ferramenta rápida, fácil de usar e totalmente segura. 
+                <span className="text-govyellow-300 font-semibold">Proteja seu futuro financeiro e garante o que é justo!</span>
+              </p>
+
+              {/* CTA Principal - Bem Destacado */}
+              <div className="flex flex-col items-center space-y-4">
+                <Link href="/calculadora" className="group">
+                  <button className="bg-gradient-to-r from-govgreen-500 to-govgreen-600 hover:from-govgreen-600 hover:to-govgreen-700 text-white font-bold text-xl px-12 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-govgreen-400 hover:border-govgreen-300">
+                    <span className="flex items-center space-x-3">
+                      <span>🧮</span>
+                      <span>CALCULAR MEUS DIREITOS AGORA MESMO!</span>
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                  </button>
+                </Link>
+                
+                <p className="text-sm text-blue-200 italic">
+                  ✅ 100% Gratuito • ✅ Resultados Imediatos • ✅ Dados Protegidos
+                </p>
+              </div>
+            </div>
+
+            {/* Elementos de Prova Social */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-3xl font-bold text-govyellow-300 mb-2">25K+</div>
+                <div className="text-sm">Cálculos Realizados</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-3xl font-bold text-govyellow-300 mb-2">R$ 2.8M</div>
+                <div className="text-sm">Recuperados pelos Usuários*</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-3xl font-bold text-govyellow-300 mb-2">4.9⭐</div>
+                <div className="text-sm">Avaliação dos Usuários</div>
+              </div>
+            </div>
+
+            <p className="text-xs text-blue-200 mt-4 italic">
+              *Estimativa baseada em relatos de usuários que utilizaram nossa calculadora
             </p>
           </div>
-
-          {/* Grid de Direitos */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {/* Direito 1 */}
-            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-govblue-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xl">💰</span>
-                </div>
-                <h3 className="text-lg font-bold text-govblue-800 ml-3">Salário Mínimo</h3>
-              </div>
-              <p className="text-govgray-700 text-sm font-medium">
-                Todo trabalhador tem direito a receber pelo menos um salário mínimo nacional, 
-                atualizado anualmente pelo governo federal.
-              </p>
-            </div>
-
-            {/* Direito 2 */}
-            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-govgreen-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xl">🏖️</span>
-                </div>
-                <h3 className="text-lg font-bold text-govblue-800 ml-3">Férias Remuneradas</h3>
-              </div>
-              <p className="text-govgray-700 text-sm font-medium">
-                Após 12 meses de trabalho, você tem direito a 30 dias de férias remuneradas 
-                com adicional de 1/3 do salário.
-              </p>
-            </div>
-
-            {/* Direito 3 */}
-            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-govyellow-500 rounded flex items-center justify-center">
-                  <span className="text-white text-xl">🎄</span>
-                </div>
-                <h3 className="text-lg font-bold text-govblue-800 ml-3">13º Salário</h3>
-              </div>
-              <p className="text-govgray-700 text-sm font-medium">
-                Gratificação natalina equivalente a um salário completo, 
-                paga em duas parcelas até dezembro.
-              </p>
-            </div>
-
-            {/* Direito 4 */}
-            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-govblue-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xl">🏦</span>
-                </div>
-                <h3 className="text-lg font-bold text-govblue-800 ml-3">FGTS</h3>
-              </div>
-              <p className="text-govgray-700 text-sm font-medium">
-                Fundo de Garantia: 8% do salário depositado mensalmente pelo empregador 
-                em conta vinculada na Caixa Econômica Federal.
-              </p>
-            </div>
-
-            {/* Direito 5 */}
-            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-govgreen-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xl">⏰</span>
-                </div>
-                <h3 className="text-lg font-bold text-govblue-800 ml-3">Horas Extras</h3>
-              </div>
-              <p className="text-govgray-700 text-sm font-medium">
-                Trabalho além das 8 horas diárias deve ser remunerado com adicional 
-                mínimo de 50% sobre o valor da hora normal.
-              </p>
-            </div>
-
-            {/* Direito 6 */}
-            <div className="bg-govgray-50 border border-govgray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-govyellow-500 rounded flex items-center justify-center">
-                  <span className="text-white text-xl">🌙</span>
-                </div>
-                <h3 className="text-lg font-bold text-govblue-800 ml-3">Adicional Noturno</h3>
-              </div>
-              <p className="text-govgray-700 text-sm font-medium">
-                Trabalho entre 22h e 5h tem direito a adicional de 20% 
-                sobre o valor da hora diurna.
-              </p>
-            </div>
-          </div>
-
-          {/* Call to Action */}
-          <div className="text-center">
-            <div className="bg-govblue-50 border-l-4 border-govblue-600 p-6 rounded-lg max-w-3xl mx-auto mb-8">
-              <h3 className="text-lg font-bold text-govblue-800 mb-2">
-                💡 Suspeita que seus direitos foram violados?
-              </h3>
-              <p className="text-govgray-700 font-medium mb-4">
-                Use nossa calculadora trabalhista para verificar valores ou entre em contato 
-                com nossos parceiros especializados para orientação gratuita.
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => document.getElementById('calculadora').scrollIntoView({ behavior: 'smooth' })}
-                className="bg-govblue-600 hover:bg-govblue-700 text-white font-bold px-8 py-3 rounded transition-all duration-200 shadow-md"
-              >
-                Usar Calculadora
-              </button>
-              <button 
-                onClick={() => document.getElementById('contato').scrollIntoView({ behavior: 'smooth' })}
-                className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold px-8 py-3 rounded transition-all duration-200 shadow-md"
-              >
-                Falar com Especialista
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Seção Calculadora Trabalhista - Estilo Gov.br */}
-      <section id="calculadora" className="min-h-screen bg-govgray-50 py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-govblue-800 mb-4">
-              🧮 Calculadora Trabalhista
-            </h2>
-            <p className="text-xl text-govgray-700 max-w-3xl mx-auto font-medium">
-              Calcule seus direitos trabalhistas de forma rápida e precisa. 
-              Ferramenta gratuita e atualizada com a legislação atual.
-            </p>
-          </div>
-
-          <CalculadoraTrabalhista />
         </div>
       </section>
 
@@ -666,9 +584,6 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
-
-              {/* FAQ Interativo */}
-              <FAQSection />
             </div>
 
             {/* Formulário de Contato - Estilo Gov.br */}
@@ -711,7 +626,7 @@ const HomePage = () => {
                 <div className="flex items-start space-x-3">
                   <input type="checkbox" className="mt-1" required />
                   <label className="text-govblue-700 text-sm">
-                    Aceito o tratamento dos meus dados conforme a <button type="button" className="text-govblue-600 hover:text-govblue-800 hover:underline">Política de Privacidade</button> e <button type="button" className="text-govblue-600 hover:text-govblue-800 hover:underline">LGPD</button>.
+                    Aceito o tratamento dos meus dados conforme a <Link href="/politica-privacidade" className="text-govblue-600 hover:text-govblue-800 hover:underline">Política de Privacidade</Link> e <Link href="/lgpd" className="text-govblue-600 hover:text-govblue-800 hover:underline">LGPD</Link>.
                   </label>
                 </div>
 
@@ -728,7 +643,11 @@ const HomePage = () => {
 
       {/* Modal de Candidatura */}
       {showModal && selectedJob && (
-        <LeadModal job={selectedJob} onClose={handleCloseModal} />
+        <LeadModal 
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          jobData={selectedJob}
+        />
       )}
     </>
   )
