@@ -158,7 +158,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'rescisao')} className="space-y-4">
             <div>
-              <label className="block text-govgray-200 mb-2">Salário Bruto (R$)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Salário Bruto (R$)</label>
               <input 
                 type="number" 
                 name="salario"
@@ -169,7 +169,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Tempo de Trabalho (meses)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Tempo de Trabalho (meses)</label>
               <input 
                 type="number" 
                 name="meses"
@@ -179,7 +179,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Tipo de Rescisão</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Tipo de Rescisão</label>
               <select name="tipo" className="form-input w-full" required>
                 <option value="demissao-sem-justa-causa">Demissão sem justa causa</option>
                 <option value="pedido-demissao">Pedido de demissão</option>
@@ -187,7 +187,7 @@ const CalculadoraTrabalhista = () => {
                 <option value="termino-contrato">Término de contrato</option>
               </select>
             </div>
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               🧮 Calcular Rescisão
             </button>
           </form>
@@ -197,7 +197,7 @@ const CalculadoraTrabalhista = () => {
         return (
           <form onSubmit={(e) => handleCalculate(e, 'ferias')} className="space-y-4">
             <div>
-              <label className="block text-govgray-200 mb-2">Salário Mensal (R$)</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Salário Mensal (R$)</label>
               <input 
                 type="number" 
                 name="salario"
@@ -208,7 +208,7 @@ const CalculadoraTrabalhista = () => {
               />
             </div>
             <div>
-              <label className="block text-govgray-200 mb-2">Dias Trabalhados no Período</label>
+              <label className="block text-govblue-800 mb-2 font-medium">Dias Trabalhados no Período</label>
               <input 
                 type="number" 
                 name="diasTrabalhados"
@@ -217,7 +217,7 @@ const CalculadoraTrabalhista = () => {
                 required 
               />
             </div>
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               🏖️ Calcular Férias
             </button>
           </form>
@@ -254,7 +254,7 @@ const CalculadoraTrabalhista = () => {
                 <option value="100">100% (domingos e feriados)</option>
               </select>
             </div>
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="w-full bg-govyellow-500 hover:bg-govyellow-600 text-govblue-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               ⏰ Calcular Horas Extras
             </button>
           </form>
@@ -287,7 +287,7 @@ const CalculadoraTrabalhista = () => {
             <div className="text-sm text-govgray-300 bg-govgray-700/80 p-3 rounded border border-govgray-600">
               💡 Adicional noturno: 20% sobre o valor da hora normal (22h às 5h)
             </div>
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               🌙 Calcular Adicional Noturno
             </button>
           </form>
@@ -325,7 +325,7 @@ const CalculadoraTrabalhista = () => {
               />
               <label htmlFor="valeTransporte" className="text-govgray-200">Desconta Vale Transporte (6%)</label>
             </div>
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
               📊 Calcular Salário Líquido
             </button>
           </form>
@@ -341,15 +341,15 @@ const CalculadoraTrabalhista = () => {
     if (!result) return null
 
     return (
-      <div className="mt-6 p-4 bg-green-900/20 border border-green-600 rounded-lg">
-        <h4 className="text-green-400 font-semibold mb-3">✅ Resultado do Cálculo</h4>
+      <div className="mt-6 p-4 bg-govgreen-50 border-2 border-govgreen-600 rounded-lg">
+        <h4 className="text-govgreen-700 font-bold mb-3">✅ Resultado do Cálculo</h4>
         <div className="space-y-2 text-sm">
           {Object.entries(result).map(([key, value]) => (
             <div key={key} className="flex justify-between">
-              <span className="text-govgray-200 capitalize">
+              <span className="text-govblue-700 capitalize font-medium">
                 {key.replace(/([A-Z])/g, ' $1').toLowerCase()}:
               </span>
-              <span className="text-white font-medium">
+              <span className="text-govblue-800 font-bold">
                 R$ {typeof value === 'number' ? value.toFixed(2) : value}
               </span>
             </div>
@@ -391,8 +391,8 @@ const CalculadoraTrabalhista = () => {
       </div>
 
       {/* Formulário da Calculadora Ativa */}
-      <div className="bg-govgray-800 p-8 rounded-2xl border border-govgray-600 shadow-lg">
-        <h3 className="text-2xl font-bold text-white mb-6">
+      <div className="bg-white p-8 rounded-2xl border-2 border-govblue-600 shadow-lg">
+        <h3 className="text-2xl font-bold text-govblue-800 mb-6">
           {calculadoras.find(c => c.id === activeCalc)?.name}
         </h3>
         {renderForm()}

@@ -37,25 +37,25 @@ const FAQSection = () => {
 
   return (
     <div className="mt-12">
-      <h4 className="text-xl font-bold text-white mb-4">❓ Perguntas Frequentes</h4>
+      <h4 className="text-xl font-bold text-govblue-800 mb-4">❓ Perguntas Frequentes</h4>
       <div className="space-y-3">
         {faqs.map((faq, index) => (
-          <div key={index} className="bg-slate-700 rounded-lg overflow-hidden">
+          <div key={index} className="bg-white border-2 border-govblue-200 rounded-lg overflow-hidden shadow-sm">
             <button 
               onClick={() => toggleFAQ(index)}
-              className="w-full text-left p-4 hover:bg-slate-600 transition-all duration-300 flex justify-between items-center"
+              className="w-full text-left p-4 hover:bg-govblue-50 transition-all duration-300 flex justify-between items-center"
             >
-              <span className="text-slate-300 hover:text-white font-medium">
+              <span className="text-govblue-800 hover:text-govblue-900 font-medium">
                 {faq.question}
               </span>
-              <span className={`text-slate-400 transition-transform duration-300 ${
+              <span className={`text-govblue-600 transition-transform duration-300 ${
                 openFAQ === index ? 'rotate-180' : ''
               }`}>
                 ▼
               </span>
             </button>
             {openFAQ === index && (
-              <div className="px-4 pb-4 text-slate-400 border-t border-slate-600 pt-3 animate-fade-in">
+              <div className="px-4 pb-4 text-govblue-700 border-t border-govblue-200 pt-3 animate-fade-in bg-govblue-50">
                 {faq.answer}
               </div>
             )}

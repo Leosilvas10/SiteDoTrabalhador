@@ -64,11 +64,14 @@ const AdminLeads = () => {
       return
     }
     
-    if (!confirm('🚨 ÚLTIMA CONFIRMAÇÃO: Todos os leads serão perdidos. Continuar?')) {
+    if (!confirm('🚨 ÚLTIMA CONFIRMAÇÃO: Todos os dados serão perdidos para sempre. Continuar?')) {
       return
     }
 
     try {
+      setLoading(true)
+      console.log('🧹 Iniciando limpeza completa...')
+      
       const response = await fetch('/api/clear-leads', {
         method: 'DELETE'
       })
@@ -76,15 +79,32 @@ const AdminLeads = () => {
       const data = await response.json()
       
       if (data.success) {
-        alert('✅ Todos os leads foram excluídos!')
-        fetchLeads() // Recarregar a lista
+        alert('✅ SISTEMA COMPLETAMENTE LIMPO!\n\n' + 
+              '• Todos os leads removidos\n' + 
+              '• Cache limpo\n' + 
+              '• Dashboard zerado\n\n' + 
+              'O sistema está pronto para começar do zero!')
+        
+        // Forçar recarregamento completo
+        setLeads([])
         setSelectedLead(null)
+        setError('')
+        await fetchLeads()
+        
+        // Limpar localStorage se houver
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('leads-cache')
+          localStorage.removeItem('admin-stats')
+        }
+        
       } else {
-        alert('❌ Erro ao limpar leads: ' + data.message)
+        alert('❌ Erro ao limpar sistema: ' + data.message)
       }
     } catch (error) {
-      console.error('Erro ao limpar leads:', error)
-      alert('❌ Erro ao limpar leads')
+      console.error('Erro ao limpar sistema:', error)
+      alert('❌ Erro ao limpar sistema. Tente novamente.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -146,9 +166,9 @@ const AdminLeads = () => {
                 </button>
                 <button
                   onClick={clearAllLeads}
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+                  className="inline-flex items-center px-6 py-3 border-2 border-red-500 rounded-md shadow-sm text-sm font-bold text-red-600 bg-white hover:bg-red-50 hover:text-red-700 transition-all duration-300"
                 >
-                  🗑️ Limpar Tudo
+                  🧹 ZERAR SISTEMA COMPLETO
                 </button>
               </div>
             </div>
@@ -312,17 +332,17 @@ const AdminLeads = () => {
                           <div className="flex items-center">
                             <div>
                               <div className="text-sm font-medium text-gray-900">
-                                {lead.name}
+                                {lead.nome || lead.name || 'Nome não informado'}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {lead.whatsapp}
+                                {lead.whatsapp || lead.telefone || 'WhatsApp não informado'}
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{lead.jobTitle}</div>
-                          <div className="text-sm text-gray-500">{lead.jobCompany}</div>
+                          <div className="text-sm text-gray-900">{lead.jobTitle || 'Vaga não informada'}</div>
+                          <div className="text-sm text-gray-500">{lead.company || lead.jobCompany || 'Empresa não informada'}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(lead.status)}`}>
@@ -378,23 +398,27 @@ const AdminLeads = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Nome</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.name}</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.nome || selectedLead.name || 'Nome não informado'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">WhatsApp</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.whatsapp}</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.whatsapp || selectedLead.telefone || 'WhatsApp não informado'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Email</label>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.email || 'Email não informado'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Vaga de Interesse</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobTitle}</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobTitle || 'Vaga não informada'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Empresa</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobCompany}</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.company || selectedLead.jobCompany || 'Empresa não informada'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Local da Vaga</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobLocation || 'Não informado'}</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedLead.originalLocation || selectedLead.jobLocation || 'Não informado'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Salário da Vaga</label>

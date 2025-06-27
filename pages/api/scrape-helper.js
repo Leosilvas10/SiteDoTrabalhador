@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         title: 'Empregada Doméstica - Zona Sul',
         company: {
           name: 'Residência Particular',
-          logo: '/logo.png'
+          logo: '/lodo.png'
         },
         location: 'São Paulo, SP - Zona Sul',
         salary: 'R$ 1.800 - R$ 2.200',
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         title: 'Cuidador de Idoso - Período Integral',
         company: {
           name: 'Casa de Repouso Premium',
-          logo: '/logo.png'
+          logo: '/lodo.png'
         },
         location: 'Rio de Janeiro, RJ',
         salary: 'R$ 2.000 - R$ 2.800',
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         title: 'Babá com Inglês - Família Executiva',
         company: {
           name: 'Família Internacional',
-          logo: '/logo.png'
+          logo: '/lodo.png'
         },
         location: 'Brasília, DF',
         salary: 'R$ 2.500 - R$ 3.500',

@@ -148,7 +148,7 @@ const VagasPage = () => {
   }
 
   return (
-    <>
+    <div className="page-white-bg min-h-screen">
       <Head>
         <title>Vagas de Emprego - Site do Trabalhador</title>
         <meta name="description" content="Encontre vagas de emprego em todo o Brasil. Oportunidades atualizadas em tempo real." />
@@ -158,7 +158,7 @@ const VagasPage = () => {
 
       <Header />
 
-      <main className="min-h-screen bg-govgray-50 pt-28">
+      <main className="min-h-screen bg-white pt-28">
         {/* Hero Section */}
         <section className="bg-govblue-600 relative overflow-hidden border-b-4 border-govyellow-400">
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -388,7 +388,7 @@ const VagasPage = () => {
       </main>
 
       {/* Espaço branco antes do footer */}
-      <div className="bg-govgray-50 py-12">
+      <div className="bg-white py-12">
         {/* Espaço em branco intencional */}
       </div>
 
@@ -401,7 +401,7 @@ const VagasPage = () => {
         onClose={() => setIsModalOpen(false)}
         jobData={selectedJob}
       />
-    </>
+    </div>
   )
 }
 

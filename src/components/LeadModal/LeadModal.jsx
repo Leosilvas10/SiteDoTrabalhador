@@ -22,24 +22,11 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
     const { name, value, type, checked } = e.target
     
     if (name === 'whatsapp') {
-      // Formatação automática do WhatsApp
-      const onlyNumbers = value.replace(/\D/g, '')
-      let formatted = onlyNumbers
-      
-      if (onlyNumbers.length >= 11) {
-        // Formato: (11) 99999-9999
-        formatted = `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2, 7)}-${onlyNumbers.slice(7, 11)}`
-      } else if (onlyNumbers.length >= 7) {
-        // Formato parcial: (11) 99999
-        formatted = `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2)}`
-      } else if (onlyNumbers.length >= 2) {
-        // Formato parcial: (11
-        formatted = `(${onlyNumbers.slice(0, 2)})`
-      }
-      
+      // Aplicar formatação automática no WhatsApp
+      const formattedValue = formatWhatsApp(value)
       setFormData(prev => ({
         ...prev,
-        [name]: formatted
+        [name]: formattedValue
       }))
     } else {
       setFormData(prev => ({
@@ -49,12 +36,29 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
     }
   }
 
+  const formatWhatsApp = (value) => {
+    // Remove tudo que não é número
+    const onlyNumbers = value.replace(/\D/g, '')
+    
+    // Aplica formatação brasileira
+    if (onlyNumbers.length <= 2) {
+      return `(${onlyNumbers}`
+    } else if (onlyNumbers.length <= 7) {
+      return `(${onlyNumbers.substring(0, 2)}) ${onlyNumbers.substring(2)}`
+    } else if (onlyNumbers.length <= 11) {
+      return `(${onlyNumbers.substring(0, 2)}) ${onlyNumbers.substring(2, 7)}-${onlyNumbers.substring(7)}`
+    }
+    
+    // Limita a 11 dígitos
+    return `(${onlyNumbers.substring(0, 2)}) ${onlyNumbers.substring(2, 7)}-${onlyNumbers.substring(7, 11)}`
+  }
+
   const validateWhatsApp = (whatsapp) => {
     // Remove tudo que não é número
     const onlyNumbers = whatsapp.replace(/\D/g, '')
     
-    // Deve ter 11 dígitos (DDD + 9 dígitos)
-    if (onlyNumbers.length !== 11) {
+    // Deve ter exatamente 10 ou 11 dígitos
+    if (onlyNumbers.length < 10 || onlyNumbers.length > 11) {
       return false
     }
     
@@ -64,14 +68,8 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
       return false
     }
     
-    // Primeiro dígito do número deve ser 9 (celular)
-    const firstDigit = onlyNumbers.charAt(2)
-    if (firstDigit !== '9') {
-      return false
-    }
-    
-    // Não pode ter todos os dígitos iguais
-    if (onlyNumbers.split('').every(digit => digit === onlyNumbers[0])) {
+    // Se tem 11 dígitos, o terceiro deve ser 9 (celular)
+    if (onlyNumbers.length === 11 && onlyNumbers[2] !== '9') {
       return false
     }
     
@@ -88,29 +86,67 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
 
     // Validação rigorosa do WhatsApp
     if (!formData.whatsapp || !validateWhatsApp(formData.whatsapp)) {
-      alert('❌ Por favor, insira um número de WhatsApp válido com DDD.\nExemplo: (11) 99999-9999')
+      alert('❌ Por favor, insira um número de WhatsApp válido com DDD.\n\nFormato esperado: (11) 99999-9999\n- DDD entre 11 e 99\n- Para celular, deve começar com 9 após o DDD')
       return
     }
 
     setIsSubmitting(true)
 
     try {
-      const leadSubmission = {
-        // Dados do formulário
+      // Formatar WhatsApp - manter apenas números
+      const whatsappFormatted = formData.whatsapp.replace(/\D/g, '')
+      
+      console.log('📋 Dados do formulário antes do envio:', {
         nome: formData.name,
         email: formData.email,
-        telefone: formData.whatsapp,
-        experiencia: `Última empresa: ${formData.lastCompany}. Status atual: ${formData.workStatus}. Recebeu direitos: ${formData.receivedRights}. Problemas no trabalho: ${formData.workIssues}. Deseja consultoria: ${formData.wantConsultation}`,
+        whatsapp: formData.whatsapp,
+        whatsappFormatted: whatsappFormatted,
+        lastCompany: formData.lastCompany,
+        workStatus: formData.workStatus,
+        jobData: jobData
+      })
+
+      console.log('🔍 Verificando URLs disponíveis na vaga:', {
+        url: jobData?.url,
+        link: jobData?.link,
+        apply_url: jobData?.apply_url,
+        original_url: jobData?.original_url,
+        company: jobData?.company,
+        title: jobData?.title,
+        location: jobData?.location
+      })
+
+      const leadSubmission = {
+        // Dados pessoais
+        nome: formData.name || '',
+        email: formData.email || '',
+        telefone: whatsappFormatted, // Usar apenas números
+        whatsapp: whatsappFormatted, // Campo adicional para compatibilidade
+        
+        // Experiência profissional detalhada
+        ultimaEmpresa: formData.lastCompany || 'Não informado',
+        statusAtual: formData.workStatus || 'Não informado',
+        recebeuDireitos: formData.receivedRights || 'Não informado',
+        problemasTrabalho: formData.workIssues || 'Não informado',
+        desejaConsultoria: formData.wantConsultation || 'Não informado',
+        
+        // Campo experiência combinado (para compatibilidade)
+        experiencia: `Última empresa: ${formData.lastCompany || 'Não informado'}. Status atual: ${formData.workStatus || 'Não informado'}. Recebeu direitos: ${formData.receivedRights || 'Não informado'}. Problemas no trabalho: ${formData.workIssues || 'Não informado'}. Deseja consultoria: ${formData.wantConsultation || 'Não informado'}`,
+        
+        // Consentimento LGPD
         lgpdConsent: formData.lgpdConsent,
         
         // Dados da vaga para redirecionamento  
-        jobId: jobData?.id,
-        jobTitle: jobData?.title,
-        company: jobData?.company?.name || jobData?.company,
-        jobLink: jobData?.url || jobData?.link || jobData?.apply_url || jobData?.original_url,
-        originalLocation: jobData?.originalLocation || jobData?.location,
+        jobId: jobData?.id || jobData?.jobId,
+        jobTitle: jobData?.title || jobData?.jobTitle || 'Vaga não especificada',
+        company: jobData?.company?.name || jobData?.company || 'Empresa não especificada',
+        jobLink: jobData?.url || jobData?.link || jobData?.apply_url || jobData?.original_url || '#',
+        originalLocation: jobData?.originalLocation || jobData?.location || 'Brasil',
         
-        // Metadados
+        // Metadados adicionais
+        fonte: 'Site do Trabalhador',
+        paginaOrigem: window.location.href,
+        userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
         source: 'Site do Trabalhador - Página de Vagas'
       }
@@ -127,17 +163,20 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
 
       const result = await response.json()
       console.log('📥 Resposta do lead:', result)
+      console.log('🔗 Dados de redirecionamento recebidos:', result.redirect)
 
       if (result.success) {
-        // Fechar modal primeiro
-        onClose()
+        // Mostrar mensagem de sucesso primeiro
+        let successMessage = '✅ Candidatura enviada com sucesso!'
+        successMessage += '\n\n📋 Dados registrados:'
+        successMessage += `\n• Nome: ${formData.name}`
+        successMessage += `\n• WhatsApp: ${formData.whatsapp}`
         
         // Verificar se há dados de redirecionamento
-        if (result.redirect && result.redirect.url) {
-          const { url, originalLocation, company, jobTitle, message } = result.redirect
+        if (result.redirect && result.redirect.url && result.redirect.url !== '#') {
+          const { url, originalLocation, company, jobTitle } = result.redirect
           
-          // Mostrar mensagem com informações da vaga real
-          let successMessage = '✅ Candidatura enviada com sucesso!'
+          console.log('✅ Redirecionamento válido encontrado:', url)
           
           if (originalLocation && originalLocation !== 'Brasil') {
             successMessage += `\n\n📍 Localização da vaga: ${originalLocation}`
@@ -147,35 +186,41 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
             successMessage += `\n🏢 Empresa: ${company}`
           }
           
-          successMessage += `\n\n${message || 'Você será redirecionado para a vaga original em instantes...'}`
+          successMessage += '\n\n🔗 Redirecionando para a vaga original...'
           
           alert(successMessage)
           
-          // Redirecionamento com delay
+          // Fechar modal
+          onClose()
+          
+          // Redirecionamento único para a vaga original
           setTimeout(() => {
-            console.log('🔗 Redirecionando para:', url)
-            
-            try {
-              // Tentar abrir em nova aba
-              const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-              
-              if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                // Se popup bloqueado, usar location.href
-                console.log('⚠️ Popup bloqueado, redirecionando na mesma aba...')
-                window.location.href = url
-              } else {
-                console.log('✅ Redirecionamento em nova aba realizado')
-              }
-            } catch (error) {
-              console.error('❌ Erro no redirecionamento:', error)
-              // Fallback: redirecionar na mesma aba
-              window.location.href = url
-            }
-          }, 2000) // 2 segundos de delay
+            console.log('🔗 Executando redirecionamento para:', url)
+            window.open(url, '_blank')
+          }, 1000)
           
         } else {
-          // Sem redirecionamento específico
-          alert('✅ Candidatura enviada com sucesso!\n\nNossa equipe entrará em contato em breve.')
+          console.log('⚠️ Redirecionamento não disponível ou inválido:', result.redirect)
+          // Tentar gerar URL manual se possível
+          if (jobData?.title && jobData?.location) {
+            const encodedTitle = encodeURIComponent(jobData.title.replace(/[^\w\s]/gi, '').replace(/\s+/g, '+'))
+            const encodedLocation = encodeURIComponent(jobData.location.split(',')[0].replace(/\s+/g, '+'))
+            const fallbackUrl = `https://www.indeed.com.br/jobs?q=${encodedTitle}&l=${encodedLocation}`
+            
+            successMessage += '\n\n🔗 Redirecionando para buscar vagas similares...'
+            alert(successMessage)
+            onClose()
+            
+            setTimeout(() => {
+              console.log('🔗 Redirecionamento de fallback para:', fallbackUrl)
+              window.open(fallbackUrl, '_blank')
+            }, 1000)
+          } else {
+            // Sem redirecionamento específico
+            successMessage += '\n\nNossa equipe entrará em contato em breve!'
+            alert(successMessage)
+            onClose()
+          }
         }
         
       } else {
@@ -189,8 +234,6 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
       setIsSubmitting(false)
     }
   }
-
-  if (!job) return null
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -238,7 +281,7 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
               </div>
               <div>
                 <label className="block text-white font-medium mb-2">
-                  WhatsApp *
+                  WhatsApp * <span className="text-govgray-300 text-xs">(com DDD)</span>
                 </label>
                 <input
                   type="tel"
@@ -247,8 +290,13 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 bg-slate-600 text-white rounded-lg border border-slate-500 focus:border-blue-500 focus:outline-none"
                   placeholder="(11) 99999-9999"
+                  maxLength="15"
+                  autoComplete="tel"
                   required
                 />
+                <p className="text-govgray-400 text-xs mt-1">
+                  Digite apenas números, a formatação será aplicada automaticamente
+                </p>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-white font-medium mb-2">

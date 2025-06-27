@@ -35,7 +35,7 @@ function AppContent({ Component, pageProps }) {
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href={siteConfig?.logoUrl || "/logo.png"} />
+        <link rel="icon" href={siteConfig?.logoUrl || "/lodo.png"} />
       </Head>
       
       {shouldExcludeLayout ? (
@@ -43,7 +43,7 @@ function AppContent({ Component, pageProps }) {
         <Component {...pageProps} />
       ) : (
         // Páginas com layout padrão
-        <div className="min-h-screen bg-slate-900 text-white">
+        <div className="min-h-screen bg-white text-gray-900">
           <Header />
           <main className="pt-28">
             <Component {...pageProps} />

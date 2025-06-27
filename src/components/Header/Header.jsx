@@ -92,7 +92,7 @@ const Header = () => {
           animation: shimmer 3s infinite;
         }
       `}</style>
-      <header className="bg-govblue-600 shadow-xl fixed top-0 w-full z-50 border-b-4 border-govyellow-500">
+      <header className="header-blue shadow-xl fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-2">
             {/* Logo Unificada - Estilo Gov.br simples e destacada */}
@@ -167,7 +167,7 @@ const Header = () => {
         {/* Mobile menu - Estilo Gov.br */}
         {isMobileMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-govblue-700 border-t border-govyellow-500">
+            <div className="header-blue-mobile px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {isHomePage ? (
                 // Menus de navegação mobile apenas na página inicial
                 <>

@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSiteContext } from '../../contexts/SiteContext'
 
 const UnifiedLogo = ({ className = '', onClick = null }) => {
   const { siteConfig } = useSiteContext()
+  const [imageKey, setImageKey] = useState(Date.now())
+  
+  // Forçar reload da imagem
+  const forceReload = () => {
+    setImageKey(Date.now())
+  }
   
   return (
     <div 
@@ -14,12 +20,16 @@ const UnifiedLogo = ({ className = '', onClick = null }) => {
           {/* Logo com fundo branco - responsivo e bem centralizado */}
           <div className="h-12 w-20 sm:h-14 sm:w-24 bg-white rounded-lg shadow-md transform group-hover:scale-105 transition-all duration-300 border border-govgray-200 flex items-center justify-center p-1">
             <img 
-              src={`${siteConfig.logoUrl}?t=${Date.now()}`}
+              key={imageKey}
+              src={`/lodo.png?v=${imageKey}&t=${Date.now()}&r=${Math.random()}`}
               alt="Site do Trabalhador" 
               className="h-12 w-16 sm:h-12 sm:w-20 object-contain transition-all duration-300"
               onError={(e) => {
-                console.error('Erro ao carregar logo:', siteConfig.logoUrl)
+                console.error('Erro ao carregar logo:', `/lodo.png?v=${imageKey}`)
                 e.target.style.display = 'none'
+              }}
+              onLoad={() => {
+                console.log('Logo carregada com sucesso:', `/lodo.png?v=${imageKey}`)
               }}
             />
           </div>

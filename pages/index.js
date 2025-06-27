@@ -282,7 +282,7 @@ const HomePage = () => {
         <meta name="description" content="Vagas de emprego em todo o Brasil: doméstica, porteiro, limpeza, cuidador, motorista e mais. Mais de 50 vagas atualizadas constantemente de fontes como Indeed, Vagas.com e mercado brasileiro." />
         <meta name="keywords" content="vagas emprego brasil real, doméstica, porteiro, auxiliar limpeza, cuidador, trabalho operacional, indeed brasil, vagas.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
+        <link rel="icon" href="/lodo.png" />
       </Head>
 
       {/* Seção Início - Hero */}
@@ -672,22 +672,22 @@ const HomePage = () => {
             </div>
 
             {/* Formulário de Contato - Estilo Gov.br */}
-            <div className="bg-white p-8 rounded-lg shadow-lg border border-govgray-200">
+            <div className="bg-white p-8 rounded-lg shadow-lg border-2 border-govblue-600">
               <h3 className="text-2xl font-bold text-govblue-800 mb-6">Envie sua Mensagem</h3>
               <form className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-slate-300 mb-2">Nome *</label>
+                    <label className="block text-govblue-800 mb-2 font-medium">Nome *</label>
                     <input type="text" className="form-input w-full" placeholder="Seu nome completo" required />
                   </div>
                   <div>
-                    <label className="block text-slate-300 mb-2">Email *</label>
+                    <label className="block text-govblue-800 mb-2 font-medium">Email *</label>
                     <input type="email" className="form-input w-full" placeholder="seu@email.com" required />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 mb-2">Assunto *</label>
+                  <label className="block text-govblue-800 mb-2 font-medium">Assunto *</label>
                   <select className="form-input w-full" required>
                     <option value="">Selecione o assunto</option>
                     <option>Dúvida sobre direitos trabalhistas</option>
@@ -700,7 +700,7 @@ const HomePage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 mb-2">Mensagem *</label>
+                  <label className="block text-govblue-800 mb-2 font-medium">Mensagem *</label>
                   <textarea 
                     className="form-input w-full h-32 resize-none" 
                     placeholder="Descreva sua mensagem detalhadamente..." 
@@ -710,12 +710,12 @@ const HomePage = () => {
 
                 <div className="flex items-start space-x-3">
                   <input type="checkbox" className="mt-1" required />
-                  <label className="text-slate-400 text-sm">
-                    Aceito o tratamento dos meus dados conforme a <button type="button" className="text-blue-400 hover:underline">Política de Privacidade</button> e <button type="button" className="text-blue-400 hover:underline">LGPD</button>.
+                  <label className="text-govblue-700 text-sm">
+                    Aceito o tratamento dos meus dados conforme a <button type="button" className="text-govblue-600 hover:text-govblue-800 hover:underline">Política de Privacidade</button> e <button type="button" className="text-govblue-600 hover:text-govblue-800 hover:underline">LGPD</button>.
                   </label>
                 </div>
 
-                <button type="submit" className="btn-primary w-full">
+                <button type="submit" className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md">
                   📤 Enviar Mensagem
                 </button>
               </form>

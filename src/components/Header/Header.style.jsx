@@ -24,7 +24,7 @@ export const HeaderInner = styled.div`
 
 export const Logo = styled.div`
     width: 10rem;
-    background: url(/logo.png) no-repeat center;
+    background: url(/lodo.png) no-repeat center;
     background-size: contain;
 `;
 

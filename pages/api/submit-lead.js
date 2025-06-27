@@ -12,25 +12,42 @@ export default async function handler(req, res) {
     const leadData = req.body;
 
     // Validações server-side
-    if (!leadData.nome || leadData.nome.length < 2) {
+    if (!leadData.nome || leadData.nome.trim().length < 2) {
       return res.status(400).json({ 
         success: false, 
         message: 'Nome deve ter pelo menos 2 caracteres' 
       });
     }
 
-    if (!leadData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadData.email)) {
+    // WhatsApp é obrigatório e mais importante que email
+    if (!leadData.telefone && !leadData.whatsapp) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'WhatsApp é obrigatório' 
+      });
+    }
+
+    // Validar formato do WhatsApp
+    const whatsappNumber = (leadData.telefone || leadData.whatsapp || '').replace(/\D/g, '');
+    if (whatsappNumber.length < 10 || whatsappNumber.length > 11) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'WhatsApp deve ter 10 ou 11 dígitos' 
+      });
+    }
+
+    // Email opcional, mas se fornecido deve ser válido
+    if (leadData.email && leadData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadData.email)) {
       return res.status(400).json({ 
         success: false, 
         message: 'Email inválido' 
       });
     }
 
-    if (!leadData.experiencia || leadData.experiencia.length < 20) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Descrição da experiência deve ter pelo menos 20 caracteres' 
-      });
+    // Experiência é opcional no formulário simplificado
+    if (!leadData.experiencia || leadData.experiencia.length < 10) {
+      // Criar experiência baseada nos campos preenchidos
+      leadData.experiencia = `Status: ${leadData.statusAtual || 'Não informado'}. Última empresa: ${leadData.ultimaEmpresa || 'Não informado'}`;
     }
 
     if (!leadData.lgpdConsent) {
@@ -41,13 +58,16 @@ export default async function handler(req, res) {
     }
     
     // Adicionar informações de rastreamento e redirecionamento
+    const leadId = `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     const submissionData = {
       ...leadData,
+      id: leadId, // ID principal para busca
+      leadId: leadId, // Backup do ID (compatibilidade)
       timestamp: new Date().toLocaleString('pt-BR'),
       timestampISO: new Date().toISOString(),
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
       userAgent: req.headers['user-agent'],
-      leadId: `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       source: 'Site do Trabalhador',
       validated: true,
       
@@ -61,6 +81,7 @@ export default async function handler(req, res) {
 
     // Log detalhado do lead
     console.log('✅ Novo lead validado:', {
+      id: submissionData.id,
       leadId: submissionData.leadId,
       nome: submissionData.nome,
       email: submissionData.email,
@@ -92,7 +113,7 @@ export default async function handler(req, res) {
       }
 
       await fs.writeFile(leadsFilePath, JSON.stringify(existingLeads, null, 2));
-      console.log(`💾 Lead salvo localmente: ${submissionData.leadId}`);
+      console.log(`💾 Lead salvo localmente: ${submissionData.id}`);
     } catch (saveError) {
       console.error('⚠️ Erro ao salvar lead localmente:', saveError.message);
       // Não bloquear o processo se falhar ao salvar
@@ -102,7 +123,7 @@ export default async function handler(req, res) {
     const response = {
       success: true,
       message: 'Candidatura enviada com sucesso!',
-      leadId: submissionData.leadId,
+      leadId: submissionData.id, // Usar o ID principal
       redirect: {
         url: submissionData.jobLink,
         originalLocation: submissionData.originalLocation,
