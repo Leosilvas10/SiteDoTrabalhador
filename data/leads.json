@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "nome": "Leonardo",
+    "email": "leonardosilvas10@gmail.com",
+    "telefone": "31991998938",
+    "whatsapp": "31991998938",
+    "ultimaEmpresa": "aliar sistemas",
+    "statusAtual": "Com carteira assinada",
+    "recebeuDireitos": "Sim, recebi tudo certinho",
+    "problemasTrabalho": "Não",
+    "desejaConsultoria": "Sim, quero saber meus direitos",
+    "experiencia": "Última empresa: aliar sistemas. Status atual: Com carteira assinada. Recebeu direitos: Sim, recebi tudo certinho. Problemas no trabalho: Não. Deseja consultoria: Sim, quero saber meus direitos",
+    "lgpdConsent": true,
+    "jobId": "market_br_1751039607759_83_ziyb1c5ia",
+    "jobTitle": "Acompanhante Hospitalar",
+    "company": "B2W Digital",
+    "jobLink": "https://www.empregos.com.br/vagas/acompanhante%2bhospitalar/niter%c3%b3i",
+    "originalLocation": "Niterói, RJ",
+    "fonte": "Site do Trabalhador",
+    "paginaOrigem": "http://localhost:3000/vagas",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "timestamp": "27/06/2025, 13:00:09",
+    "source": "Site do Trabalhador",
+    "id": "lead_1751040009042_dgu4hfa2x",
+    "leadId": "lead_1751040009042_dgu4hfa2x",
+    "timestampISO": "2025-06-27T16:00:09.132Z",
+    "ip": "::1",
+    "validated": true
+  }
+]

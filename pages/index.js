@@ -115,7 +115,7 @@ const HomePage = () => {
       console.log('📡 Buscando vagas da API HOME...')
       
       const timestamp = Date.now()
-      const response = await fetch(`/api/fetch-home-jobs?t=${timestamp}`, {
+      const response = await fetch(`/api/jobs?t=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
@@ -139,7 +139,7 @@ const HomePage = () => {
         throw new Error(data.message || 'Erro na API')
       }
 
-      const jobsData = safeArray(data.data)
+      const jobsData = safeArray(data.data || data.jobs)
       const totalAvailable = data.meta?.totalAvailable || jobsData.length
       
       console.log('📊 Processando vagas HOME (sem cidade):', jobsData.length)
@@ -177,8 +177,7 @@ const HomePage = () => {
         }
         
         console.log(`✅ ${processedJobs.length} vagas carregadas de todo o Brasil`)
-        console.log(`📊 Fontes: ${data.meta?.sources?.join(', ') || 'Não informado'}`)
-        console.log(`📈 Estatísticas:`, data.meta?.stats)
+        console.log(`📊 Fontes: ${data.meta?.sources?.join(', ') || 'Indeed Brasil'}`)
       }
 
       // Atualizar informações de timestamp
@@ -231,22 +230,11 @@ const HomePage = () => {
 
   // Effect para busca inicial e configuração de intervalos
   useEffect(() => {
-    // Limpar cache antigo/corrompido na primeira execução
-    try {
-      const cachedData = localStorage.getItem('jobsCache')
-      if (cachedData) {
-        const jobs = JSON.parse(cachedData)
-        if (!Array.isArray(jobs)) {
-          console.log('🧹 Limpando cache corrompido...')
-          localStorage.removeItem('jobsCache')
-          localStorage.removeItem('jobsCacheTime')
-        }
-      }
-    } catch (error) {
-      console.log('🧹 Limpando cache inválido...')
-      localStorage.removeItem('jobsCache')
-      localStorage.removeItem('jobsCacheTime')
-    }
+    // 🚨 LIMPAR CACHE SEMPRE - Para forçar vagas novas e corretas
+    console.log('🧹 Limpando cache para buscar vagas corrigidas...')
+    localStorage.removeItem('jobsCache')
+    localStorage.removeItem('jobsCacheTime')
+    localStorage.removeItem('totalSystemJobs')
     
     // Buscar vagas reais em vez de usar vagas mockadas
     fetchJobs()

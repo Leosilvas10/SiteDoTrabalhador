@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
-import Header from '../src/components/Header/Header'
-import Footer from '../src/components/Footer/Footer'
 import LeadModal from '../src/components/LeadModal/LeadModal'
+import ExternalJobModal from '../src/components/ExternalJobModal/ExternalJobModal'
+import ExternalJobLeadModal from '../src/components/ExternalJobLeadModal/ExternalJobLeadModal'
 
 const VagasPage = () => {
   const [jobs, setJobs] = useState([])
@@ -11,6 +11,8 @@ const VagasPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedJob, setSelectedJob] = useState(null)
+  const [isExternalModalOpen, setIsExternalModalOpen] = useState(false)
+  const [selectedExternalJob, setSelectedExternalJob] = useState(null)
   const [filters, setFilters] = useState({
     search: '',
     category: '',
@@ -21,20 +23,36 @@ const VagasPage = () => {
   const jobsPerPage = 9
 
   useEffect(() => {
-    // Buscar vagas da API
-    fetch('/api/fetch-real-jobs?limit=120')
+    // Buscar TODAS as vagas (internas + públicas externas)
+    console.log('🔍 Buscando TODAS as vagas (internas + públicas)...')
+    
+    fetch(`/api/all-jobs-combined?t=${Date.now()}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    })
       .then(res => res.json())
       .then(data => {
+        console.log('📋 Dados recebidos na página de vagas:', data)
+        
         if (data.success) {
-          setJobs(data.jobs || [])
-          setFilteredJobs(data.jobs || [])
+          const vagasData = data.jobs || data.data || []
+          console.log(`✅ Total de ${vagasData.length} vagas carregadas`)
+          console.log(`📊 Internas: ${data.meta?.internalJobs || 0}, Externas: ${data.meta?.externalJobs || 0}`)
+          console.log(`🌐 Fontes: ${data.meta?.sources?.join(', ') || 'N/A'}`)
+          
+          setJobs(vagasData)
+          setFilteredJobs(vagasData)
         } else {
-          setError('Erro ao carregar vagas')
+          console.error('❌ Erro na resposta da API:', data.message)
+          setError(data.message || 'Erro ao carregar vagas')
         }
         setLoading(false)
       })
       .catch(err => {
-        setError('Erro ao carregar vagas')
+        console.error('❌ Erro ao buscar vagas:', err)
+        setError('Erro ao carregar vagas. Tente novamente.')
         setLoading(false)
       })
   }, [])
@@ -143,8 +161,21 @@ const VagasPage = () => {
   }
 
   const handleApply = (job) => {
-    setSelectedJob(job)
-    setIsModalOpen(true)
+    // Verificar se é vaga externa que requer captação de lead
+    if (job.isExternal && job.requiresLead) {
+      setSelectedExternalJob(job)
+      setIsExternalModalOpen(true)
+    } else {
+      // Vaga interna - usar modal normal
+      setSelectedJob(job)
+      setIsModalOpen(true)
+    }
+  }
+
+  const handleExternalJobSubmit = (result) => {
+    console.log('✅ Lead de vaga externa processado:', result)
+    // Modal será fechado automaticamente
+    // Redirecionamento será feito automaticamente
   }
 
   return (
@@ -156,10 +187,7 @@ const VagasPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
-      <main className="min-h-screen bg-white pt-28">
-        {/* Hero Section */}
+      {/* Hero Section */}
         <section className="bg-govblue-600 relative overflow-hidden border-b-4 border-govyellow-400">
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="text-center">
@@ -286,7 +314,8 @@ const VagasPage = () => {
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {currentJobs.map((job, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300 relative">
+                  
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-govgray-800 mb-1">{job.title || 'Vaga sem título'}</h3>
                     <p className="text-govgray-600 text-sm font-medium">{job.company?.name || job.company || 'Empresa não informada'}</p>
@@ -294,7 +323,11 @@ const VagasPage = () => {
 
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center text-govgray-600">
-                      <span className="mr-3 text-govblue-600">💰</span>
+                      <span className="mr-3 text-govblue-600">�</span>
+                      <span className="text-sm">{job.location || 'Brasil'}</span>
+                    </div>
+                    <div className="flex items-center text-govgray-600">
+                      <span className="mr-3 text-govblue-600">�💰</span>
                       <span className="text-sm font-semibold text-govgreen-600">{job.salary || 'Salário a combinar'}</span>
                     </div>
                     <div className="flex items-center text-govgray-600">
@@ -309,9 +342,9 @@ const VagasPage = () => {
 
                   <button 
                     onClick={() => handleApply(job)}
-                    className="w-full bg-govgreen-600 text-white py-3 px-4 rounded-lg hover:bg-govgreen-700 transition-colors font-medium shadow-md"
+                    className="w-full py-3 px-4 rounded-lg transition-colors font-medium shadow-md bg-govgreen-600 hover:bg-govgreen-700 text-white"
                   >
-                    ✨ Quero me Candidatar
+                    {job.isExternal ? '✨ Quero me Candidatar' : '✨ Quero me Candidatar'}
                   </button>
                 </div>
               ))}
@@ -385,21 +418,28 @@ const VagasPage = () => {
             </div>
           </section>
         )}
-      </main>
 
-      {/* Espaço branco antes do footer */}
-      <div className="bg-white py-12">
-        {/* Espaço em branco intencional */}
+        {/* Espaço branco antes do footer */}
+        <div className="bg-white py-12">
+          {/* Espaço em branco intencional */}
+        </div>
+
+        {/* Modal de Lead - Vagas Internas */}
+        <LeadModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          jobData={selectedJob}
+        />
+
+        {/* Modal de Lead - Vagas Externas */}
+        <ExternalJobModal
+          isOpen={isExternalModalOpen}
+          onClose={() => setIsExternalModalOpen(false)}
+          job={selectedExternalJob}
+          onSubmit={handleExternalJobSubmit}
+        />
       </div>
-
-      {/* Modal de Lead */}
-      <LeadModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        jobData={selectedJob}
-      />
-    </div>
-  )
-}
+    )
+  }
 
 export default VagasPage

@@ -310,7 +310,10 @@ const AdminLeads = () => {
                         Lead
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Vaga de Interesse
+                        Origem
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Vaga/Empresa
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
@@ -333,14 +336,55 @@ const AdminLeads = () => {
                                 {lead.nome || lead.name || 'Nome não informado'}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {lead.whatsapp || lead.telefone || 'WhatsApp não informado'}
+                                📱 {lead.whatsapp || lead.telefone || 'WhatsApp não informado'}
                               </div>
+                              {lead.email && (
+                                <div className="text-xs text-gray-400">
+                                  ✉️ {lead.email}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{lead.jobTitle || 'Vaga não informada'}</div>
-                          <div className="text-sm text-gray-500">{lead.company || lead.jobCompany || 'Empresa não informada'}</div>
+                          <div className="text-sm text-gray-900">
+                            {lead.source === 'formulario_empresas' && '🏢 Empresa'}
+                            {lead.source === 'Formulário de Contato - Página Inicial' && '📞 Contato Home'}
+                            {lead.source === 'Formulário de Contato' && '📞 Contato'}
+                            {lead.source === 'calculadora_trabalhista' && '🧮 Calculadora'}
+                            {lead.source === 'candidatura_vaga' && '💼 Candidatura'}
+                            {(!lead.source || 
+                              (lead.source !== 'formulario_empresas' && 
+                               lead.source !== 'Formulário de Contato - Página Inicial' && 
+                               lead.source !== 'Formulário de Contato' && 
+                               lead.source !== 'calculadora_trabalhista' && 
+                               lead.source !== 'candidatura_vaga')) && '💼 Candidatura'}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {lead.source || 'candidatura_vaga'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {lead.type === 'empresa' ? (
+                            <div>
+                              <div className="text-sm font-medium text-blue-900">
+                                🏢 {lead.nomeEmpresa || 'Empresa não informada'}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                💼 {lead.cargo || 'Cargo não informado'}
+                              </div>
+                              {lead.cnpj && (
+                                <div className="text-xs text-gray-400">
+                                  📋 {lead.cnpj}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div>
+                              <div className="text-sm text-gray-900">{lead.jobTitle || 'Vaga não informada'}</div>
+                              <div className="text-sm text-gray-500">{lead.company || lead.jobCompany || 'Empresa não informada'}</div>
+                            </div>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(lead.status)}`}>
@@ -393,80 +437,211 @@ const AdminLeads = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Nome</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.nome || selectedLead.name || 'Nome não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">WhatsApp</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.whatsapp || selectedLead.telefone || 'WhatsApp não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Email</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.email || 'Email não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Vaga de Interesse</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobTitle || 'Vaga não informada'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Empresa</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.company || selectedLead.jobCompany || 'Empresa não informada'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Local da Vaga</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.originalLocation || selectedLead.jobLocation || 'Não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Salário da Vaga</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.jobSalary || 'Não informado'}</p>
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700">URL da Vaga Original</label>
-                      {selectedLead.jobUrl ? (
-                        <a 
-                          href={selectedLead.jobUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="mt-1 text-sm text-blue-600 hover:text-blue-800 underline"
-                        >
-                          🔗 Acessar vaga original
-                        </a>
-                      ) : (
-                        <p className="mt-1 text-sm text-gray-900">Não disponível</p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Última Empresa</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.lastCompany || 'Não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Status de Trabalho</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.workStatus || 'Não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Recebeu Direitos</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.receivedRights || 'Não informado'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Quer Consultoria</label>
-                      <p className="mt-1 text-sm text-gray-900">{selectedLead.wantConsultation || 'Não informado'}</p>
+                  {/* Informações básicas */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-3">📋 Informações Básicas</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Nome</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedLead.nome || selectedLead.name || 'Nome não informado'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">WhatsApp</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedLead.whatsapp || selectedLead.telefone || 'WhatsApp não informado'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedLead.email || 'Email não informado'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Origem do Lead</label>
+                        <p className="mt-1 text-sm text-gray-900">
+                          {selectedLead.source === 'formulario_empresas' && '🏢 Formulário de Empresas'}
+                          {selectedLead.source === 'Formulário de Contato - Página Inicial' && '📞 Contato - Página Inicial'}
+                          {selectedLead.source === 'Formulário de Contato' && '📞 Página de Contato'}
+                          {selectedLead.source === 'calculadora_trabalhista' && '🧮 Calculadora Trabalhista'}
+                          {selectedLead.source === 'candidatura_vaga' && '💼 Candidatura a Vaga'}
+                          {(!selectedLead.source || 
+                            (selectedLead.source !== 'formulario_empresas' && 
+                             selectedLead.source !== 'Formulário de Contato - Página Inicial' && 
+                             selectedLead.source !== 'Formulário de Contato' && 
+                             selectedLead.source !== 'calculadora_trabalhista' && 
+                             selectedLead.source !== 'candidatura_vaga')) && '💼 Candidatura a Vaga'}
+                        </p>
+                        <p className="text-xs text-gray-500">{selectedLead.source || 'candidatura_vaga'}</p>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Problemas Trabalhistas</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedLead.workIssues || 'Não informado'}</p>
-                  </div>
-                  
+
+                  {/* Dados específicos de empresa */}
+                  {selectedLead.type === 'empresa' && (
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-3">🏢 Dados da Empresa</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Nome da Empresa</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.nomeEmpresa || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">CNPJ</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.cnpj || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Segmento</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.segmento || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Cidade</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.cidade || 'Não informado'}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-blue-700">Descrição da Empresa</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.descricaoEmpresa || 'Não informado'}</p>
+                        </div>
+                      </div>
+                      
+                      <h5 className="font-semibold text-blue-900 mt-4 mb-3">💼 Vaga Oferecida</h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Cargo</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.cargo || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Área</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.area || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Tipo de Contrato</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.tipoContrato || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Salário</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.salario || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-blue-700">Local de Trabalho</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.localTrabalho || 'Não informado'}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-blue-700">Descrição da Vaga</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.descricaoVaga || 'Não informado'}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-blue-700">Requisitos</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.requisitos || 'Não informado'}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-blue-700">Benefícios</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.beneficios || 'Não informado'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Dados de candidatura a vaga */}
+                  {selectedLead.type !== 'empresa' && (
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-3">💼 Dados da Candidatura</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-green-700">Vaga de Interesse</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.jobTitle || 'Vaga não informada'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-green-700">Empresa</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.company || selectedLead.jobCompany || 'Empresa não informada'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-green-700">Local da Vaga</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.originalLocation || selectedLead.jobLocation || 'Não informado'}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-green-700">Salário da Vaga</label>
+                          <p className="mt-1 text-sm text-gray-900">{selectedLead.jobSalary || 'Não informado'}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-green-700">URL da Vaga Original</label>
+                          {selectedLead.jobLink || selectedLead.originalJobUrl ? (
+                            <a 
+                              href={selectedLead.jobLink || selectedLead.originalJobUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="mt-1 text-sm text-blue-600 hover:text-blue-800 underline"
+                            >
+                              🔗 Acessar vaga original
+                            </a>
+                          ) : (
+                            <p className="mt-1 text-sm text-gray-900">Não disponível</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Dados de contato/assunto (para leads de contato) */}
+                  {(selectedLead.source === 'Formulário de Contato - Página Inicial' || selectedLead.source === 'Formulário de Contato' || selectedLead.assunto) && (
+                    <div className="bg-yellow-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-yellow-900 mb-3">📞 Dados do Contato</h4>
+                      <div className="grid grid-cols-1 gap-4">
+                        {selectedLead.assunto && (
+                          <div>
+                            <label className="block text-sm font-medium text-yellow-700">Assunto</label>
+                            <p className="mt-1 text-sm text-gray-900">{selectedLead.assunto}</p>
+                          </div>
+                        )}
+                        {selectedLead.mensagem && (
+                          <div>
+                            <label className="block text-sm font-medium text-yellow-700">Mensagem</label>
+                            <p className="mt-1 text-sm text-gray-900 whitespace-pre-wrap">{selectedLead.mensagem}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Dados do candidato */}
+                  {(selectedLead.statusAtual || selectedLead.ultimaEmpresa || selectedLead.experiencia) && (
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-purple-900 mb-3">👤 Dados do Candidato</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {selectedLead.statusAtual && (
+                          <div>
+                            <label className="block text-sm font-medium text-purple-700">Status Atual</label>
+                            <p className="mt-1 text-sm text-gray-900">{selectedLead.statusAtual}</p>
+                          </div>
+                        )}
+                        {selectedLead.ultimaEmpresa && (
+                          <div>
+                            <label className="block text-sm font-medium text-purple-700">Última Empresa</label>
+                            <p className="mt-1 text-sm text-gray-900">{selectedLead.ultimaEmpresa}</p>
+                          </div>
+                        )}
+                        {selectedLead.experiencia && (
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-purple-700">Experiência/Observações</label>
+                            <p className="mt-1 text-sm text-gray-900 whitespace-pre-wrap">{selectedLead.experiencia}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Informações técnicas */}
                   <div className="border-t pt-4">
-                    <p className="text-xs text-gray-500">
-                      Criado em: {formatDate(selectedLead.createdAt)}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      ID: {selectedLead.id}
-                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-500">
+                      <div>
+                        <strong>Criado em:</strong><br/>
+                        {selectedLead.timestamp || selectedLead.timestampISO || selectedLead.createdAt || 'Não informado'}
+                      </div>
+                      <div>
+                        <strong>ID do Lead:</strong><br/>
+                        {selectedLead.id || selectedLead.leadId || 'Não informado'}
+                      </div>
+                      <div>
+                        <strong>LGPD:</strong><br/>
+                        {selectedLead.lgpdConsent ? '✅ Aceito' : '❌ Não aceito'}
+                      </div>
+                    </div>
                   </div>
                 </div>
                 

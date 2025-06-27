@@ -1,8 +1,6 @@
 
 import { useState } from 'react'
 import Head from 'next/head'
-import EmpresasHeader from '../src/components/Header/EmpresasHeader'
-import Footer from '../src/components/Footer/Footer'
 
 const EmpresasPage = () => {
   const [formData, setFormData] = useState({
@@ -42,18 +40,48 @@ const EmpresasPage = () => {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/submit-empresa', {
+      // Preparar dados no formato da API de leads
+      const leadData = {
+        nome: `Empresa: ${formData.nomeEmpresa}`,
+        email: formData.email,
+        telefone: formData.telefone,
+        whatsapp: formData.telefone,
+        experiencia: `EMPRESA - CNPJ: ${formData.cnpj} | Segmento: ${formData.segmento} | Cidade: ${formData.cidade} | Descrição: ${formData.descricaoEmpresa}`,
+        statusAtual: 'empresa_recrutadora',
+        ultimaEmpresa: formData.nomeEmpresa,
+        lgpdConsent: true,
+        source: 'formulario_empresas',
+        type: 'empresa',
+        // Dados específicos da empresa
+        nomeEmpresa: formData.nomeEmpresa,
+        cnpj: formData.cnpj,
+        segmento: formData.segmento,
+        cidade: formData.cidade,
+        descricaoEmpresa: formData.descricaoEmpresa,
+        // Dados da vaga
+        cargo: formData.cargo,
+        area: formData.area,
+        tipoContrato: formData.tipoContrato,
+        salario: formData.salario,
+        descricaoVaga: formData.descricaoVaga,
+        requisitos: formData.requisitos,
+        beneficios: formData.beneficios,
+        localTrabalho: formData.localTrabalho,
+        jobTitle: formData.cargo,
+        company: formData.nomeEmpresa
+      }
+
+      const response = await fetch('/api/submit-lead', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          ...formData,
-          timestamp: new Date().toISOString()
-        })
+        body: JSON.stringify(leadData)
       })
 
-      if (response.ok) {
+      const result = await response.json()
+
+      if (result.success) {
         setSuccess(true)
         setFormData({
           nomeEmpresa: '',
@@ -72,6 +100,8 @@ const EmpresasPage = () => {
           beneficios: '',
           localTrabalho: ''
         })
+      } else {
+        console.error('Erro na resposta:', result.message)
       }
     } catch (error) {
       console.error('Erro ao enviar solicitação:', error)
@@ -88,9 +118,6 @@ const EmpresasPage = () => {
       </Head>
 
       <div className="min-h-screen bg-govblue-50">
-        <EmpresasHeader />
-        
-        <main className="min-h-screen bg-govblue-50 pt-28">
         <div className="container mx-auto px-4 py-12">
           
           {/* Hero Section */}
@@ -437,9 +464,6 @@ const EmpresasPage = () => {
             </div>
           )}
         </div>
-        </main>
-
-        <Footer />
       </div>
     </>
   )

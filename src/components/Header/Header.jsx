@@ -101,47 +101,31 @@ const Header = () => {
               className="transform hover:scale-105 transition-all duration-300"
             />
 
-            {/* Desktop Navigation - Estilo Gov.br */}
-            {isHomePage ? (
-              // Menus de navegação apenas na página inicial
-              <nav className="hidden md:flex space-x-6">
-                <button onClick={scrollToTop} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
-                  Início
-                </button>
-                <button onClick={() => router.push('/vagas')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
-                  Vagas
-                </button>
-                <button onClick={() => router.push('/calculadora')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
-                  Calculadora
-                </button>
-                <button onClick={() => router.push('/contato')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
-                  Contato
-                </button>
-              </nav>
-            ) : (
-              // Botão "Ver Site" para outras páginas - Estilo Gov.br
-              <div className="hidden md:flex">
-                <button 
-                  onClick={goToHome}
-                  className="px-6 py-2 bg-govgreen-600 text-white rounded font-medium transition-all duration-200 flex items-center hover:bg-govgreen-700 shadow-md"
-                >
-                  <span className="mr-2">🏠</span>
-                  Ver Site
-                </button>
-              </div>
-            )}
+            {/* Desktop Navigation - Estilo Gov.br - SEMPRE VISÍVEL */}
+            <nav className="hidden md:flex space-x-6">
+              <button onClick={() => router.push('/')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
+                Início
+              </button>
+              <button onClick={() => router.push('/vagas')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
+                Vagas
+              </button>
+              <button onClick={() => router.push('/calculadora')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
+                Calculadora Trabalhista
+              </button>
+              <button onClick={() => router.push('/contato')} className="text-white hover:text-govyellow-400 font-medium transition-colors duration-200 px-3 py-2 border-b-2 border-transparent hover:border-govyellow-400">
+                Contato
+              </button>
+            </nav>
 
-            {/* Desktop Auth Buttons - apenas na home - Estilo Gov.br */}
-            {isHomePage && (
-              <div className="hidden md:flex items-center space-x-4">
-                <button 
-                  onClick={() => router.push('/empresas')}
-                  className="px-6 py-2 bg-govgreen-600 text-white rounded font-medium transition-all duration-200 hover:bg-govgreen-700 shadow-md"
-                >
-                  Para Empresas
-                </button>
-              </div>
-            )}
+            {/* Desktop Auth Buttons - SEMPRE VISÍVEL */}
+            <div className="hidden md:flex items-center space-x-4">
+              <button 
+                onClick={() => router.push('/empresas')}
+                className="px-6 py-2 bg-govgreen-600 text-white rounded font-medium transition-all duration-200 hover:bg-govgreen-700 shadow-md"
+              >
+                Para Empresas
+              </button>
+            </div>
 
             {/* Mobile menu button - Estilo Gov.br */}
             <div className="md:hidden">
@@ -164,35 +148,25 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile menu - Estilo Gov.br */}
+        {/* Mobile menu - Estilo Gov.br - SEMPRE VISÍVEL */}
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="header-blue-mobile px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {isHomePage ? (
-                // Menus de navegação mobile apenas na página inicial
-                <>
-                  <button onClick={scrollToTop} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
-                    Início
-                  </button>
-                  <button onClick={() => router.push('/vagas')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
-                    Vagas
-                  </button>
-                  <button onClick={() => router.push('/calculadora')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
-                    Calculadora
-                  </button>
-                  <button onClick={() => router.push('/contato')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
-                    Contato
-                  </button>
-                  <button onClick={() => router.push('/empresas')} className="block w-full text-left px-3 py-2 text-govgreen-400 hover:text-govgreen-300 font-medium hover:bg-govblue-800 rounded">
-                    Para Empresas
-                  </button>
-                </>
-              ) : (
-                // Botão "Ver Site" mobile para outras páginas
-                <button onClick={goToHome} className="block w-full text-left px-3 py-2 text-govyellow-400 hover:text-govyellow-300 font-medium hover:bg-govblue-800 rounded">
-                  🏠 Ver Site
-                </button>
-              )}
+              <button onClick={() => router.push('/')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
+                Início
+              </button>
+              <button onClick={() => router.push('/vagas')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
+                Vagas
+              </button>
+              <button onClick={() => router.push('/calculadora')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
+                Calculadora Trabalhista
+              </button>
+              <button onClick={() => router.push('/contato')} className="block w-full text-left px-3 py-2 text-white hover:text-govyellow-400 font-medium hover:bg-govblue-800 rounded">
+                Contato
+              </button>
+              <button onClick={() => router.push('/empresas')} className="block w-full text-left px-3 py-2 text-govgreen-400 hover:text-govgreen-300 font-medium hover:bg-govblue-800 rounded">
+                Para Empresas
+              </button>
             </div>
           </div>
         )}

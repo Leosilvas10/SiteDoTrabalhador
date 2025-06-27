@@ -11,10 +11,8 @@ function AppContent({ Component, pageProps }) {
   const { siteConfig } = useSiteContext()
   const router = useRouter()
   
-  // Páginas que não devem ter Header/Footer padrão
+  // Páginas que não devem ter Header/Footer padrão (apenas admin)
   const excludeLayout = [
-    '/vagas',
-    '/empresas',
     '/admin',
     '/admin/login',
     '/admin/dashboard',
