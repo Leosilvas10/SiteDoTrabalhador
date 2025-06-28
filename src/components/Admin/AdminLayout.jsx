@@ -88,24 +88,17 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-xl relative border-r border-govgray-200">
           {/* Header do Sidebar */}
-          <div className="p-6 border-b border-govgray-200 bg-govblue-600">
-            <div className="flex items-center space-x-3">
-              {siteConfig?.logoUrl ? (
-                <img 
-                  src={siteConfig.logoUrl} 
-                  alt="Logo" 
-                  className="w-16 h-16 rounded-lg object-contain"
-                />
-              ) : (
-                <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-govblue-600 font-bold text-lg">ST</span>
-                </div>
-              )}
-              <div>
-                <h1 className="text-lg font-bold text-white">Admin Panel</h1>
-                <p className="text-blue-100 text-sm">Painel Administrativo</p>
-              </div>
+          <div className="p-6 border-b border-govgray-200 bg-govblue-600">          <div className="flex items-center space-x-3">
+            <img 
+              src="/site do trabalhador.png" 
+              alt="Site do Trabalhador" 
+              className="w-12 h-12 rounded-lg object-contain bg-white p-1"
+            />
+            <div>
+              <h1 className="text-lg font-bold text-white">Admin Panel</h1>
+              <p className="text-blue-100 text-sm">Painel Administrativo</p>
             </div>
+          </div>
           </div>
 
           {/* Navigation */}

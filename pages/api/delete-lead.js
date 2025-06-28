@@ -49,6 +49,31 @@ export default async function handler(req, res) {
     // Salvar a lista atualizada
     const saved = await saveLeads(leads)
     
+    if (!saved) {
+      console.log('❌ Erro ao salvar leads após exclusão')
+      return res.status(500).json({
+        success: false,
+        message: 'Erro ao salvar dados após exclusão'
+      })
+    }
+
+    console.log('✅ Lead excluído com sucesso:', leadToDelete.nome)
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lead excluído com sucesso',
+      deletedLead: { id: leadToDelete.id || leadToDelete.leadId, nome: leadToDelete.nome }
+    })
+    
+  } catch (error) {
+    console.error('❌ Erro ao excluir lead:', error)
+    return res.status(500).json({
+      success: false,
+      message: 'Erro interno do servidor: ' + error.message
+    })
+  }
+}
+    
     if (saved) {
       console.log('✅ Lead excluído com sucesso')
       res.status(200).json({

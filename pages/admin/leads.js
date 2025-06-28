@@ -59,22 +59,36 @@ const AdminLeads = () => {
     }
 
     try {
-      const response = await fetch(`/api/delete-lead?id=${leadId}`, {
-        method: 'DELETE'
+      console.log('🗑️ Tentando excluir lead ID:', leadId)
+      
+      const response = await fetch(`/api/delete-lead?id=${encodeURIComponent(leadId)}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       
+      console.log('📡 Resposta do servidor:', response.status)
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`)
+      }
+      
       const data = await response.json()
+      console.log('📊 Dados da resposta:', data)
       
       if (data.success) {
         alert('✅ Lead excluído com sucesso!')
-        fetchLeads() // Recarregar a lista
-        setSelectedLead(null) // Fechar modal se estiver aberto
+        // Recarregar ambas as listas
+        await fetchLeads()
+        await fetchCalculadoraLeads()
+        setSelectedLead(null)
       } else {
-        alert('❌ Erro ao excluir lead: ' + data.message)
+        throw new Error(data.message || 'Erro desconhecido')
       }
     } catch (error) {
-      console.error('Erro ao excluir lead:', error)
-      alert('❌ Erro ao excluir lead')
+      console.error('❌ Erro ao excluir lead:', error)
+      alert(`❌ Erro ao excluir lead: ${error.message}`)
     }
   }
 

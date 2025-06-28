@@ -52,7 +52,9 @@ export default async function handler(req, res) {
     }
     
     // Adicionar informações de rastreamento e redirecionamento
-    const leadId = `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const timestamp = Date.now()
+    const randomId = Math.random().toString(36).substr(2, 9)
+    const leadId = `lead_${timestamp}_${randomId}`
     
     const submissionData = {
       ...leadData,
@@ -61,11 +63,13 @@ export default async function handler(req, res) {
       timestamp: new Date().toLocaleString('pt-BR'),
       timestampISO: new Date().toISOString(),
       createdAt: new Date().toISOString(), // Campo principal para datas
+      updatedAt: new Date().toISOString(),
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
       userAgent: req.headers['user-agent'],
-      source: 'Site do Trabalhador',
+      source: leadData.source || 'Site do Trabalhador - Candidatura',
       validated: true,
       status: 'novo', // Status padrão para novos leads
+      type: 'job-application', // Tipo do lead
       
       // Dados da vaga para redirecionamento
       jobId: leadData.jobId,
