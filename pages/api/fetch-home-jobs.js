@@ -23,8 +23,20 @@ export default async function handler(req, res) {
     console.log('🏠 === API VAGAS HOME (SEM CIDADE) ===');
     console.log('📅 Timestamp:', new Date().toISOString());
     
-    // Buscar vagas para home (limitado e sem cidade específica)
-    const jobs = await fetchJobsForHome();
+    // TEMPORARIAMENTE: Carregar vagas de teste
+    const fs = require('fs');
+    const path = require('path');
+    const testJobsPath = path.join(process.cwd(), 'data', 'jobs-test.json');
+    
+    let jobs = [];
+    if (fs.existsSync(testJobsPath)) {
+      const testJobs = JSON.parse(fs.readFileSync(testJobsPath, 'utf8'));
+      jobs = testJobs;
+      console.log('📋 Carregadas vagas de teste:', jobs.length);
+    } else {
+      // Buscar vagas para home (limitado e sem cidade específica)
+      jobs = await fetchJobsForHome();
+    }
     
     if (!jobs || jobs.length === 0) {
       console.log('⚠️ Nenhuma vaga encontrada para home');

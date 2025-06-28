@@ -1,0 +1,53 @@
+[
+  {
+    "id": "test_assistente_social_123",
+    "title": "Assistente Social",
+    "company": {
+      "name": "CRAS - Centro de Referência"
+    },
+    "location": "Brasil",
+    "description": "Vaga de Assistente Social para atendimento ao público. Requisitos: Formação em Serviço Social, experiência em atendimento social.",
+    "url": "https://example.com/vaga-assistente-social",
+    "apply_url": "https://example.com/candidatar-assistente-social",
+    "source": "Manual - Teste",
+    "posted_date": "2025-06-28T20:30:00.000Z",
+    "salary": "R$ 2.500 - R$ 3.500",
+    "employment_type": "CLT",
+    "remote": false,
+    "requirements": [
+      "Formação em Serviço Social",
+      "Registro no CRESS",
+      "Experiência em políticas públicas"
+    ],
+    "benefits": [
+      "Vale Alimentação",
+      "Plano de Saúde",
+      "Vale Transporte"
+    ]
+  },
+  {
+    "id": "test_auxiliar_admin_456",
+    "title": "Auxiliar Administrativo", 
+    "company": {
+      "name": "Empresa de Serviços Públicos"
+    },
+    "location": "São Paulo, SP",
+    "description": "Auxiliar administrativo para atividades de apoio e atendimento ao público.",
+    "url": "https://example.com/vaga-auxiliar-admin",
+    "apply_url": "https://example.com/candidatar-auxiliar",
+    "source": "Manual - Teste",
+    "posted_date": "2025-06-28T20:30:00.000Z",
+    "salary": "R$ 1.800 - R$ 2.500",
+    "employment_type": "CLT",
+    "remote": false,
+    "requirements": [
+      "Ensino Médio Completo",
+      "Experiência em atendimento",
+      "Conhecimentos básicos de informática"
+    ],
+    "benefits": [
+      "Vale Alimentação",
+      "Vale Transporte"
+    ]
+  }
+]
