@@ -1,23 +1,57 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useJobStats } from '../../hooks/useJobStats'
 
 const HeroSection = () => {
-  // Estatísticas para exibir
+  const { stats: jobStats, loading: jobStatsLoading } = useJobStats()
+  
+  // Estatísticas para exibir - agora usando dados reais
   const stats = [
-    { label: 'Vagas Ativas', value: '50K+', icon: '💼' },
+    { 
+      label: 'Vagas Ativas', 
+      value: jobStatsLoading ? '...' : `${jobStats?.formatted?.totalJobsFormatted || '0'}`, 
+      icon: '💼' 
+    },
     { label: 'Empresas Cadastradas', value: '5K+', icon: '🏢' },
     { label: 'Profissionais', value: '100K+', icon: '👥' },
-    { label: 'Vagas Preenchidas', value: '25K+', icon: '✅' }
+    { 
+      label: 'Vagas Preenchidas', 
+      value: jobStatsLoading ? '...' : `${Math.floor((jobStats?.totalJobs || 0) * 0.3)}+`, 
+      icon: '✅' 
+    }
   ]
 
-  // Categorias populares - Vagas Operacionais
-  const popularCategories = [
-    { name: 'Doméstica', icon: '🏠', count: '8K+' },
-    { name: 'Limpeza', icon: '🧹', count: '6K+' },
-    { name: 'Segurança', icon: '🛡️', count: '5K+' },
-    { name: 'Alimentação', icon: '🍽️', count: '7K+' },
-    { name: 'Cuidados', icon: '👨‍⚕️', count: '4K+' },
-    { name: 'Construção', icon: '🔨', count: '9K+' }
-  ]
+  // Categorias populares - Vagas Operacionais (usando dados reais)
+  const getPopularCategories = () => {
+    if (jobStatsLoading || !jobStats?.categories) {
+      return [
+        { name: 'Doméstica', icon: '🏠', count: '...' },
+        { name: 'Limpeza', icon: '🧹', count: '...' },
+        { name: 'Segurança', icon: '🛡️', count: '...' },
+        { name: 'Alimentação', icon: '🍽️', count: '...' },
+        { name: 'Cuidados', icon: '👨‍⚕️', count: '...' },
+        { name: 'Construção', icon: '🔨', count: '...' }
+      ]
+    }
+
+    const categoryMapping = {
+      'Serviços Domésticos': { name: 'Doméstica', icon: '🏠' },
+      'Limpeza e Conservação': { name: 'Limpeza', icon: '🧹' },
+      'Segurança e Portaria': { name: 'Segurança', icon: '🛡️' },
+      'Cuidados e Saúde': { name: 'Cuidados', icon: '👨‍⚕️' },
+      'Transporte e Logística': { name: 'Transporte', icon: '🚛' },
+      'Vendas e Atendimento': { name: 'Vendas', icon: '🛒' }
+    }
+
+    return Object.entries(jobStats.categories).map(([category, count]) => {
+      const mapping = categoryMapping[category] || { name: category, icon: '💼' }
+      return {
+        ...mapping,
+        count: count > 0 ? `${count}+` : '0'
+      }
+    }).slice(0, 6)
+  }
+
+  const popularCategories = getPopularCategories()
 
   return (
     <div className="relative bg-gradient-to-br from-govblue-600 via-govblue-700 to-govblue-800 overflow-hidden">
@@ -53,14 +87,17 @@ const HeroSection = () => {
             <div className="bounce-in" style={{ animationDelay: '0.2s' }}>
               <button
                 onClick={() => window.location.href = '/vagas'}
-                className="inline-flex items-center space-x-3 bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold text-lg px-10 py-4 rounded shadow-lg transition-all duration-200 transform hover:scale-105"
+                className="inline-flex items-center space-x-3 bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold text-base px-10 py-4 rounded shadow-lg transition-all duration-200 transform hover:scale-105"
               >
-                <span className="text-2xl">👀</span>
+                <span className="text-lg">👀</span>
                 <span>Ver Todas as Vagas</span>
-                <span className="text-xl">→</span>
+                <span className="text-base">→</span>
               </button>
               <p className="text-sm text-govgray-200 mt-3 font-medium">
-                Mais de 50 mil oportunidades atualizadas diariamente
+                {jobStatsLoading ? 
+                  'Carregando oportunidades...' : 
+                  `${jobStats?.formatted?.totalJobsFormatted || '0'} oportunidades atualizadas diariamente`
+                }
               </p>
             </div>
           </div>

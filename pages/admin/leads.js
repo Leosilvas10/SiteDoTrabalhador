@@ -4,12 +4,15 @@ import AdminLayout from '../../src/components/Admin/AdminLayout'
 
 const AdminLeads = () => {
   const [leads, setLeads] = useState([])
+  const [calculadoraLeads, setCalculadoraLeads] = useState([])
+  const [activeTab, setActiveTab] = useState('all') // 'all', 'jobs', 'calculator'
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedLead, setSelectedLead] = useState(null)
 
   useEffect(() => {
     fetchLeads()
+    fetchCalculadoraLeads()
   }, [])
 
   const fetchLeads = async () => {
@@ -28,6 +31,21 @@ const AdminLeads = () => {
       setError('Erro ao carregar leads')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchCalculadoraLeads = async () => {
+    try {
+      const response = await fetch('/api/calculadora-leads')
+      const data = await response.json()
+
+      if (data.success) {
+        setCalculadoraLeads(data.leads)
+      } else {
+        console.error('Erro ao carregar leads da calculadora:', data.message)
+      }
+    } catch (error) {
+      console.error('Erro ao buscar leads da calculadora:', error)
     }
   }
 
@@ -110,7 +128,47 @@ const AdminLeads = () => {
   }
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString('pt-BR')
+    if (!dateString) return 'Data não informada'
+    
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) {
+        return 'Data inválida'
+      }
+      return date.toLocaleString('pt-BR')
+    } catch (error) {
+      return 'Data inválida'
+    }
+  }
+
+  // Função para obter estatísticas combinadas
+  const getStats = () => {
+    const allLeads = [...leads, ...calculadoraLeads]
+    const hoje = new Date().toDateString()
+    
+    return {
+      total: allLeads.length,
+      novos: allLeads.filter(l => l.status === 'novo').length,
+      contatados: allLeads.filter(l => l.status === 'contatado').length,
+      hoje: allLeads.filter(l => {
+        const leadDate = new Date(l.createdAt || l.timestamp).toDateString()
+        return hoje === leadDate
+      }).length,
+      vagas: leads.length,
+      calculadora: calculadoraLeads.length
+    }
+  }
+
+  // Função para obter leads filtrados por aba
+  const getFilteredLeads = () => {
+    switch (activeTab) {
+      case 'jobs':
+        return leads
+      case 'calculator':
+        return calculadoraLeads
+      default:
+        return [...leads, ...calculadoraLeads]
+    }
   }
 
   const getStatusColor = (status) => {
@@ -134,6 +192,9 @@ const AdminLeads = () => {
       </AdminLayout>
     )
   }
+
+  const stats = getStats()
+  const filteredLeads = getFilteredLeads()
 
   return (
     <AdminLayout title="Administração de Leads">
@@ -190,7 +251,7 @@ const AdminLeads = () => {
                         Total de Leads
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {leads.length}
+                        {stats.total}
                       </dd>
                     </dl>
                   </div>
@@ -212,7 +273,7 @@ const AdminLeads = () => {
                         Novos
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {leads.filter(l => l.status === 'novo').length}
+                        {stats.novos}
                       </dd>
                     </dl>
                   </div>
@@ -234,7 +295,7 @@ const AdminLeads = () => {
                         Contatados
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {leads.filter(l => l.status === 'contatado').length}
+                        {stats.contatados}
                       </dd>
                     </dl>
                   </div>
@@ -256,11 +317,7 @@ const AdminLeads = () => {
                         Hoje
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {leads.filter(l => {
-                          const today = new Date().toDateString()
-                          const leadDate = new Date(l.createdAt).toDateString()
-                          return today === leadDate
-                        }).length}
+                        {stats.hoje}
                       </dd>
                     </dl>
                   </div>
@@ -291,7 +348,7 @@ const AdminLeads = () => {
               </p>
             </div>
             
-            {leads.length === 0 ? (
+            {filteredLeads.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-400 text-6xl mb-4">📋</div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -327,7 +384,7 @@ const AdminLeads = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {leads.map((lead) => (
+                    {filteredLeads.map((lead) => (
                       <tr key={lead.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">

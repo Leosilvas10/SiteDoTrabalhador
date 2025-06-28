@@ -473,7 +473,7 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
               disabled={isSubmitting}
               className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
             >
-              {isSubmitting ? '⏳ Enviando...' : 'ENVIAR PESQUISA E PROSSEGUIR PARA A VAGA'}
+              {isSubmitting ? '⏳ Enviando...' : '✅ Enviar Candidatura'}
             </button>
           </div>
 

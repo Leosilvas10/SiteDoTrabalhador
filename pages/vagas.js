@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import LeadModal from '../src/components/LeadModal/LeadModal'
+import { useJobStats, useJobFormatting } from '../src/hooks/useJobStats'
 
 const Vagas = () => {
   const [jobs, setJobs] = useState([])
@@ -17,6 +18,10 @@ const Vagas = () => {
   })
   const [filteredJobs, setFilteredJobs] = useState([])
   const jobsPerPage = 9
+
+  // Hook para estatísticas reais
+  const { stats: jobStats } = useJobStats()
+  const { formatJobCount } = useJobFormatting()
 
   useEffect(() => {
     // Buscar TODAS as vagas (internas + públicas externas)
@@ -168,10 +173,53 @@ const Vagas = () => {
   }
 
   const handleApply = (job) => {
+    // Registrar aplicação para analytics
+    if (job.id || job.title) {
+      fetch('/api/jobs-analytics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          jobId: job.id || `${job.title}_${job.company}`.replace(/\s+/g, '_'),
+          action: 'apply',
+          jobData: {
+            title: job.title,
+            company: job.company?.name || job.company
+          }
+        })
+      }).catch(err => console.log('Analytics error:', err))
+    }
+
     // Usar sempre o LeadModal unificado para todas as vagas
     setSelectedJob(job)
     setIsModalOpen(true)
   }
+
+  // Effect para registrar visualizações das vagas
+  useEffect(() => {
+    if (!loading && !error && currentJobs.length > 0) {
+      // Registrar view para as vagas visíveis na página atual
+      currentJobs.forEach(job => {
+        if (job.id || job.title) {
+          fetch('/api/jobs-analytics', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              jobId: job.id || `${job.title}_${job.company}`.replace(/\s+/g, '_'),
+              action: 'view',
+              jobData: {
+                title: job.title,
+                company: job.company?.name || job.company
+              }
+            })
+          }).catch(err => console.log('Analytics error:', err))
+        }
+      })
+    }
+  }, [currentJobs, loading, error])
 
   // Função para gerar conteúdo específico por categoria (focado em trabalhos simples)
   const getCategoryContent = (category) => {
@@ -219,6 +267,12 @@ const Vagas = () => {
                 <p className="text-xl text-blue-100 mb-2">
                   ✅ {loading ? "Carregando vagas..." : `${filteredJobs.length} vagas disponíveis | Mostrando as mais recentes`}
                 </p>
+                {jobStats.totalJobs > 0 && (
+                  <p className="text-blue-200 text-sm mb-1">
+                    📊 Total na plataforma: <strong>{jobStats.formatted.totalJobsFormatted} vagas</strong> | 
+                    Recentes: <strong>{jobStats.formatted.recentJobsFormatted}</strong>
+                  </p>
+                )}
                 <p className="text-blue-200 text-sm">
                   Última atualização: {new Date().toLocaleDateString('pt-BR')} às {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                 </p>

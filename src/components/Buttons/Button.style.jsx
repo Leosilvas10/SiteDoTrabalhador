@@ -20,12 +20,12 @@ export const ButtonDefault = styled.button`
 export const Submit = styled(ButtonDefault)`
     width: 100%;
     height: 100%;
-    font-size: 1.8rem;
+    font-size: 1.2rem;
 
     @media screen and (max-width: 1024px) {
       width: 100%;
       height: 4rem;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
 `;
 

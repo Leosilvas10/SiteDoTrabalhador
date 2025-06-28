@@ -361,9 +361,9 @@ const EmpresasPage = () => {
             </p>
             <a 
               href="#formulario" 
-              className="inline-block bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold text-xl py-4 px-8 rounded-lg transition-colors shadow-lg"
+              className="inline-block bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold text-lg py-4 px-8 rounded-lg transition-colors shadow-lg"
             >
-              🚀 PUBLIQUE SUA VAGA AGORA!
+              🚀 Publique sua Vaga
             </a>
           </div>
 

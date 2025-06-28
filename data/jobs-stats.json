@@ -1,0 +1,490 @@
+{
+  "health-011": {
+    "views": 4,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.307Z",
+    "lastViewed": "2025-06-28T17:50:21.956Z",
+    "jobTitle": "Biomédico",
+    "company": "Laboratório de Análises"
+  },
+  "ext_3_1751126403173": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.315Z",
+    "lastViewed": "2025-06-28T16:00:03.315Z",
+    "jobTitle": "Cuidador de Idosos",
+    "company": "Home Care São Paulo"
+  },
+  "job_5_1751126403151": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.326Z",
+    "lastViewed": "2025-06-28T16:00:03.326Z",
+    "jobTitle": "Auxiliar de Estoque",
+    "company": "Mercado Líder"
+  },
+  "service-010": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.332Z",
+    "lastViewed": "2025-06-28T18:56:07.157Z",
+    "jobTitle": "Garçom",
+    "company": "Hotel Executivo"
+  },
+  "health-010": {
+    "views": 7,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.336Z",
+    "lastViewed": "2025-06-28T18:56:07.315Z",
+    "jobTitle": "Enfermeiro",
+    "company": "UPA 24h"
+  },
+  "job_12_1751126403151": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.338Z",
+    "lastViewed": "2025-06-28T16:00:03.338Z",
+    "jobTitle": "Cuidador de Idosos",
+    "company": "Home Care Assistência"
+  },
+  "job_3_1751126403151": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.353Z",
+    "lastViewed": "2025-06-28T16:00:03.353Z",
+    "jobTitle": "Recepcionista",
+    "company": "Clínica Odontológica"
+  },
+  "ext_14_1751126403173": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.355Z",
+    "lastViewed": "2025-06-28T16:00:03.355Z",
+    "jobTitle": "Entregador de Moto",
+    "company": "iFood"
+  },
+  "service-004": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.364Z",
+    "lastViewed": "2025-06-28T17:50:21.980Z",
+    "jobTitle": "Advogado",
+    "company": "Escritório de Advocacia"
+  },
+  "ext_12_1751126403174": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.365Z",
+    "lastViewed": "2025-06-28T16:00:03.403Z",
+    "jobTitle": "Ajudante de Carga",
+    "company": "Transportadora São José"
+  },
+  "service-007": {
+    "views": 5,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.366Z",
+    "lastViewed": "2025-06-28T17:21:00.231Z",
+    "jobTitle": "Vendedor",
+    "company": "Loja de Roupas"
+  },
+  "tech-004": {
+    "views": 5,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.368Z",
+    "lastViewed": "2025-06-28T18:56:07.288Z",
+    "jobTitle": "Designer Gráfico",
+    "company": "CreativeStudio"
+  },
+  "ext_5_1751126403174": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.380Z",
+    "lastViewed": "2025-06-28T16:00:03.416Z",
+    "jobTitle": "Auxiliar de Cozinha",
+    "company": "Habib's"
+  },
+  "service-012": {
+    "views": 20,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.382Z",
+    "lastViewed": "2025-06-28T18:56:07.171Z",
+    "jobTitle": "Camareira",
+    "company": "Hotel Central"
+  },
+  "tech-008": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.389Z",
+    "lastViewed": "2025-06-28T17:50:21.951Z",
+    "jobTitle": "Analista de Dados",
+    "company": "DataAnalytics"
+  },
+  "ext_21_1751126403174": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.391Z",
+    "lastViewed": "2025-06-28T16:00:03.431Z",
+    "jobTitle": "Garçom",
+    "company": "Restaurante Outback"
+  },
+  "ext_16_1751126403174": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:00:03.393Z",
+    "lastViewed": "2025-06-28T16:00:03.425Z",
+    "jobTitle": "Promotor de Vendas",
+    "company": "Unilever"
+  },
+  "ext_9_1751128511072": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.658Z",
+    "lastViewed": "2025-06-28T17:10:12.109Z",
+    "jobTitle": "Operador de Caixa",
+    "company": "Pão de Açúcar"
+  },
+  "job_10_1751128510971": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.662Z",
+    "lastViewed": "2025-06-28T17:10:12.097Z",
+    "jobTitle": "Operador de Caixa",
+    "company": "Carrefour"
+  },
+  "ext_2_1751128511072": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.664Z",
+    "lastViewed": "2025-06-28T17:10:12.102Z",
+    "jobTitle": "Auxiliar de Cozinha",
+    "company": "Habib's"
+  },
+  "ext_18_1751128511072": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.666Z",
+    "lastViewed": "2025-06-28T17:10:12.104Z",
+    "jobTitle": "Cuidador de Idosos",
+    "company": "Home Care São Paulo"
+  },
+  "ext_5_1751128511072": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.670Z",
+    "lastViewed": "2025-06-28T17:10:12.094Z",
+    "jobTitle": "Telefonista",
+    "company": "Hospital Santa Maria"
+  },
+  "job_2_1751128510971": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.692Z",
+    "lastViewed": "2025-06-28T17:10:12.171Z",
+    "jobTitle": "Motorista de Entrega",
+    "company": "iFood"
+  },
+  "tech-003": {
+    "views": 17,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.696Z",
+    "lastViewed": "2025-06-28T17:50:21.979Z",
+    "jobTitle": "Suporte Técnico",
+    "company": "InfoTech"
+  },
+  "ext_3_1751128511072": {
+    "views": 16,
+    "applications": 0,
+    "firstSeen": "2025-06-28T16:35:11.700Z",
+    "lastViewed": "2025-06-28T17:10:12.176Z",
+    "jobTitle": "Balconista de Farmácia",
+    "company": "Drogasil"
+  },
+  "ext_22_1751131259174": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.854Z",
+    "lastViewed": "2025-06-28T17:21:00.122Z",
+    "jobTitle": "Balconista de Farmácia",
+    "company": "Drogasil"
+  },
+  "ext_6_1751131259174": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.858Z",
+    "lastViewed": "2025-06-28T17:21:00.124Z",
+    "jobTitle": "Porteiro",
+    "company": "Condomínio Residencial"
+  },
+  "tech-007": {
+    "views": 4,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.861Z",
+    "lastViewed": "2025-06-28T17:50:21.960Z",
+    "jobTitle": "Técnico em Informática",
+    "company": "TechRepair"
+  },
+  "ext_13_1751131259174": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.864Z",
+    "lastViewed": "2025-06-28T17:21:00.129Z",
+    "jobTitle": "Auxiliar de Estoque",
+    "company": "Mercado Livre"
+  },
+  "service-006": {
+    "views": 5,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.868Z",
+    "lastViewed": "2025-06-28T18:56:07.155Z",
+    "jobTitle": "Motorista",
+    "company": "Empresa de Transporte"
+  },
+  "tech-009": {
+    "views": 9,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.871Z",
+    "lastViewed": "2025-06-28T18:56:07.307Z",
+    "jobTitle": "Desenvolvedor Mobile",
+    "company": "AppDev"
+  },
+  "service-002": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.907Z",
+    "lastViewed": "2025-06-28T17:21:00.225Z",
+    "jobTitle": "Auxiliar Administrativo",
+    "company": "Prefeitura Municipal"
+  },
+  "service-013": {
+    "views": 4,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:20:59.909Z",
+    "lastViewed": "2025-06-28T17:50:21.962Z",
+    "jobTitle": "Operador de Caixa",
+    "company": "Supermercado"
+  },
+  "tech-005": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.107Z",
+    "lastViewed": "2025-06-28T17:48:15.186Z",
+    "jobTitle": "Programador Junior",
+    "company": "CodeLab"
+  },
+  "ext_4_1751132894445": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.112Z",
+    "lastViewed": "2025-06-28T17:48:15.187Z",
+    "jobTitle": "Atendente de Telemarketing",
+    "company": "Central de Relacionamento"
+  },
+  "health-008": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.114Z",
+    "lastViewed": "2025-06-28T17:48:15.189Z",
+    "jobTitle": "Psicólogo Clínico",
+    "company": "Centro de Saúde Mental"
+  },
+  "health-001": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.115Z",
+    "lastViewed": "2025-06-28T17:48:15.191Z",
+    "jobTitle": "Auxiliar de Enfermagem",
+    "company": "Hospital São Lucas"
+  },
+  "service-005": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.117Z",
+    "lastViewed": "2025-06-28T17:48:15.194Z",
+    "jobTitle": "Assistente Social",
+    "company": "CRAS"
+  },
+  "job_5_1751132894273": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.119Z",
+    "lastViewed": "2025-06-28T17:48:15.183Z",
+    "jobTitle": "Auxiliar de Produção",
+    "company": "Indústria Alimentícia"
+  },
+  "job_12_1751132894273": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.133Z",
+    "lastViewed": "2025-06-28T17:48:15.203Z",
+    "jobTitle": "Vendedor Externo",
+    "company": "Distribuidora Regional"
+  },
+  "ext_3_1751132894445": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.135Z",
+    "lastViewed": "2025-06-28T17:48:15.204Z",
+    "jobTitle": "Auxiliar de Cozinha",
+    "company": "Habib's"
+  },
+  "ext_5_1751132894445": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:48:15.136Z",
+    "lastViewed": "2025-06-28T17:48:15.206Z",
+    "jobTitle": "Repositor de Mercadorias",
+    "company": "Extra Supermercados"
+  },
+  "job_9_1751133021523": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:21.958Z",
+    "lastViewed": "2025-06-28T17:50:21.958Z",
+    "jobTitle": "Operador de Caixa",
+    "company": "Carrefour"
+  },
+  "ext_17_1751133021546": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:21.983Z",
+    "lastViewed": "2025-06-28T17:50:21.983Z",
+    "jobTitle": "Telefonista",
+    "company": "Hospital Santa Maria"
+  },
+  "job_3_1751133021523": {
+    "views": 1,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:21.986Z",
+    "lastViewed": "2025-06-28T17:50:21.987Z",
+    "jobTitle": "Atendente de Fast Food",
+    "company": "McDonald's"
+  },
+  "ext_25_1751133021547": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.013Z",
+    "lastViewed": "2025-06-28T17:50:22.170Z",
+    "jobTitle": "Ajudante de Carga",
+    "company": "Transportadora São José"
+  },
+  "ext_13_1751133021547": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.015Z",
+    "lastViewed": "2025-06-28T17:50:22.171Z",
+    "jobTitle": "Entregador de Moto",
+    "company": "iFood"
+  },
+  "tech-001": {
+    "views": 6,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.020Z",
+    "lastViewed": "2025-06-28T18:56:07.318Z",
+    "jobTitle": "Desenvolvedor Web",
+    "company": "TechSolutions"
+  },
+  "service-014": {
+    "views": 6,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.023Z",
+    "lastViewed": "2025-06-28T18:56:07.286Z",
+    "jobTitle": "Limpeza",
+    "company": "Empresa de Limpeza"
+  },
+  "service-015": {
+    "views": 5,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.026Z",
+    "lastViewed": "2025-06-28T18:56:07.113Z",
+    "jobTitle": "Porteiro",
+    "company": "Condomínio Residencial"
+  },
+  "ext_21_1751133021547": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.054Z",
+    "lastViewed": "2025-06-28T17:50:22.191Z",
+    "jobTitle": "Telefonista",
+    "company": "Hospital Santa Maria"
+  },
+  "ext_4_1751133021547": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T17:50:22.059Z",
+    "lastViewed": "2025-06-28T17:50:22.195Z",
+    "jobTitle": "Auxiliar de Produção",
+    "company": "Coca-Cola"
+  },
+  "ext_21_1751136966567": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:06.987Z",
+    "lastViewed": "2025-06-28T18:56:07.116Z",
+    "jobTitle": "Entregador de Moto",
+    "company": "iFood"
+  },
+  "ext_3_1751136966567": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:06.989Z",
+    "lastViewed": "2025-06-28T18:56:07.124Z",
+    "jobTitle": "Auxiliar de Produção",
+    "company": "Coca-Cola"
+  },
+  "job_10_1751136966506": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.001Z",
+    "lastViewed": "2025-06-28T18:56:07.165Z",
+    "jobTitle": "Recepcionista",
+    "company": "Clínica Odontológica"
+  },
+  "health-004": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.101Z",
+    "lastViewed": "2025-06-28T18:56:07.168Z",
+    "jobTitle": "Farmacêutico",
+    "company": "Farmácia Popular"
+  },
+  "ext_14_1751136966567": {
+    "views": 2,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.104Z",
+    "lastViewed": "2025-06-28T18:56:07.170Z",
+    "jobTitle": "Atendente de Telemarketing",
+    "company": "Central de Relacionamento"
+  },
+  "ext_15_1751136966570": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.189Z",
+    "lastViewed": "2025-06-28T18:56:07.284Z",
+    "jobTitle": "Telefonista",
+    "company": "Hospital Santa Maria"
+  },
+  "job_11_1751136966511": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.202Z",
+    "lastViewed": "2025-06-28T18:56:07.289Z",
+    "jobTitle": "Vendedor Externo",
+    "company": "Distribuidora Regional"
+  },
+  "ext_17_1751136966570": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.204Z",
+    "lastViewed": "2025-06-28T18:56:07.290Z",
+    "jobTitle": "Empacotador",
+    "company": "Americanas"
+  },
+  "ext_11_1751136966570": {
+    "views": 3,
+    "applications": 0,
+    "firstSeen": "2025-06-28T18:56:07.206Z",
+    "lastViewed": "2025-06-28T18:56:07.296Z",
+    "jobTitle": "Repositor de Mercadorias",
+    "company": "Extra Supermercados"
+  }
+}

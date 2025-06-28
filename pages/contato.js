@@ -217,7 +217,7 @@ const Contato = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-lg disabled:bg-govgray-400 disabled:cursor-not-allowed"
+                    className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-base disabled:bg-govgray-400 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? '📤 Enviando...' : '📤 Enviar Mensagem'}
                   </button>

@@ -60,11 +60,12 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
 
   const menuItems = [
     { name: 'Dashboard', icon: '📊', path: '/admin', active: router.pathname === '/admin' },
-    { name: 'Vagas', icon: '💼', path: '/admin/vagas', active: router.pathname.includes('/admin/vagas') },
+    { name: 'Vagas', icon: '💼', path: '/admin/vagas', active: router.pathname.includes('/admin/vagas') && !router.pathname.includes('analytics') },
+    { name: 'Analytics Vagas', icon: '📈', path: '/admin/vagas/analytics', active: router.pathname === '/admin/vagas/analytics' },
     { name: 'Leads', icon: '👥', path: '/admin/leads', active: router.pathname === '/admin/leads' },
     { name: 'Empresas', icon: '🏢', path: '/admin/empresas', active: router.pathname === '/admin/empresas' },
     { name: 'Usuários', icon: '👤', path: '/admin/usuarios', active: router.pathname === '/admin/usuarios' },
-    { name: 'Conteúdo', icon: '📝', path: '/admin/conteudo', active: router.pathname === '/admin/conteudo' },
+    { name: 'Editor de Conteúdo', icon: '✏️', path: '/admin/conteudo/editor', active: router.pathname === '/admin/conteudo/editor' },
     { name: 'Configurações', icon: '⚙️', path: '/admin/configuracoes', active: router.pathname === '/admin/configuracoes' }
   ]
 
@@ -93,11 +94,11 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
                 <img 
                   src={siteConfig.logoUrl} 
                   alt="Logo" 
-                  className="w-10 h-10 rounded-lg object-contain"
+                  className="w-16 h-16 rounded-lg object-contain"
                 />
               ) : (
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-govblue-600 font-bold text-sm">ST</span>
+                <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
+                  <span className="text-govblue-600 font-bold text-lg">ST</span>
                 </div>
               )}
               <div>
@@ -116,8 +117,8 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
                   onClick={() => router.push(item.path)}
                   className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
                     item.active
-                      ? 'bg-govblue-600 text-white'
-                      : 'text-govgray-700 hover:bg-govblue-50 hover:text-govblue-600'
+                      ? 'bg-govblue-600 text-white shadow-md'
+                      : 'text-gray-700 hover:bg-govblue-50 hover:text-govblue-600'
                   }`}
                 >
                   <span className="mr-3 text-lg">{item.icon}</span>
@@ -129,23 +130,23 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
           </nav>
 
           {/* User Info & Actions */}
-          <div className="absolute bottom-0 w-64 p-4 border-t border-govgray-200 bg-white">
+          <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200 bg-white">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-8 h-8 bg-govgreen-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xs">A</span>
+              <div className="w-10 h-10 bg-govgreen-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
               </div>
               <div>
-                <p className="text-govgray-800 text-sm font-medium">
+                <p className="text-gray-800 text-sm font-medium">
                   {user?.name || 'Administrador'}
                 </p>
-                <p className="text-govgray-600 text-xs">Admin</p>
+                <p className="text-gray-600 text-xs">Admin</p>
               </div>
             </div>
 
             <div className="space-y-2">
               <button
                 onClick={navigateToHome}
-                className="w-full flex items-center px-3 py-2 text-govgray-700 hover:bg-govblue-50 hover:text-govblue-600 rounded-lg transition-colors duration-200"
+                className="w-full flex items-center px-3 py-2 text-gray-700 hover:bg-govblue-50 hover:text-govblue-600 rounded-lg transition-colors duration-200"
               >
                 <span className="mr-2">🏠</span>
                 <span className="text-sm">Ver Site</span>
@@ -162,7 +163,7 @@ const AdminLayout = ({ children, title = 'Painel Administrativo' }) => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col bg-govgray-50">
+        <div className="flex-1 flex flex-col bg-gray-50">
           <main className="flex-1 p-8 overflow-y-auto">
             {children}
           </main>

@@ -433,9 +433,9 @@ const CalculadoraPage = () => {
 
                     <button
                       type="submit"
-                      className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-lg"
+                      className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-base"
                     >
-                      📧 VER MEU RESULTADO AGORA!
+                      📧 Ver Meu Resultado
                     </button>
                   </form>
                 </div>
@@ -536,8 +536,8 @@ const CalculadoraPage = () => {
               
               <div className="space-x-4">
                 <Link href="/contato">
-                  <button className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl">
-                    📞 FALE COM NOSSOS ESPECIALISTAS
+                  <button className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-base">
+                    📞 Falar com Especialistas
                   </button>
                 </Link>
                 

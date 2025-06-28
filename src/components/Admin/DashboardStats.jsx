@@ -1,7 +1,10 @@
 
 import { useState, useEffect } from 'react'
+import { useJobStats } from '../../hooks/useJobStats'
 
 const DashboardStats = () => {
+  const { stats: jobStats, loading: jobStatsLoading, error: jobStatsError } = useJobStats()
+  
   const [stats, setStats] = useState({
     totalVagas: 0,
     vagasAtivas: 0,
@@ -18,12 +21,23 @@ const DashboardStats = () => {
 
   useEffect(() => {
     loadDashboardData()
-  }, [])
+  }, [jobStats])
+
+  // Atualizar estatísticas quando os dados das vagas chegarem
+  useEffect(() => {
+    if (!jobStatsLoading && jobStats && !jobStatsError) {
+      setStats(prevStats => ({
+        ...prevStats,
+        totalVagas: jobStats.totalJobs || 0,
+        vagasAtivas: jobStats.recentJobs || 0
+      }))
+    }
+  }, [jobStats, jobStatsLoading, jobStatsError])
 
   const resetDashboard = async () => {
     const zeroStats = {
-      totalVagas: 0,
-      vagasAtivas: 0,
+      totalVagas: jobStats?.totalJobs || 0, // Preservar dados reais das vagas
+      vagasAtivas: jobStats?.recentJobs || 0, // Preservar dados reais das vagas
       totalLeads: 0,
       leadsHoje: 0,
       acessosHoje: 0,
@@ -45,7 +59,7 @@ const DashboardStats = () => {
       localStorage.setItem('dashboardResetFlag', 'true')
       localStorage.setItem('dashboardResetTime', new Date().toISOString())
       
-      console.log('🧹 Dashboard completamente zerado e salvo!')
+      console.log('🧹 Dashboard zerado (mantendo dados reais das vagas da API)!')
       
       // Garantir que os dados sejam limpos também na API
       try {
@@ -99,7 +113,7 @@ const DashboardStats = () => {
       const resetFlag = localStorage.getItem('dashboardResetFlag')
       
       if (resetFlag === 'true' || (savedStats && savedActivities)) {
-        // Sistema foi zerado ou há dados salvos - usar esses dados
+        // Sistema foi zerado ou há dados salvos - usar esses dados, mas preservar dados reais das vagas
         const stats = savedStats ? JSON.parse(savedStats) : {
           totalVagas: 0,
           vagasAtivas: 0,
@@ -111,21 +125,27 @@ const DashboardStats = () => {
           taxaConversao: 0
         }
         
+        // Usar dados reais das vagas se disponíveis
+        if (jobStats && !jobStatsLoading && !jobStatsError) {
+          stats.totalVagas = jobStats.totalJobs || 0
+          stats.vagasAtivas = jobStats.recentJobs || 0
+        }
+        
         const activities = savedActivities ? JSON.parse(savedActivities) : []
         
         setStats(stats)
         setActivities(activities)
         
         if (resetFlag === 'true') {
-          console.log('🧹 Sistema zerado - carregando dados limpos')
+          console.log('🧹 Sistema zerado - carregando dados limpos (vagas da API)')
         } else {
-          console.log('📊 Carregando dados salvos do dashboard')
+          console.log('📊 Carregando dados salvos do dashboard (vagas da API)')
         }
       } else {
-        // Primeira vez ou dados não encontrados - começar limpo
+        // Primeira vez ou dados não encontrados - começar limpo, mas com dados reais das vagas
         const cleanStats = {
-          totalVagas: 0,
-          vagasAtivas: 0,
+          totalVagas: jobStats?.totalJobs || 0,
+          vagasAtivas: jobStats?.recentJobs || 0,
           totalLeads: 0,
           leadsHoje: 0,
           acessosHoje: 0,
@@ -143,14 +163,14 @@ const DashboardStats = () => {
         localStorage.setItem('dashboardStats', JSON.stringify(cleanStats))
         localStorage.setItem('dashboardActivities', JSON.stringify(cleanActivities))
         
-        console.log('🆕 Sistema iniciado limpo - sem dados')
+        console.log('🆕 Sistema iniciado limpo - com dados reais das vagas da API')
       }
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error)
-      // Em caso de erro, usar dados limpos como fallback
+      // Em caso de erro, usar dados limpos como fallback, mas preservar dados das vagas
       const fallbackStats = {
-        totalVagas: 0,
-        vagasAtivas: 0,
+        totalVagas: jobStats?.totalJobs || 0,
+        vagasAtivas: jobStats?.recentJobs || 0,
         totalLeads: 0,
         leadsHoje: 0,
         acessosHoje: 0,
@@ -184,7 +204,7 @@ const DashboardStats = () => {
     </div>
   )
 
-  if (loading) {
+  if (loading || jobStatsLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
@@ -204,16 +224,16 @@ const DashboardStats = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Total de Vagas"
-          value={stats.totalVagas}
-          change={stats.totalVagas > 0 ? "+12% vs último mês" : null}
+          value={`${stats.totalVagas}`}
+          change={stats.totalVagas > 0 ? "📡 Dados da API em tempo real" : null}
           changeType="positive"
           icon="💼"
           color="border-l-4 border-govblue-600"
         />
         <StatCard
           title="Vagas Ativas"
-          value={stats.vagasAtivas}
-          change={stats.vagasAtivas > 0 ? "+8% vs último mês" : null}
+          value={`${stats.vagasAtivas}`}
+          change={stats.vagasAtivas > 0 ? "📡 Dados da API em tempo real" : null}
           changeType="positive"
           icon="✅"
           color="border-l-4 border-govgreen-600"
@@ -322,6 +342,12 @@ const DashboardStats = () => {
               <span className="text-govgreen-600 text-sm font-medium">🟢 Online</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-govgray-100">
+              <span className="text-govgray-700 font-medium">API das Vagas</span>
+              <span className={`text-sm font-medium ${jobStatsError ? 'text-red-600' : 'text-govgreen-600'}`}>
+                {jobStatsError ? '🔴 Erro' : '🟢 Conectada'}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-govgray-100">
               <span className="text-govgray-700 font-medium">Último Reset</span>
               <span className="text-govgray-600 text-sm">
                 {localStorage.getItem('dashboardResetTime') 
@@ -339,7 +365,13 @@ const DashboardStats = () => {
             <div className="flex justify-between items-center py-2 border-b border-govgray-100">
               <span className="text-govgray-700 font-medium">Vagas Cadastradas</span>
               <span className={`text-sm font-medium ${stats.totalVagas > 0 ? 'text-govblue-600' : 'text-govgray-500'}`}>
-                {stats.totalVagas} vagas
+                {stats.totalVagas} vagas {stats.totalVagas > 0 ? '(API)' : ''}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-govgray-100">
+              <span className="text-govgray-700 font-medium">Categoria Principal</span>
+              <span className="text-govgray-600 text-sm">
+                {jobStats?.formatted?.topCategory?.[0] || 'N/A'} ({jobStats?.formatted?.topCategory?.[1] || 0})
               </span>
             </div>
             <div className="flex justify-between items-center py-2">

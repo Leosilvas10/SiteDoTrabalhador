@@ -598,10 +598,10 @@ const HomePage = () => {
               {/* CTA Principal - Bem Destacado */}
               <div className="flex flex-col items-center space-y-4">
                 <Link href="/calculadora" className="group">
-                  <button className="bg-gradient-to-r from-govgreen-500 to-govgreen-600 hover:from-govgreen-600 hover:to-govgreen-700 text-white font-bold text-xl px-12 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-govgreen-400 hover:border-govgreen-300">
+                  <button className="bg-gradient-to-r from-govgreen-500 to-govgreen-600 hover:from-govgreen-600 hover:to-govgreen-700 text-white font-bold text-lg px-12 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-govgreen-400 hover:border-govgreen-300">
                     <span className="flex items-center space-x-3">
                       <span>🧮</span>
-                      <span>CALCULAR MEUS DIREITOS AGORA MESMO!</span>
+                      <span>Calcular Meus Direitos</span>
                       <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
                   </button>

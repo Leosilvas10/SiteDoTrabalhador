@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
@@ -19,44 +18,61 @@ export default function AdminEmpresas() {
     }
     
     setIsAuthenticated(true)
-    
-    // Carregar solicitações (simulando dados)
-    const mockSolicitacoes = [
-      {
-        id: 1,
-        nomeEmpresa: 'Hospital São José',
-        cnpj: '12.345.678/0001-90',
-        email: 'rh@hospitalsaojose.com.br',
-        telefone: '(11) 99999-9999',
-        segmento: 'saude',
-        cidade: 'São Paulo, SP',
-        cargo: 'Auxiliar de Limpeza',
-        area: 'limpeza',
-        tipoContrato: 'CLT',
-        salario: 'R$ 1.320,00',
-        status: 'pendente',
-        dataEnvio: '2024-01-21T10:30:00Z'
-      },
-      {
-        id: 2,
-        nomeEmpresa: 'Construtora ABC',
-        cnpj: '98.765.432/0001-10',
-        email: 'contato@construtorabc.com.br',
-        telefone: '(21) 88888-8888',
-        segmento: 'construcao',
-        cidade: 'Rio de Janeiro, RJ',
-        cargo: 'Pedreiro',
-        area: 'construcao',
-        tipoContrato: 'CLT',
-        salario: 'R$ 2.200,00',
-        status: 'aprovada',
-        dataEnvio: '2024-01-20T14:15:00Z'
-      }
-    ]
-    
-    setSolicitacoes(mockSolicitacoes)
-    setLoading(false)
+    fetchEmpresas()
   }, [])
+
+  const fetchEmpresas = async () => {
+    try {
+      setLoading(true)
+      // Buscar leads de empresas da API real
+      const response = await fetch('/api/get-leads')
+      const data = await response.json()
+
+      if (data.success) {
+        // Filtrar apenas leads que são de empresas
+        const empresaLeads = data.leads.filter(lead => 
+          lead.type === 'empresa' || 
+          lead.source === 'formulario_empresas' ||
+          lead.nomeEmpresa
+        )
+        setSolicitacoes(empresaLeads)
+      } else {
+        console.error('Erro ao carregar empresas:', data.message)
+        // Fallback para dados mock se a API falhar
+        setSolicitacoes([])
+      }
+    } catch (error) {
+      console.error('Erro ao buscar empresas:', error)
+      // Manter dados mock em caso de erro
+      setSolicitacoes([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const deleteEmpresa = async (empresaId) => {
+    if (!confirm('Tem certeza que deseja excluir esta solicitação de empresa?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/delete-lead?id=${empresaId}`, {
+        method: 'DELETE'
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        alert('✅ Solicitação de empresa excluída com sucesso!')
+        fetchEmpresas() // Recarregar a lista
+      } else {
+        alert('❌ Erro ao excluir: ' + data.message)
+      }
+    } catch (error) {
+      console.error('Erro ao excluir empresa:', error)
+      alert('❌ Erro ao excluir solicitação')
+    }
+  }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -77,13 +93,13 @@ export default function AdminEmpresas() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'pendente':
-        return 'bg-yellow-600/20 text-yellow-300'
+        return 'bg-yellow-100 text-yellow-800'
       case 'aprovada':
-        return 'bg-green-600/20 text-green-300'
+        return 'bg-green-100 text-green-800'
       case 'rejeitada':
-        return 'bg-red-600/20 text-red-300'
+        return 'bg-red-100 text-red-800'
       default:
-        return 'bg-slate-600/20 text-slate-300'
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
@@ -107,33 +123,66 @@ export default function AdminEmpresas() {
         <title>Gestão de Empresas - Admin</title>
       </Head>
       <AdminLayout>
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-white">Solicitações de Empresas</h1>
-            <div className="text-slate-400">
-              Total: {solicitacoes.length} solicitações
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="bg-white shadow-sm rounded-lg">
+            <div className="px-6 py-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">Solicitações de Empresas</h1>
+                  <p className="mt-1 text-sm text-gray-500">Gerencie as solicitações de publicação de vagas enviadas pelas empresas</p>
+                </div>
+                <div className="text-sm text-gray-600">
+                  Total: <span className="font-semibold text-govblue-600">{solicitacoes.length}</span> solicitações
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Estatísticas rápidas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-slate-800 rounded-lg p-6">
-              <div className="text-2xl font-bold text-yellow-400">
-                {solicitacoes.filter(s => s.status === 'pendente').length}
+          {/* Estatísticas */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center">
+                <div className="p-2 bg-yellow-100 rounded-lg">
+                  <span className="text-2xl">⏳</span>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Pendentes</p>
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {solicitacoes.filter(s => s.status === 'pendente').length}
+                  </p>
+                </div>
               </div>
-              <div className="text-slate-400">Pendentes</div>
             </div>
             
-            <div className="bg-slate-800 rounded-lg p-6">
-              <div className="text-2xl font-bold text-green-400">
-                {solicitacoes.filter(s => s.status === 'aprovada').length}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <span className="text-2xl">✅</span>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Aprovadas</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {solicitacoes.filter(s => s.status === 'aprovada').length}
+                  </p>
+                </div>
               </div>
-              <div className="text-slate-400">Aprovadas</div>
             </div>
             
-            <div className="bg-slate-800 rounded-lg p-6">
-              <div className="text-2xl font-bold text-red-400">
-                {solicitacoes.filter(s => s.status === 'rejeitada').length}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <span className="text-2xl">❌</span>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Rejeitadas</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {solicitacoes.filter(s => s.status === 'rejeitada').length}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
               </div>
               <div className="text-slate-400">Rejeitadas</div>
             </div>
@@ -142,13 +191,13 @@ export default function AdminEmpresas() {
           {/* Lista de solicitações */}
           <div className="space-y-6">
             {solicitacoes.map((solicitacao) => (
-              <div key={solicitacao.id} className="bg-slate-800 rounded-lg p-6">
+              <div key={solicitacao.id} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-1">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
                       {solicitacao.nomeEmpresa}
                     </h3>
-                    <p className="text-slate-400 text-sm">
+                    <p className="text-gray-500 text-sm">
                       Solicitação enviada em {formatDate(solicitacao.dataEnvio)}
                     </p>
                   </div>
@@ -160,50 +209,50 @@ export default function AdminEmpresas() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
-                    <div className="text-sm text-slate-400">CNPJ</div>
-                    <div className="text-white">{solicitacao.cnpj}</div>
+                    <div className="text-sm text-gray-500">CNPJ</div>
+                    <div className="text-gray-900">{solicitacao.cnpj}</div>
                   </div>
                   
                   <div>
-                    <div className="text-sm text-slate-400">Email</div>
-                    <div className="text-white">{solicitacao.email}</div>
+                    <div className="text-sm text-gray-500">Email</div>
+                    <div className="text-gray-900">{solicitacao.email}</div>
                   </div>
                   
                   <div>
-                    <div className="text-sm text-slate-400">Telefone</div>
-                    <div className="text-white">{solicitacao.telefone}</div>
+                    <div className="text-sm text-gray-500">Telefone</div>
+                    <div className="text-gray-900">{solicitacao.telefone}</div>
                   </div>
                   
                   <div>
-                    <div className="text-sm text-slate-400">Cidade</div>
-                    <div className="text-white">{solicitacao.cidade}</div>
+                    <div className="text-sm text-gray-500">Cidade</div>
+                    <div className="text-gray-900">{solicitacao.cidade}</div>
                   </div>
                   
                   <div>
-                    <div className="text-sm text-slate-400">Segmento</div>
-                    <div className="text-white capitalize">{solicitacao.segmento.replace('-', ' ')}</div>
+                    <div className="text-sm text-gray-500">Segmento</div>
+                    <div className="text-gray-900 capitalize">{solicitacao.segmento.replace('-', ' ')}</div>
                   </div>
                   
                   <div>
-                    <div className="text-sm text-slate-400">Cargo</div>
-                    <div className="text-white">{solicitacao.cargo}</div>
+                    <div className="text-sm text-gray-500">Cargo</div>
+                    <div className="text-gray-900">{solicitacao.cargo}</div>
                   </div>
                 </div>
 
-                <div className="bg-slate-900 rounded-lg p-4 mb-4">
-                  <h4 className="text-white font-medium mb-2">Detalhes da Vaga</h4>
+                <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                  <h4 className="text-gray-900 font-medium mb-2">Detalhes da Vaga</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <span className="text-slate-400">Área:</span>
-                      <span className="text-white ml-2 capitalize">{solicitacao.area.replace('-', ' ')}</span>
+                      <span className="text-gray-500">Área:</span>
+                      <span className="text-gray-900 ml-2 capitalize">{solicitacao.area.replace('-', ' ')}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400">Contrato:</span>
-                      <span className="text-white ml-2">{solicitacao.tipoContrato}</span>
+                      <span className="text-gray-500">Contrato:</span>
+                      <span className="text-gray-900 ml-2">{solicitacao.tipoContrato}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400">Salário:</span>
-                      <span className="text-white ml-2">{solicitacao.salario}</span>
+                      <span className="text-gray-500">Salário:</span>
+                      <span className="text-gray-900 ml-2">{solicitacao.salario}</span>
                     </div>
                   </div>
                 </div>
@@ -234,15 +283,22 @@ export default function AdminEmpresas() {
                   <button className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg transition-colors">
                     👁️ Ver Detalhes
                   </button>
+
+                  <button
+                    onClick={() => deleteEmpresa(solicitacao.id)}
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    🗑️ Excluir
+                  </button>
                 </div>
               </div>
             ))}
           </div>
 
           {solicitacoes.length === 0 && (
-            <div className="text-center text-slate-400 py-12">
+            <div className="text-center text-gray-500 py-12">
               <div className="text-6xl mb-4">📭</div>
-              <h3 className="text-xl font-semibold mb-2">Nenhuma solicitação encontrada</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gray-700">Nenhuma solicitação encontrada</h3>
               <p>Quando empresas enviarem solicitações, elas aparecerão aqui.</p>
             </div>
           )}

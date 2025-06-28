@@ -60,10 +60,12 @@ export default async function handler(req, res) {
       leadId: leadId, // Backup do ID (compatibilidade)
       timestamp: new Date().toLocaleString('pt-BR'),
       timestampISO: new Date().toISOString(),
+      createdAt: new Date().toISOString(), // Campo principal para datas
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
       userAgent: req.headers['user-agent'],
       source: 'Site do Trabalhador',
       validated: true,
+      status: 'novo', // Status padrão para novos leads
       
       // Dados da vaga para redirecionamento
       jobId: leadData.jobId,

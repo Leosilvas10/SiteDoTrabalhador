@@ -68,9 +68,9 @@ const ParaEmpresas = () => {
             <div className="mt-10">
               <a 
                 href="#cta-principal" 
-                className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors shadow-lg inline-block"
+                className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors shadow-lg inline-block"
               >
-                📢 PUBLIQUE SUA VAGA AGORA!
+                📢 Publique sua Vaga
               </a>
             </div>
           </div>
@@ -241,9 +241,9 @@ const ParaEmpresas = () => {
           <div className="space-y-4">
             <a 
               href="/publicar-vaga" 
-              className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors shadow-lg inline-block mr-4"
+              className="bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors shadow-lg inline-block mr-4"
             >
-              📢 PUBLIQUE SUA VAGA AGORA!
+              📢 Publique sua Vaga
             </a>
             <br className="md:hidden" />
             <a 

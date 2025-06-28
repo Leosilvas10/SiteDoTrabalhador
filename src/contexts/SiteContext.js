@@ -12,7 +12,7 @@ export const useSiteContext = () => {
 
 export const SiteProvider = ({ children }) => {
   const [siteConfig, setSiteConfig] = useState({
-    logoUrl: `/lodo.png?v=${Date.now() + Math.random()}`, // Logo correta do print
+    logoUrl: `/site do trabalhador.png?v=${Date.now() + Math.random()}`, // Logo correta do print
     heroTitulo: 'Encontre sua próxima oportunidade',
     heroSubtitulo: 'Conectamos trabalhadores a empresas em todo o Brasil',
     sobreTitulo: 'Sobre o Site do Trabalhador',
@@ -23,12 +23,13 @@ export const SiteProvider = ({ children }) => {
 
   // Carregar configurações do localStorage ao inicializar
   useEffect(() => {
-    // Limpar cache antigo da logo
+    // Limpar cache antigo da logo - forçar atualização
     const currentTime = Date.now()
     const lastLogoUpdate = localStorage.getItem('logo_update_time')
     
-    if (!lastLogoUpdate || (currentTime - parseInt(lastLogoUpdate)) > 60000) {
-      // Se não há timestamp ou passou mais de 1 minuto, limpar configurações
+    // Sempre limpar configurações para garantir o novo logo
+    if (!lastLogoUpdate || (currentTime - parseInt(lastLogoUpdate)) > 10000) {
+      console.log('🔄 Limpando cache do logo e carregando nova imagem...')
       localStorage.removeItem('site_config')
       localStorage.setItem('logo_update_time', currentTime.toString())
     }
