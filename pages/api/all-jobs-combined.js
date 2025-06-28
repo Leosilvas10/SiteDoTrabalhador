@@ -13,10 +13,13 @@ export default async function handler(req, res) {
     const allJobs = [];
     const sources = [];
 
+    // Obter a URL base correta
+    const baseUrl = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`;
+
     // 1. Buscar vagas internas
     try {
       console.log('📋 Buscando vagas internas...');
-      const internalResponse = await fetch(`http://localhost:3000/api/jobs`);
+      const internalResponse = await fetch(`${baseUrl}/api/jobs`);
       const internalData = await internalResponse.json();
       
       if (internalData.success && internalData.data) {
@@ -37,7 +40,7 @@ export default async function handler(req, res) {
     // 2. Buscar vagas externas da API principal
     try {
       console.log('🌐 Buscando vagas externas...');
-      const externalResponse = await fetch(`http://localhost:3000/api/public-jobs-new`);
+      const externalResponse = await fetch(`${baseUrl}/api/public-jobs-new`);
       const externalData = await externalResponse.json();
       
       if (externalData.success && externalData.data) {
@@ -58,7 +61,7 @@ export default async function handler(req, res) {
     // 3. Buscar vagas de tecnologia
     try {
       console.log('💻 Buscando vagas de tecnologia...');
-      const techResponse = await fetch(`http://localhost:3000/api/public-jobs-tech`);
+      const techResponse = await fetch(`${baseUrl}/api/public-jobs-tech`);
       const techData = await techResponse.json();
       
       if (techData.success && techData.jobs) {
@@ -79,7 +82,7 @@ export default async function handler(req, res) {
     // 4. Buscar vagas de saúde
     try {
       console.log('🏥 Buscando vagas de saúde...');
-      const healthResponse = await fetch(`http://localhost:3000/api/public-jobs-health`);
+      const healthResponse = await fetch(`${baseUrl}/api/public-jobs-health`);
       const healthData = await healthResponse.json();
       
       if (healthData.success && healthData.jobs) {
@@ -100,7 +103,7 @@ export default async function handler(req, res) {
     // 5. Buscar vagas de serviços gerais
     try {
       console.log('🔧 Buscando vagas de serviços gerais...');
-      const servicesResponse = await fetch(`http://localhost:3000/api/public-jobs-services`);
+      const servicesResponse = await fetch(`${baseUrl}/api/public-jobs-services`);
       const servicesData = await servicesResponse.json();
       
       if (servicesData.success && servicesData.jobs) {
