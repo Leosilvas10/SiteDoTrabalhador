@@ -2,16 +2,36 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-// Detectar ambiente
-const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+// Detectar ambiente - versão mais robusta
+const isProduction = process.env.NODE_ENV === 'production' || 
+                     process.env.VERCEL_ENV === 'production' ||
+                     process.env.VERCEL === '1';
 
-// Array em memória para produção
-let productionLeads = [];
+// Array em memória para produção - usar globalThis para compartilhar entre APIs
+if (!globalThis.productionLeads) {
+  globalThis.productionLeads = [];
+}
+
+// Função para debug de ambiente
+function logEnvironmentInfo() {
+  console.log('🔍 Get-Leads Environment Debug:', {
+    NODE_ENV: process.env.NODE_ENV,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+    VERCEL: process.env.VERCEL,
+    isProduction: isProduction,
+    globalLeadsCount: globalThis.productionLeads?.length || 0
+  });
+}
 
 // Função para ler leads
 async function getLeads() {
+  logEnvironmentInfo();
+  
   if (isProduction) {
     console.log('📊 Produção: Retornando leads da memória:', productionLeads.length);
+    if (productionLeads.length > 0) {
+      console.log('📊 Últimos 3 IDs na memória:', productionLeads.slice(-3).map(l => l.id));
+    }
     return productionLeads;
   }
   

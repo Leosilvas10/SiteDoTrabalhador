@@ -3,16 +3,37 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-// Detectar ambiente
-const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+// Detectar ambiente - versão mais robusta
+const isProduction = process.env.NODE_ENV === 'production' || 
+                     process.env.VERCEL_ENV === 'production' ||
+                     process.env.VERCEL === '1';
 
-// Array em memória para produção (temporário)
-let productionLeads = [];
+// Array em memória para produção - usar globalThis para compartilhar entre APIs
+if (!globalThis.productionLeads) {
+  globalThis.productionLeads = [];
+}
 
-// Função para ler leads
+// Função para debug de ambiente
+function logEnvironmentInfo() {
+  console.log('🔍 Environment Debug:', {
+    NODE_ENV: process.env.NODE_ENV,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+    VERCEL: process.env.VERCEL,
+    isProduction: isProduction,
+    platform: process.platform,
+    cwd: process.cwd(),
+    globalLeadsCount: globalThis.productionLeads?.length || 0
+  });
+}
+
+// Função para ler leads - melhorada
 async function getLeads() {
+  logEnvironmentInfo();
+  
   if (isProduction) {
-    return productionLeads;
+    const leads = globalThis.productionLeads || [];
+    console.log('💾 Produção: Leads na memória global:', leads.length);
+    return leads;
   }
   
   try {
@@ -20,22 +41,24 @@ async function getLeads() {
     const fileContent = await fs.readFile(leadsFilePath, 'utf8');
     return JSON.parse(fileContent);
   } catch (err) {
+    console.log('📁 Arquivo de leads não encontrado, criando array vazio');
     return [];
   }
 }
 
-// Função para salvar leads
+// Função para salvar leads - melhorada
 async function saveLeads(leads) {
   if (isProduction) {
-    productionLeads = [...leads];
-    console.log('💾 Produção: Lead salvo na memória. Total:', productionLeads.length);
+    globalThis.productionLeads = [...leads];
+    console.log('💾 Produção: Lead salvo na memória global. Total atual:', globalThis.productionLeads.length);
+    console.log('💾 Últimos 3 IDs salvos:', globalThis.productionLeads.slice(-3).map(l => l.id));
     return true;
   }
   
   try {
     const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
     await fs.writeFile(leadsFilePath, JSON.stringify(leads, null, 2));
-    console.log('💾 Desenvolvimento: Lead salvo no arquivo');
+    console.log('💾 Desenvolvimento: Lead salvo no arquivo. Total:', leads.length);
     return true;
   } catch (error) {
     console.error('❌ Erro ao salvar lead:', error);
@@ -153,7 +176,8 @@ export default async function handler(req, res) {
     const response = {
       success: true,
       message: 'Candidatura enviada com sucesso!',
-      leadId: submissionData.id, // Usar o ID principal
+      id: submissionData.id, // Usar 'id' em vez de 'leadId' para consistência
+      leadId: submissionData.id, // Manter compatibilidade
       redirect: {
         url: submissionData.jobLink,
         originalLocation: submissionData.originalLocation,
