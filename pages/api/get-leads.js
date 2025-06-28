@@ -1,4 +1,70 @@
-import { getLeads, leadsToCSV } from '../../lib/leadsDB'
+// API para buscar leads com suporte a produção
+const fs = require('fs').promises;
+const path = require('path');
+
+// Detectar ambiente
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+
+// Array em memória para produção
+let productionLeads = [];
+
+// Função para ler leads
+async function getLeads() {
+  if (isProduction) {
+    console.log('📊 Produção: Retornando leads da memória:', productionLeads.length);
+    return productionLeads;
+  }
+  
+  try {
+    const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
+    const fileContent = await fs.readFile(leadsFilePath, 'utf8');
+    const leads = JSON.parse(fileContent);
+    console.log('📊 Desenvolvimento: Leads do arquivo:', leads.length);
+    return leads;
+  } catch (err) {
+    console.log('📊 Nenhum arquivo de leads encontrado');
+    return [];
+  }
+}
+
+// Função para exportar como CSV
+function leadsToCSV(leads) {
+  if (!leads || leads.length === 0) {
+    return 'Nenhum lead encontrado'
+  }
+
+  const headers = [
+    'ID', 'Nome', 'Email', 'Telefone', 'WhatsApp', 
+    'Última Empresa', 'Status Trabalho', 'Recebeu Direitos',
+    'Problemas Trabalho', 'Deseja Consultoria',
+    'Vaga', 'Empresa', 'Data', 'Fonte', 'Status'
+  ]
+
+  const csvRows = [headers.join(',')]
+
+  leads.forEach(lead => {
+    const row = [
+      lead.id || lead.leadId || '',
+      `"${lead.nome || ''}"`,
+      `"${lead.email || ''}"`,
+      `"${lead.telefone || ''}"`,
+      `"${lead.whatsapp || ''}"`,
+      `"${lead.ultimaEmpresa || ''}"`,
+      `"${lead.statusTrabalho || ''}"`,
+      `"${lead.recebeuDireitos || ''}"`,
+      `"${lead.problemasTrabalho || ''}"`,
+      `"${lead.desejaConsultoria || ''}"`,
+      `"${lead.jobTitle || ''}"`,
+      `"${lead.company || ''}"`,
+      `"${lead.timestamp || ''}"`,
+      `"${lead.source || ''}"`,
+      `"${lead.status || ''}"`,
+    ]
+    csvRows.push(row.join(','))
+  })
+
+  return csvRows.join('\n')
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {

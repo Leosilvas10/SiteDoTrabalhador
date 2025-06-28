@@ -3,6 +3,46 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+// Detectar ambiente
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+
+// Array em memória para produção (temporário)
+let productionLeads = [];
+
+// Função para ler leads
+async function getLeads() {
+  if (isProduction) {
+    return productionLeads;
+  }
+  
+  try {
+    const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
+    const fileContent = await fs.readFile(leadsFilePath, 'utf8');
+    return JSON.parse(fileContent);
+  } catch (err) {
+    return [];
+  }
+}
+
+// Função para salvar leads
+async function saveLeads(leads) {
+  if (isProduction) {
+    productionLeads = [...leads];
+    console.log('💾 Produção: Lead salvo na memória. Total:', productionLeads.length);
+    return true;
+  }
+  
+  try {
+    const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
+    await fs.writeFile(leadsFilePath, JSON.stringify(leads, null, 2));
+    console.log('💾 Desenvolvimento: Lead salvo no arquivo');
+    return true;
+  } catch (error) {
+    console.error('❌ Erro ao salvar lead:', error);
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -92,31 +132,21 @@ export default async function handler(req, res) {
       timestamp: submissionData.timestamp
     });
 
-    // Salvar lead em arquivo JSON local (backup)
+    // Salvar lead
     try {
-      const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
-      
-      let existingLeads = [];
-      try {
-        const fileContent = await fs.readFile(leadsFilePath, 'utf8');
-        existingLeads = JSON.parse(fileContent);
-      } catch (err) {
-        // Arquivo não existe ou está vazio, começar com array vazio
-        console.log('Criando novo arquivo de leads...');
-      }
-
+      const existingLeads = await getLeads();
       existingLeads.push(submissionData);
       
-      // Manter apenas os últimos 1000 leads para evitar arquivo muito grande
+      // Manter apenas os últimos 1000 leads para evitar problemas de memória
       if (existingLeads.length > 1000) {
-        existingLeads = existingLeads.slice(-1000);
+        existingLeads.splice(0, existingLeads.length - 1000);
       }
 
-      await fs.writeFile(leadsFilePath, JSON.stringify(existingLeads, null, 2));
-      console.log(`💾 Lead salvo localmente: ${submissionData.id}`);
+      await saveLeads(existingLeads);
+      console.log(`💾 Lead salvo: ${submissionData.id} - ${submissionData.nome}`);
     } catch (saveError) {
-      console.error('⚠️ Erro ao salvar lead localmente:', saveError.message);
-      // Não bloquear o processo se falhar ao salvar
+      console.error('⚠️ Erro ao salvar lead:', saveError.message);
+      // Não bloquear o processo se falhar ao salvar - o lead foi processado
     }
 
     // Preparar resposta com dados de redirecionamento

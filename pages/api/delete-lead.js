@@ -1,16 +1,59 @@
-import { getLeads, saveLeads } from '../../lib/leadsDB'
+// API para deletar leads com suporte a produção
+const fs = require('fs').promises;
+const path = require('path');
+
+// Detectar ambiente
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+
+// Array em memória para produção
+let productionLeads = [];
+
+// Função para ler leads
+async function getLeads() {
+  if (isProduction) {
+    return productionLeads;
+  }
+  
+  try {
+    const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
+    const fileContent = await fs.readFile(leadsFilePath, 'utf8');
+    return JSON.parse(fileContent);
+  } catch (err) {
+    return [];
+  }
+}
+
+// Função para salvar leads
+async function saveLeads(leads) {
+  if (isProduction) {
+    productionLeads = [...leads];
+    console.log('💾 Produção: Leads atualizados na memória. Total:', productionLeads.length);
+    return true;
+  }
+  
+  try {
+    const leadsFilePath = path.join(process.cwd(), 'data', 'leads.json');
+    await fs.writeFile(leadsFilePath, JSON.stringify(leads, null, 2));
+    return true;
+  } catch (error) {
+    console.error('❌ Erro ao salvar leads:', error);
+    return false;
+  }
+}
 
 export default async function handler(req, res) {
-  if (req.method !== 'DELETE') {
+  if (req.method !== 'POST' && req.method !== 'DELETE') {
     return res.status(405).json({ message: 'Método não permitido' })
   }
 
   try {
-    const { id } = req.query
+    // Para POST, o ID vem no body. Para DELETE, vem na query
+    const { leadId, id } = req.method === 'POST' ? req.body : req.query
+    const leadIdToDelete = leadId || id
 
-    console.log('🗑️ Tentando excluir lead com ID:', id)
+    console.log('🗑️ Tentando excluir lead com ID:', leadIdToDelete)
 
-    if (!id) {
+    if (!leadIdToDelete) {
       return res.status(400).json({ 
         success: false, 
         message: 'ID do lead é obrigatório' 
@@ -24,10 +67,10 @@ export default async function handler(req, res) {
     
     // Encontrar o lead - verificar tanto 'id' quanto 'leadId'
     const leadIndex = leads.findIndex(lead => 
-      lead.id === id || 
-      lead.leadId === id || 
-      lead.id === String(id) || 
-      lead.leadId === String(id)
+      lead.id === leadIdToDelete || 
+      lead.leadId === leadIdToDelete || 
+      lead.id === String(leadIdToDelete) || 
+      lead.leadId === String(leadIdToDelete)
     )
     
     console.log('📍 Index do lead encontrado:', leadIndex)
