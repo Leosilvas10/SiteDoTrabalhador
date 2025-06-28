@@ -220,24 +220,6 @@ export default function AdminUsuarios() {
             </div>
           </div>
         </div>
-                <p className="text-2xl font-bold text-white">{usuarios.filter(u => u.role === 'super_admin').length}</p>
-                <p className="text-slate-400">Super Admins</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800 rounded-lg p-6">
-            <div className="flex items-center">
-              <div className="p-3 bg-red-600 rounded-lg">
-                <span className="text-2xl">❌</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-2xl font-bold text-white">{usuarios.filter(u => !u.active).length}</p>
-                <p className="text-slate-400">Usuários Inativos</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Tabela de usuários */}
         <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">

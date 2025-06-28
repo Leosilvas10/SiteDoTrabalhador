@@ -183,10 +183,6 @@ export default function AdminEmpresas() {
               </div>
             </div>
           </div>
-              </div>
-              <div className="text-slate-400">Rejeitadas</div>
-            </div>
-          </div>
 
           {/* Lista de solicitações */}
           <div className="space-y-6">
