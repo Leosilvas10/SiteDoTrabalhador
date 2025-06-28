@@ -73,25 +73,3 @@ export default async function handler(req, res) {
     })
   }
 }
-    
-    if (saved) {
-      console.log('✅ Lead excluído com sucesso')
-      res.status(200).json({
-        success: true,
-        message: 'Lead excluído com sucesso'
-      })
-    } else {
-      res.status(500).json({
-        success: false,
-        message: 'Erro ao salvar alterações'
-      })
-    }
-
-  } catch (error) {
-    console.error('Erro ao excluir lead:', error)
-    res.status(500).json({
-      success: false,
-      message: 'Erro interno do servidor'
-    })
-  }
-}
