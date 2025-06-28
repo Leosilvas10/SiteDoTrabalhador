@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import LeadModal from '../src/components/LeadModal/LeadModal'
-import ExternalJobModal from '../src/components/ExternalJobModal/ExternalJobModal'
-import ExternalJobLeadModal from '../src/components/ExternalJobLeadModal/ExternalJobLeadModal'
 
-const VagasPage = () => {
+const Vagas = () => {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedJob, setSelectedJob] = useState(null)
-  const [isExternalModalOpen, setIsExternalModalOpen] = useState(false)
-  const [selectedExternalJob, setSelectedExternalJob] = useState(null)
   const [filters, setFilters] = useState({
     search: '',
     category: '',
@@ -71,21 +67,32 @@ const VagasPage = () => {
       )
     }
 
-    // Filtro por categoria (baseado no título da vaga)
+    // Filtro por categoria (baseado no título da vaga - focado em trabalhos simples)
     if (filters.category) {
       filtered = filtered.filter(job => {
         const title = job.title?.toLowerCase() || ''
+        const description = job.description?.toLowerCase() || ''
         switch (filters.category) {
-          case 'vendas':
-            return title.includes('vend') || title.includes('comercial')
-          case 'administrativo':
-            return title.includes('admin') || title.includes('assist') || title.includes('auxiliar')
+          case 'domestica':
+            return title.includes('domést') || title.includes('diarista') || title.includes('faxineira') || description.includes('domést')
+          case 'limpeza':
+            return title.includes('limpeza') || title.includes('faxina') || title.includes('zelador') || title.includes('servente')
+          case 'seguranca':
+            return title.includes('porteiro') || title.includes('vigilante') || title.includes('seguran') || title.includes('guarita')
+          case 'alimentacao':
+            return title.includes('cozinheir') || title.includes('ajudante de cozinha') || title.includes('copeira') || title.includes('garç')
+          case 'cuidados':
+            return title.includes('cuidador') || title.includes('babá') || title.includes('acompanhante') || title.includes('idoso')
+          case 'construcao':
+            return title.includes('pedreiro') || title.includes('servente') || title.includes('ajudante') || title.includes('construção')
+          case 'motorista':
+            return title.includes('motorista') || title.includes('entregador') || title.includes('driver')
           case 'servicos':
-            return title.includes('serv') || title.includes('atend') || title.includes('recep')
-          case 'operacional':
-            return title.includes('oper') || title.includes('produc') || title.includes('fabric')
-          case 'saude':
-            return title.includes('enferm') || title.includes('medic') || title.includes('saude')
+            return title.includes('jardineiro') || title.includes('manutenção') || title.includes('serviços gerais') || title.includes('auxiliar')
+          case 'vendas':
+            return title.includes('vend') || title.includes('comercial') || title.includes('promot')
+          case 'administrativo':
+            return title.includes('admin') || title.includes('assist') || title.includes('auxiliar') || title.includes('recep')
           default:
             return true
         }
@@ -161,30 +168,36 @@ const VagasPage = () => {
   }
 
   const handleApply = (job) => {
-    // Verificar se é vaga externa que requer captação de lead
-    if (job.isExternal && job.requiresLead) {
-      setSelectedExternalJob(job)
-      setIsExternalModalOpen(true)
-    } else {
-      // Vaga interna - usar modal normal
-      setSelectedJob(job)
-      setIsModalOpen(true)
-    }
+    // Usar sempre o LeadModal unificado para todas as vagas
+    setSelectedJob(job)
+    setIsModalOpen(true)
   }
 
-  const handleExternalJobSubmit = (result) => {
-    console.log('✅ Lead de vaga externa processado:', result)
-    // Modal será fechado automaticamente
-    // Redirecionamento será feito automaticamente
+  // Função para gerar conteúdo específico por categoria (focado em trabalhos simples)
+  const getCategoryContent = (category) => {
+    const contents = {
+      domestica: "🏠 Encontre as melhores **vagas para Doméstica e Diarista** em todo o Brasil! Oportunidades com carteira assinada, meio período ou diárias. Trabalhe em residências que valorizam seu serviço e oferecem boas condições. Sua nova oportunidade como doméstica está aqui!",
+      limpeza: "🧹 Descubra **vagas em Limpeza e Conservação** em todo o Brasil! Oportunidades para faxineira, zelador, servente e auxiliar de limpeza em empresas, condomínios e estabelecimentos comerciais. Trabalhe com dignidade e reconhecimento!",
+      seguranca: "🔒 Explore vagas em **Segurança, Portaria e Vigilância** em todo o Brasil! Oportunidades para porteiro, vigilante, controlador de acesso em condomínios, empresas e estabelecimentos comerciais. Proteja e seja valorizado!",
+      alimentacao: "🍽️ Encontre vagas na área de **Alimentação e Cozinha** em todo o Brasil! Oportunidades para cozinheiro, ajudante de cozinha, copeira e garçom em restaurantes, lanchonetes e empresas. Sua paixão pela culinária pode ser sua profissão!",
+      cuidados: "👥 Descubra vagas em **Cuidados Pessoais** em todo o Brasil! Oportunidades para cuidador de idosos, babá, acompanhante e auxiliar de cuidados especiais. Trabalhe cuidando de pessoas com carinho e dedicação!",
+      construcao: "🔨 Explore vagas na **Construção Civil** em todo o Brasil! Oportunidades para pedreiro, servente, ajudante geral e auxiliar de obras. Construa sua carreira no setor que mais cresce no país!",
+      motorista: "🚗 Encontre vagas para **Motorista e Entregador** em todo o Brasil! Oportunidades para motorista particular, entregador, driver de aplicativo e transporte de cargas. Sua carteira de motorista pode ser sua fonte de renda!",
+      servicos: "⚙️ Descubra vagas em **Serviços Gerais** em todo o Brasil! Oportunidades para jardineiro, auxiliar de manutenção, handyman e prestador de serviços diversos. Suas habilidades práticas são valorizadas aqui!",
+      vendas: "💼 Explore as melhores vagas em **Vendas e Comercial** em todo o Brasil! Encontre oportunidades para vendedor, promotor de vendas, consultor e mais, em diversas cidades. Sua carreira de sucesso em vendas espera por você!",
+      administrativo: "📋 Encontre sua vaga em **Administrativo** em todo o Brasil! Oportunidades para assistente administrativo, recepcionista, secretária e cargos de apoio em todo o país. Comece a organizar sua carreira com as melhores vagas!"
+    }
+    return contents[category] || null  
   }
 
   return (
     <div className="page-white-bg min-h-screen">
       <Head>
-        <title>Vagas de Emprego - Site do Trabalhador</title>
-        <meta name="description" content="Encontre vagas de emprego em todo o Brasil. Oportunidades atualizadas em tempo real." />
+        <title>Encontre Sua Vaga de Emprego Ideal: Milhares de Oportunidades Esperam por Você! | Site do Trabalhador</title>
+        <meta name="description" content="Doméstica, Porteiro, Cuidador, Limpeza, Motorista e Mais! Milhares de vagas simples em todo o Brasil. Filtre por categoria, cidade ou salário. Vagas atualizadas diariamente!" />
+        <meta name="keywords" content="vaga emprego, doméstica, porteiro, cuidador, limpeza, motorista, trabalho simples, Brasil, vagas CLT, carteira assinada" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/site-do-trabalhador.ico" />
       </Head>
 
       {/* Hero Section */}
@@ -192,11 +205,27 @@ const VagasPage = () => {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                💼 Vagas em Destaque
+                Encontre Sua Vaga de Emprego Ideal: Milhares de Oportunidades Esperam por Você!
               </h1>
-              <p className="text-xl text-blue-100 mb-8">
-                {loading ? "Carregando vagas..." : `${filteredJobs.length} vagas encontradas de ${jobs.length} disponíveis`}
+              <h2 className="text-2xl md:text-3xl font-semibold text-blue-100 mb-4">
+                Doméstica, Porteiro, Cuidador, Limpeza, Motorista e Mais! Filtre por Categoria, Cidade ou Salário.
+              </h2>
+              <p className="text-lg text-blue-100 mb-8 max-w-4xl mx-auto">
+                Seu próximo emprego está a um clique! Aqui, você encontra as melhores <strong>vagas para trabalhos simples</strong> em todo o <strong>Brasil</strong>, atualizadas diariamente. Use nossos filtros inteligentes para achar a oportunidade que realmente combina com você e seu perfil e dê o próximo passo em sua carreira!
               </p>
+              
+              {/* Bloco de Contagem de Vagas e Última Atualização */}
+              <div className="bg-blue-800 bg-opacity-40 rounded-lg p-6 mb-6 max-w-2xl mx-auto">
+                <p className="text-xl text-blue-100 mb-2">
+                  ✅ {loading ? "Carregando vagas..." : `${filteredJobs.length} vagas disponíveis | Mostrando as mais recentes`}
+                </p>
+                <p className="text-blue-200 text-sm">
+                  Última atualização: {new Date().toLocaleDateString('pt-BR')} às {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                </p>
+                <p className="text-blue-200 text-sm mt-1">
+                  🔄 As vagas são atualizadas automaticamente a cada 1 hora!
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -205,88 +234,23 @@ const VagasPage = () => {
         {!loading && !error && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 mb-8">
-              <div className="flex flex-wrap items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-govgray-800">🔍 Filtrar Vagas</h3>
-                <button
-                  onClick={clearFilters}
-                  className="text-govblue-600 hover:text-govblue-700 text-sm font-medium transition-colors"
-                >
-                  🗑️ Limpar Filtros
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Busca por palavra-chave */}
-                <div>
-                  <label className="block text-sm font-medium text-govgray-700 mb-2">
-                    Buscar por cargo ou empresa
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ex: vendedor, assistente..."
-                    value={filters.search}
-                    onChange={(e) => handleFilterChange('search', e.target.value)}
-                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
-                  />
-                </div>
-
-                {/* Categoria */}
-                <div>
-                  <label className="block text-sm font-medium text-govgray-700 mb-2">
-                    Área de atuação
-                  </label>
-                  <select
-                    value={filters.category}
-                    onChange={(e) => handleFilterChange('category', e.target.value)}
-                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
-                  >
-                    <option value="">Todas as áreas</option>
-                    <option value="vendas">💼 Vendas e Comercial</option>
-                    <option value="administrativo">📋 Administrativo</option>
-                    <option value="servicos">🤝 Atendimento e Serviços</option>
-                    <option value="operacional">⚙️ Operacional</option>
-                    <option value="saude">🏥 Saúde</option>
-                  </select>
-                </div>
-
-                {/* Faixa Salarial */}
-                <div>
-                  <label className="block text-sm font-medium text-govgray-700 mb-2">
-                    Faixa salarial
-                  </label>
-                  <select
-                    value={filters.salary}
-                    onChange={(e) => handleFilterChange('salary', e.target.value)}
-                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
-                  >
-                    <option value="">Todos os salários</option>
-                    <option value="ate-2k">💰 Até R$ 2.000</option>
-                    <option value="2k-5k">💰 R$ 2.000 - R$ 5.000</option>
-                    <option value="acima-5k">💰 Acima de R$ 5.000</option>
-                  </select>
-                </div>
-
-                {/* Tipo de Contrato */}
-                <div>
-                  <label className="block text-sm font-medium text-govgray-700 mb-2">
-                    Tipo de contrato
-                  </label>
-                  <select
-                    value={filters.type}
-                    onChange={(e) => handleFilterChange('type', e.target.value)}
-                    className="w-full px-3 py-2 border border-govgray-300 rounded-lg focus:ring-2 focus:ring-govblue-500 focus:border-transparent transition-all"
-                  >
-                    <option value="">Todos os tipos</option>
-                    <option value="clt">📄 CLT</option>
-                    <option value="pj">🏢 Pessoa Jurídica</option>
-                    <option value="temporario">⏰ Temporário</option>
-                    <option value="estagio">🎓 Estágio</option>
-                  </select>
-                </div>
-              </div>
+              {/* ...existing code... */}
             </div>
           </section>
         )}
+
+        {/* Divisor Moderno */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative flex items-center justify-center py-8">
+            <div className="flex-grow border-t border-govgray-200"></div>
+            <div className="flex-shrink-0 px-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-govblue-500 to-govgreen-500 rounded-full flex items-center justify-center shadow-lg">
+                <span className="text-white text-lg">💼</span>
+              </div>
+            </div>
+            <div className="flex-grow border-t border-govgray-200"></div>
+          </div>
+        </div>
 
         {/* Loading State */}
         {loading && (
@@ -312,6 +276,26 @@ const VagasPage = () => {
         {/* Lista de Vagas com Paginação */}
         {!loading && !error && filteredJobs.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            
+            {/* Conteúdo específico por categoria */}
+            {filters.category && getCategoryContent(filters.category) && (
+              <div className="bg-govblue-50 border-l-4 border-govblue-600 p-6 mb-8 rounded-r-lg">
+                <p className="text-govgray-700 text-lg leading-relaxed">
+                  {getCategoryContent(filters.category).split('**').map((part, index) => 
+                    index % 2 === 1 ? <strong key={index} className="text-govblue-700">{part}</strong> : part
+                  )}
+                </p>
+              </div>
+            )}
+
+            {/* Parágrafo introdutório */}
+            <div className="text-center mb-8">
+              <p className="text-lg text-govgray-700 max-w-3xl mx-auto">
+                Confira abaixo as <strong>vagas de emprego atualizadas</strong> que correspondem à sua busca. 
+                Para saber mais detalhes e enviar sua candidatura, clique em <strong>"Quero me Candidatar"</strong> em cada vaga.
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {currentJobs.map((job, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300 relative">
@@ -419,27 +403,109 @@ const VagasPage = () => {
           </section>
         )}
 
+        {/* Seção Dicas para o Candidato */}
+        {!loading && !error && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-govgray-50">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-govgray-800 mb-4">
+                💡 Dicas Essenciais para o Candidato: Conquiste Sua Próxima Vaga!
+              </h2>
+              <p className="text-lg text-govgray-600 max-w-3xl mx-auto">
+                Maximize suas chances de sucesso com nossas dicas especializadas para candidatos a emprego
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Dica 1: Currículo */}
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-govblue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white text-2xl">📄</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-govgray-800 mb-3">Currículo que Impressiona</h3>
+                  <p className="text-govgray-600 mb-6">
+                    Saiba como montar um <strong>currículo simples e eficaz</strong>, destacando suas qualidades e experiências para as vagas de emprego.
+                  </p>
+                  <a 
+                    href="https://www.vagas.com.br/dicas-de-carreira/curriculo/como-fazer-um-curriculo" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    VEJA COMO MONTAR SEU CURRÍCULO
+                  </a>
+                </div>
+              </div>
+
+              {/* Dica 2: Entrevista */}
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-govgreen-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white text-2xl">💼</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-govgray-800 mb-3">Entrevista de Sucesso</h3>
+                  <p className="text-govgray-600 mb-6">
+                    Prepare-se para sua <strong>entrevista de emprego</strong> com nossas dicas valiosas. Descubra como responder às perguntas mais comuns e deixar uma ótima impressão nos recrutadores.
+                  </p>
+                  <a 
+                    href="https://www.catho.com.br/carreira-sucesso/dicas-emprego/como-se-preparar-para-uma-entrevista-de-emprego/" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    PREPARE-SE PARA A ENTREVISTA
+                  </a>
+                </div>
+              </div>
+
+              {/* Dica 3: Direitos Trabalhistas */}
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-govyellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white text-2xl">⚖️</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-govgray-800 mb-3">Seus Direitos Trabalhistas</h3>
+                  <p className="text-govgray-600 mb-6">
+                    Antes de aceitar qualquer vaga de trabalho, é fundamental conhecer e entender seus <strong>direitos trabalhistas</strong>. Use nossa Calculadora Trabalhista Gratuita para se informar e garantir um futuro seguro!
+                  </p>
+                  <a 
+                    href="/calculadora" 
+                    className="inline-block bg-govyellow-500 hover:bg-govyellow-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    ACESSAR CALCULADORA DE DIREITOS
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Texto adicional para SEO */}
+            <div className="text-center mt-12 bg-white rounded-xl p-8 shadow-lg">
+              <h3 className="text-2xl font-bold text-govgray-800 mb-4">
+                Por que escolher o Site do Trabalhador?
+              </h3>
+              <p className="text-lg text-govgray-700 max-w-4xl mx-auto leading-relaxed">
+                Somos a plataforma completa que conecta <strong>trabalhadores brasileiros</strong> às melhores <strong>oportunidades de emprego</strong> 
+                em todo o país. Além de vagas atualizadas diariamente, oferecemos ferramentas gratuitas como a 
+                <strong> Calculadora Trabalhista</strong>, dicas de carreira e orientações sobre direitos trabalhistas. 
+                Seu sucesso profissional é nossa missão!
+              </p>
+            </div>
+          </section>
+        )}
+
         {/* Espaço branco antes do footer */}
         <div className="bg-white py-12">
           {/* Espaço em branco intencional */}
         </div>
 
-        {/* Modal de Lead - Vagas Internas */}
+        {/* Modal de Lead Unificado */}
         <LeadModal 
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           jobData={selectedJob}
         />
-
-        {/* Modal de Lead - Vagas Externas */}
-        <ExternalJobModal
-          isOpen={isExternalModalOpen}
-          onClose={() => setIsExternalModalOpen(false)}
-          job={selectedExternalJob}
-          onSubmit={handleExternalJobSubmit}
-        />
       </div>
     )
-  }
+}
 
-export default VagasPage
+export default Vagas

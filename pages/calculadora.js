@@ -253,7 +253,7 @@ const CalculadoraPage = () => {
         <meta name="description" content="Calculadora gratuita de direitos trabalhistas. Calcule FGTS, rescisão, férias, 13º salário, horas extras e mais." />
         <meta name="keywords" content="calculadora direitos trabalhistas, FGTS, rescisão, férias, 13º salário, horas extras" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/site-do-trabalhador.ico" />
       </Head>
 
       <Header />
@@ -445,11 +445,39 @@ const CalculadoraPage = () => {
         )}
 
         {/* FAQ */}
-        <section className="py-20 bg-govgray-50">
+
+        {/* Seção Educativa */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-govblue-800 mb-6">
+                📚 Aprofunde Seus Conhecimentos
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {educationalTopics.map((topic) => (
+                <div key={topic.id} className="bg-govgray-50 rounded-xl p-6 border border-govgray-200 hover:border-govblue-300 hover:shadow-lg transition-all duration-300">
+                  <h3 className="text-xl font-bold text-govblue-800 mb-3">{topic.title}</h3>
+                  <p className="text-govgray-600 mb-4">{topic.description}</p>
+                  <button 
+                    onClick={() => openEducationalModal(topic.id)}
+                    className="text-govblue-600 hover:text-govblue-800 font-medium hover:underline transition-colors duration-200"
+                  >
+                    Saiba mais →
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="py-20 bg-govblue-600">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold text-govblue-800 mb-6 flex items-center justify-center">
+                <h3 className="text-3xl font-bold text-white mb-6 flex items-center justify-center">
                   <span className="mr-3">❓</span>
                   Dúvidas Frequentes
                 </h3>
@@ -459,11 +487,11 @@ const CalculadoraPage = () => {
                 {faqData.map((item) => (
                   <div 
                     key={item.id} 
-                    className="bg-white rounded-xl shadow-md border-2 border-govgray-200 hover:border-govblue-300 transition-all duration-300 overflow-hidden"
+                    className="bg-white rounded-xl shadow-md border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 overflow-hidden"
                   >
                     <button
                       onClick={() => toggleFaq(item.id)}
-                      className="w-full p-6 text-left flex items-center justify-between hover:bg-govblue-50 transition-all duration-300"
+                      className="w-full p-6 text-left flex items-center justify-between hover:bg-blue-50 transition-all duration-300"
                     >
                       <h4 className="text-lg font-bold text-govblue-800 pr-4">
                         {item.question}
@@ -495,40 +523,14 @@ const CalculadoraPage = () => {
           </div>
         </section>
 
-        {/* Seção Educativa */}
+        {/* Chamada Final para Contato */}
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-govblue-800 mb-6">
-                📚 Aprofunde Seus Conhecimentos
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {educationalTopics.map((topic) => (
-                <div key={topic.id} className="bg-govgray-50 rounded-xl p-6 border border-govgray-200 hover:border-govblue-300 hover:shadow-lg transition-all duration-300">
-                  <h3 className="text-xl font-bold text-govblue-800 mb-3">{topic.title}</h3>
-                  <p className="text-govgray-600 mb-4">{topic.description}</p>
-                  <button 
-                    onClick={() => openEducationalModal(topic.id)}
-                    className="text-govblue-600 hover:text-govblue-800 font-medium hover:underline transition-colors duration-200"
-                  >
-                    Saiba mais →
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Chamada Final para Contato */}
-        <section className="py-20 bg-govblue-600">
-          <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h3 className="text-3xl font-bold text-white mb-6">
+              <h3 className="text-3xl font-bold text-govblue-800 mb-6">
                 🤝 Ainda com Dúvidas?
               </h3>
-              <p className="text-xl text-blue-100 mb-8">
+              <p className="text-xl text-govgray-700 mb-8">
                 Nossa equipe está pronta para te auxiliar em qualquer questão sobre seus direitos trabalhistas.
               </p>
               

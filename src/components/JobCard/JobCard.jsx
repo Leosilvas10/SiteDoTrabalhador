@@ -99,7 +99,7 @@ const JobCard = ({ job, onApplyClick }) => {
         {/* Botão de candidatura - Estilo Gov.br */}
         <button
           onClick={onApplyClick}
-          className="w-full bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-4 rounded transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
+          className="w-full bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold py-3 px-4 rounded transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
         >
           <span>Quero me candidatar</span>
           <span>🔗</span>

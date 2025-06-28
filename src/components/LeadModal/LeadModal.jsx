@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 
 const LeadModal = ({ isOpen, onClose, jobData }) => {
   const [formData, setFormData] = useState({
-    // Dados pessoais
+    // Dados de contato
     name: '',
     whatsapp: '',
-    email: '',
     
-    // Perguntas sobre último emprego
+    // Perguntas obrigatórias
     lastCompany: '',
     workStatus: '',
     receivedRights: '',
@@ -17,8 +16,6 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
     // Consentimento
     lgpdConsent: false
   })
-
-  const [showContactFields, setShowContactFields] = useState(false)
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -56,8 +53,6 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
         ...prev,
         [name]: value
       }))
-      // Mostrar/ocultar campos de contato baseado na resposta
-      setShowContactFields(value === 'sim')
     } else {
       setFormData(prev => ({
         ...prev,
@@ -109,25 +104,19 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    // Validações básicas
-    if (!formData.lastCompany || !formData.workStatus || !formData.receivedRights || 
-        !formData.workProblems.length || !formData.wantConsultation) {
-      alert('❌ Por favor, responda todas as perguntas obrigatórias marcadas com *')
+    // Validações básicas - TODOS OS CAMPOS OBRIGATÓRIOS
+    if (!formData.name || !formData.whatsapp || !formData.lastCompany || 
+        !formData.workStatus || !formData.receivedRights || 
+        !formData.workProblems.length || !formData.wantConsultation || 
+        !formData.lgpdConsent) {
+      alert('❌ Por favor, preencha todos os campos obrigatórios marcados com *')
       return
     }
 
-    // Se quer consultoria, validar campos de contato
-    if (showContactFields) {
-      if (!formData.name || !formData.whatsapp || !formData.lgpdConsent) {
-        alert('❌ Para receber orientação gratuita, preencha seus dados de contato e aceite os termos.')
-        return
-      }
-
-      // Validação rigorosa do WhatsApp
-      if (!validateWhatsApp(formData.whatsapp)) {
-        alert('❌ Por favor, insira um número de WhatsApp válido com DDD.\n\nFormato esperado: (11) 99999-9999\n- DDD entre 11 e 99\n- Para celular, deve começar com 9 após o DDD')
-        return
-      }
+    // Validação rigorosa do WhatsApp
+    if (!validateWhatsApp(formData.whatsapp)) {
+      alert('❌ Por favor, insira um número de WhatsApp válido com DDD.\\n\\nFormato esperado: (11) 99999-9999\\n- DDD entre 11 e 99\\n- Para celular, deve começar com 9 após o DDD')
+      return
     }
 
     setIsSubmitting(true)
@@ -136,45 +125,25 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
       // Formatar WhatsApp - manter apenas números
       const whatsappFormatted = formData.whatsapp.replace(/\D/g, '')
       
-      console.log('📋 Dados do formulário antes do envio:', {
-        nome: formData.name,
-        email: formData.email,
-        whatsapp: formData.whatsapp,
-        whatsappFormatted: whatsappFormatted,
-        lastCompany: formData.lastCompany,
-        workStatus: formData.workStatus,
-        jobData: jobData
-      })
-
-      console.log('🔍 Verificando URLs disponíveis na vaga:', {
-        url: jobData?.url,
-        link: jobData?.link,
-        apply_url: jobData?.apply_url,
-        original_url: jobData?.original_url,
-        company: jobData?.company,
-        title: jobData?.title,
-        location: jobData?.location
-      })
-
       const leadSubmission = {
-        // Dados pessoais (só se quer consultoria)
-        nome: showContactFields ? (formData.name || '') : 'Não informado',
-        email: showContactFields ? (formData.email || '') : 'Não informado',
-        telefone: showContactFields ? whatsappFormatted : 'Não informado',
-        whatsapp: showContactFields ? whatsappFormatted : 'Não informado',
+        // Dados pessoais - SEMPRE OBRIGATÓRIOS
+        nome: formData.name,
+        telefone: whatsappFormatted,
+        whatsapp: whatsappFormatted,
+        email: 'Não informado', // Email removido do formulário
         
-        // Respostas da pesquisa (SEMPRE enviadas)
-        ultimaEmpresa: formData.lastCompany || 'Não informado',
-        statusTrabalho: formData.workStatus || 'Não informado',
-        recebeuDireitos: formData.receivedRights || 'Não informado',
-        problemasTrabalho: formData.workProblems.join(', ') || 'Nenhum informado',
-        desejaConsultoria: formData.wantConsultation || 'Não informado',
+        // Respostas da pesquisa - TODAS OBRIGATÓRIAS
+        ultimaEmpresa: formData.lastCompany,
+        statusTrabalho: formData.workStatus,
+        recebeuDireitos: formData.receivedRights,
+        problemasTrabalho: formData.workProblems.join(', '),
+        desejaConsultoria: formData.wantConsultation,
         
         // Campo experiência combinado (para compatibilidade)
-        experiencia: `Última empresa: ${formData.lastCompany || 'Não informado'}. Status: ${formData.workStatus || 'Não informado'}. Recebeu direitos: ${formData.receivedRights || 'Não informado'}. Problemas: ${formData.workProblems.join(', ') || 'Nenhum'}. Quer consultoria: ${formData.wantConsultation || 'Não informado'}`,
+        experiencia: `Última empresa: ${formData.lastCompany}. Status: ${formData.workStatus}. Recebeu direitos: ${formData.receivedRights}. Problemas: ${formData.workProblems.join(', ')}. Quer consultoria: ${formData.wantConsultation}`,
         
-        // Consentimento LGPD
-        lgpdConsent: showContactFields ? formData.lgpdConsent : true,
+        // Consentimento LGPD - SEMPRE OBRIGATÓRIO
+        lgpdConsent: formData.lgpdConsent,
         
         // Dados da vaga para redirecionamento  
         jobId: jobData?.id || jobData?.jobId,
@@ -188,11 +157,15 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
         paginaOrigem: window.location.href,
         userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
-        source: 'Site do Trabalhador - Formulário Completo',
-        tipoLead: showContactFields ? 'COM_CONSULTORIA' : 'SEM_CONSULTORIA'
+        dataChegada: new Date().toLocaleString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit', 
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        source: 'Site do Trabalhador - Formulário Único'
       }
-
-      console.log('📤 Enviando lead:', leadSubmission)
 
       const response = await fetch('/api/submit-lead', {
         method: 'POST',
@@ -203,31 +176,27 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
       })
 
       const result = await response.json()
-      console.log('📥 Resposta do lead:', result)
-      console.log('🔗 Dados de redirecionamento recebidos:', result.redirect)
 
       if (result.success) {
         // Mostrar mensagem de sucesso primeiro
         let successMessage = '✅ Candidatura enviada com sucesso!'
-        successMessage += '\n\n📋 Dados registrados:'
-        successMessage += `\n• Nome: ${formData.name}`
-        successMessage += `\n• WhatsApp: ${formData.whatsapp}`
+        successMessage += '\\n\\n📋 Dados registrados:'
+        successMessage += `\\n• Nome: ${formData.name}`
+        successMessage += `\\n• WhatsApp: ${formData.whatsapp}`
         
         // Verificar se há dados de redirecionamento
         if (result.redirect && result.redirect.url && result.redirect.url !== '#') {
           const { url, originalLocation, company, jobTitle } = result.redirect
           
-          console.log('✅ Redirecionamento válido encontrado:', url)
-          
           if (originalLocation && originalLocation !== 'Brasil') {
-            successMessage += `\n\n📍 Localização da vaga: ${originalLocation}`
+            successMessage += `\\n\\n📍 Localização da vaga: ${originalLocation}`
           }
           
           if (company) {
-            successMessage += `\n🏢 Empresa: ${company}`
+            successMessage += `\\n🏢 Empresa: ${company}`
           }
           
-          successMessage += '\n\n🔗 Redirecionando para a vaga original...'
+          successMessage += '\\n\\n🔗 Redirecionando para a vaga original...'
           
           alert(successMessage)
           
@@ -236,29 +205,26 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
           
           // Redirecionamento único para a vaga original
           setTimeout(() => {
-            console.log('🔗 Executando redirecionamento para:', url)
             window.open(url, '_blank')
           }, 1000)
           
         } else {
-          console.log('⚠️ Redirecionamento não disponível ou inválido:', result.redirect)
           // Tentar gerar URL manual se possível
           if (jobData?.title && jobData?.location) {
-            const encodedTitle = encodeURIComponent(jobData.title.replace(/[^\w\s]/gi, '').replace(/\s+/g, '+'))
-            const encodedLocation = encodeURIComponent(jobData.location.split(',')[0].replace(/\s+/g, '+'))
+            const encodedTitle = encodeURIComponent(jobData.title.replace(/[^\\w\\s]/gi, '').replace(/\\s+/g, '+'))
+            const encodedLocation = encodeURIComponent(jobData.location.split(',')[0].replace(/\\s+/g, '+'))
             const fallbackUrl = `https://www.indeed.com.br/jobs?q=${encodedTitle}&l=${encodedLocation}`
             
-            successMessage += '\n\n🔗 Redirecionando para buscar vagas similares...'
+            successMessage += '\\n\\n🔗 Redirecionando para buscar vagas similares...'
             alert(successMessage)
             onClose()
             
             setTimeout(() => {
-              console.log('🔗 Redirecionamento de fallback para:', fallbackUrl)
               window.open(fallbackUrl, '_blank')
             }, 1000)
           } else {
             // Sem redirecionamento específico
-            successMessage += '\n\nNossa equipe entrará em contato em breve!'
+            successMessage += '\\n\\nNossa equipe entrará em contato em breve!'
             alert(successMessage)
             onClose()
           }
@@ -284,10 +250,10 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="text-xl font-bold text-white mb-2">
-                PESQUISA RÁPIDA: Seu Último Emprego e Seus Direitos!
+                PESQUISA RÁPIDA SOBRE SEU ÚLTIMO EMPREGO
               </h2>
-              <p className="text-govgray-200 text-sm">
-                Leve menos de 1 minuto! Suas respostas nos ajudarão a entender melhor o mercado de trabalho e, quem sabe, te ajudar a descobrir se você tem algum valor a receber do seu último emprego. É rápido e totalmente confidencial.
+              <p className="text-govgray-300 text-sm">
+                Leva menos de 1 minuto! Suas respostas podem te ajudar a descobrir se a empresa te deve algum valor.
               </p>
               <p className="text-govgreen-400 text-sm mt-2">
                 <strong>{jobData?.title || 'Vaga de Emprego'}</strong> - {jobData?.company?.name || jobData?.company || 'Empresa não informada'}
@@ -330,7 +296,7 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
                 'Comecei sem, depois registraram',
                 'Não tenho certeza'
               ].map((option) => (
-                <label key={option} className="flex items-center text-slate-300 cursor-pointer hover:text-white">
+                <label key={option} className="flex items-center text-govgray-300 cursor-pointer hover:text-white">
                   <input
                     type="radio"
                     name="workStatus"
@@ -353,12 +319,12 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
             </label>
             <div className="space-y-2">
               {[
-                'Sim, recebi tudo ok',
+                'Sim',
                 'Não recebi nada',
                 'Recebi só uma parte',
                 'Não sei dizer'
               ].map((option) => (
-                <label key={option} className="flex items-center text-slate-300 cursor-pointer hover:text-white">
+                <label key={option} className="flex items-center text-govgray-300 cursor-pointer hover:text-white">
                   <input
                     type="radio"
                     name="receivedRights"
@@ -387,7 +353,7 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
                 { value: 'acumulo-funcoes', label: 'Acúmulo de funções sem aumento salarial' },
                 { value: 'nenhuma', label: 'Nenhuma dessas' }
               ].map((option) => (
-                <label key={option.value} className="flex items-center text-slate-300 cursor-pointer hover:text-white">
+                <label key={option.value} className="flex items-center text-govgray-300 cursor-pointer hover:text-white">
                   <input
                     type="checkbox"
                     name="workProblems"
@@ -405,14 +371,14 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
           {/* Pergunta 5 */}
           <div className="bg-slate-700 p-4 rounded-lg">
             <label className="block text-white font-medium mb-3">
-              5. Podemos encaminhar suas respostas para um parceiro especializado em consultas trabalhistas gratuitas, que pode te orientar sobre seus direitos e verificar se você tem algo a receber? *
+              5. Podemos encaminhar suas respostas para um parceiro especializado em consultas trabalhistas gratuitas, que pode te orientar sobre seus direitos? *
             </label>
             <div className="space-y-2">
               {[
-                { value: 'sim', label: 'Sim, quero saber se tenho algo a receber e receber orientação gratuita.' },
-                { value: 'nao', label: 'Não, obrigado(a). Quero apenas me candidatar à vaga e não desejo contato para fins de orientação jurídica.' }
+                { value: 'sim', label: 'Sim, quero saber se tenho algo a receber' },
+                { value: 'nao', label: 'Não, obrigado(a)' }
               ].map((option) => (
-                <label key={option.value} className="flex items-center text-slate-300 cursor-pointer hover:text-white">
+                <label key={option.value} className="flex items-center text-govgray-300 cursor-pointer hover:text-white">
                   <input
                     type="radio"
                     name="wantConsultation"
@@ -428,88 +394,70 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
             </div>
           </div>
 
-          {/* Seção de Contato - Só aparece se quer consultoria */}
-          {showContactFields && (
-            <>
-              <div className="bg-blue-900 bg-opacity-30 p-4 rounded-lg border border-blue-500">
-                <h3 className="text-white font-semibold mb-4">
-                  Ótimo! Para que nosso parceiro possa entrar em contato com você, por favor, informe seus dados: *
-                </h3>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <div>
-                    <label className="block text-white font-medium mb-2">
-                      WhatsApp para contato: * <span className="text-govgray-300 text-xs">(com DDD)</span>
-                    </label>
-                    <input
-                      type="tel"
-                      name="whatsapp"
-                      value={formData.whatsapp}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 bg-slate-600 text-white rounded-lg border border-slate-500 focus:border-blue-500 focus:outline-none"
-                      placeholder="Seu WhatsApp com DDD (Ex: 11 99999-9999)"
-                      maxLength="15"
-                      autoComplete="tel"
-                      required
-                    />
-                    <p className="text-govgray-400 text-xs mt-1">
-                      Digite apenas números, a formatação será aplicada automaticamente
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-white font-medium mb-2">
-                      Nome Completo: *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 bg-slate-600 text-white rounded-lg border border-slate-500 focus:border-blue-500 focus:outline-none"
-                      placeholder="Seu Nome Completo"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-white font-medium mb-2">
-                      E-mail: (opcional)
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 bg-slate-600 text-white rounded-lg border border-slate-500 focus:border-blue-500 focus:outline-none"
-                      placeholder="Seu melhor e-mail (opcional)"
-                    />
-                  </div>
-                </div>
+          {/* Pergunta 6 - Dados de Contato */}
+          <div className="bg-blue-900 bg-opacity-30 p-4 rounded-lg border border-blue-500">
+            <h3 className="text-white font-semibold mb-4">
+              6. Para isso, informe seu nome e WhatsApp para contato: *
+            </h3>
+            
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-white font-medium mb-2">
+                  Nome Completo: *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 bg-slate-600 text-white rounded-lg border border-slate-500 focus:border-blue-500 focus:outline-none"
+                  placeholder="Seu nome completo"
+                  required
+                />
               </div>
+              
+              <div>
+                <label className="block text-white font-medium mb-2">
+                  WhatsApp: * <span className="text-govgray-300 text-xs">(com DDD)</span>
+                </label>
+                <input
+                  type="tel"
+                  name="whatsapp"
+                  value={formData.whatsapp}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 bg-slate-600 text-white rounded-lg border border-slate-500 focus:border-blue-500 focus:outline-none"
+                  placeholder="(11) 99999-9999"
+                  maxLength="15"
+                  autoComplete="tel"
+                  required
+                />
+                <p className="text-govgray-300 text-xs mt-1">
+                  Digite apenas números, a formatação será aplicada automaticamente
+                </p>
+              </div>
+            </div>
+          </div>
 
-              {/* Consentimento LGPD */}
-              <div className="bg-blue-900 bg-opacity-30 p-4 rounded-lg border border-blue-500">
-                <div className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    name="lgpdConsent"
-                    checked={formData.lgpdConsent}
-                    onChange={handleInputChange}
-                    className="mt-1"
-                    required
-                  />
-                  <label className="text-slate-300 text-sm">
-                    <strong className="text-white">Declaro que li e concordo com a</strong>{' '}
-                    <button type="button" className="text-blue-400 hover:underline">
-                      Política de Privacidade
-                    </button>{' '}
-                    e com o tratamento dos meus dados para fins de contato e orientação jurídica. *
-                  </label>
-                </div>
-              </div>
-            </>
-          )}
+          {/* Consentimento LGPD */}
+          <div className="bg-blue-900 bg-opacity-30 p-4 rounded-lg border border-blue-500">
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                name="lgpdConsent"
+                checked={formData.lgpdConsent}
+                onChange={handleInputChange}
+                className="mt-1"
+                required
+              />
+              <label className="text-govgray-300 text-sm">
+                <strong className="text-white">Aceito o tratamento dos meus dados</strong> conforme a{' '}
+                <button type="button" className="text-blue-400 hover:underline">
+                  Política de Privacidade
+                </button>{' '}
+                e autorizo o contato para oportunidades de trabalho e consultoria jurídica trabalhista gratuita. *
+              </label>
+            </div>
+          </div>
 
           {/* Botões */}
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
@@ -529,7 +477,7 @@ const LeadModal = ({ isOpen, onClose, jobData }) => {
             </button>
           </div>
 
-          <div className="text-center text-slate-400 text-xs mt-4">
+          <div className="text-center text-govgray-300 text-xs mt-4">
             🔒 Seus dados estão seguros e serão usados apenas para esta oportunidade
           </div>
         </form>

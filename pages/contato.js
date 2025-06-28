@@ -81,7 +81,7 @@ const Contato = () => {
         <title>Contato - Site do Trabalhador</title>
         <meta name="description" content="Entre em contato com o Site do Trabalhador. Estamos aqui para ajudar com suas dúvidas sobre direitos trabalhistas." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/site-do-trabalhador.ico" />
       </Head>
 
       <Header />

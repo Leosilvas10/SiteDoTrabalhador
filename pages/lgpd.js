@@ -9,7 +9,7 @@ const LGPD = () => {
         <title>LGPD - Proteção de Dados - Site do Trabalhador</title>
         <meta name="description" content="Informações sobre LGPD e proteção de dados pessoais no Site do Trabalhador. Seus direitos e nossa responsabilidade." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/site-do-trabalhador.ico" />
       </Head>
 
       <Header />

@@ -9,7 +9,7 @@ const PoliticaPrivacidade = () => {
         <title>Política de Privacidade - Site do Trabalhador</title>
         <meta name="description" content="Política de Privacidade do Site do Trabalhador. Saiba como protegemos e utilizamos seus dados pessoais." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/site-do-trabalhador.ico" />
       </Head>
 
       <Header />

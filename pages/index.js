@@ -15,7 +15,7 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [lastUpdate, setLastUpdate] = useState(null)
   const [nextUpdate, setNextUpdate] = useState(null)
-  const [updateCountdown, setUpdateCountdown] = useState(30 * 60) // 30 minutos em segundos
+  const [updateCountdown, setUpdateCountdown] = useState(60 * 60) // 60 minutos em segundos
   const [totalSystemJobs, setTotalSystemJobs] = useState(0) // Total de vagas no sistema
   
   // Estado do formulário de contato
@@ -112,10 +112,10 @@ const HomePage = () => {
         setError(null)
       }
 
-      console.log('📡 Buscando vagas da API HOME...')
+      console.log('📡 Buscando vagas da API HOME (fonte unificada)...')
       
       const timestamp = Date.now()
-      const response = await fetch(`/api/jobs?t=${timestamp}`, {
+      const response = await fetch(`/api/all-jobs-combined?t=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
@@ -139,8 +139,8 @@ const HomePage = () => {
         throw new Error(data.message || 'Erro na API')
       }
 
-      const jobsData = safeArray(data.data || data.jobs)
-      const totalAvailable = data.meta?.totalAvailable || jobsData.length
+      const jobsData = safeArray(data.jobs || data.data || [])
+      const totalAvailable = data.meta?.totalJobs || data.meta?.totalAvailable || jobsData.length
       
       console.log('📊 Processando vagas HOME (sem cidade):', jobsData.length)
       console.log('📈 Total no sistema:', totalAvailable)
@@ -186,8 +186,8 @@ const HomePage = () => {
         setNextUpdate(new Date(data.meta.nextUpdate))
       }
 
-      // Resetar countdown para 30 minutos
-      setUpdateCountdown(30 * 60)
+      // Resetar countdown para 60 minutos
+      setUpdateCountdown(60 * 60)
 
     } catch (error) {
       console.error("❌ Erro ao buscar vagas da API:", error)
@@ -230,8 +230,8 @@ const HomePage = () => {
 
   // Effect para busca inicial e configuração de intervalos
   useEffect(() => {
-    // 🚨 LIMPAR CACHE SEMPRE - Para forçar vagas novas e corretas
-    console.log('🧹 Limpando cache para buscar vagas corrigidas...')
+    // 🚨 LIMPAR CACHE SEMPRE - Para forçar vagas novas e corretas após mudança de API
+    console.log('🧹 Limpando cache para buscar vagas da fonte unificada...')
     localStorage.removeItem('jobsCache')
     localStorage.removeItem('jobsCacheTime')
     localStorage.removeItem('totalSystemJobs')
@@ -239,14 +239,14 @@ const HomePage = () => {
     // Buscar vagas reais em vez de usar vagas mockadas
     fetchJobs()
     
-    // Configurar atualização automática a cada 30 minutos
+    // Configurar atualização automática a cada 60 minutos
     const interval = setInterval(() => {
       fetchJobs(false) // Não mostrar loading no auto-refresh
-    }, 30 * 60 * 1000) // 30 minutos
+    }, 60 * 60 * 1000) // 60 minutos
     
     // Configurar countdown
     const countdownInterval = setInterval(() => {
-      setUpdateCountdown(prev => prev > 0 ? prev - 1 : 30 * 60)
+      setUpdateCountdown(prev => prev > 0 ? prev - 1 : 60 * 60)
     }, 1000)
     
     return () => {
@@ -334,7 +334,7 @@ const HomePage = () => {
         <meta name="description" content="Vagas de emprego em todo o Brasil: doméstica, porteiro, limpeza, cuidador, motorista e mais. Mais de 50 vagas atualizadas constantemente de fontes como Indeed, Vagas.com e mercado brasileiro." />
         <meta name="keywords" content="vagas emprego brasil real, doméstica, porteiro, auxiliar limpeza, cuidador, trabalho operacional, indeed brasil, vagas.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/lodo.png" />
+        <link rel="icon" href="/site-do-trabalhador.ico" />
       </Head>
 
       {/* Seção Início - Hero */}
@@ -369,7 +369,7 @@ const HomePage = () => {
                     <div className="text-sm text-govgray-600 space-y-1 font-medium">
                       <p>Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}</p>
                       <p>Próxima atualização em: {formatCountdown(updateCountdown)}</p>
-                      <p>🔄 Atualização automática a cada 30 minutos</p>
+                      <p>🔄 Atualização automática a cada 1 hora</p>
                     </div>
                   )}
                 </>
@@ -389,11 +389,10 @@ const HomePage = () => {
               <div className="bg-gradient-to-br from-green-600 to-green-800 p-4 rounded-xl text-center">
                 <div className="text-2xl font-bold text-white">100%</div>
                 <div className="text-green-200 text-sm">Verificadas</div>
-              </div>
-              <div className="bg-gradient-to-br from-purple-600 to-purple-800 p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-white">30min</div>
-                <div className="text-purple-200 text-sm">Atualização</div>
-              </div>
+              </div>            <div className="bg-gradient-to-br from-purple-600 to-purple-800 p-4 rounded-xl text-center">
+              <div className="text-2xl font-bold text-white">1h</div>
+              <div className="text-purple-200 text-sm">Atualização</div>
+            </div>
               <div className="bg-gradient-to-br from-yellow-600 to-yellow-800 p-4 rounded-xl text-center">
                 <div className="text-2xl font-bold text-white">🇧🇷</div>
                 <div className="text-yellow-200 text-sm">Só Brasil</div>
@@ -460,19 +459,19 @@ const HomePage = () => {
                       Mostrando apenas 6 vagas em destaque
                     </p>
                     <p className="text-blue-400 font-semibold">
-                      54+ vagas adicionais disponíveis
+                      {Math.max(0, totalSystemJobs - 6)}+ vagas adicionais disponíveis
                     </p>
                   </div>
                   <button
                     onClick={() => router.push('/vagas')}
-                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold rounded-xl hover:from-green-700 hover:to-green-800 transform hover:scale-105 transition-all duration-300 shadow-lg"
                   >
                     <span className="mr-2">👀</span>
                     Ver Todas as Vagas
                     <span className="ml-2">→</span>
                   </button>
                   <p className="text-sm text-slate-400 mt-3">
-                    60 vagas atualizadas a cada 30 minutos - Filtros, busca por cidade e mais
+                    60 vagas atualizadas a cada 1 hora - Filtros, busca por cidade e mais
                   </p>
                 </div>
               )}
@@ -503,7 +502,7 @@ const HomePage = () => {
                 </button>
               </div>
               <div className="mt-8 text-sm text-slate-500">
-                <p>💡 Dica: Nossas vagas são atualizadas a cada 20 minutos</p>
+                <p>💡 Dica: Nossas vagas são atualizadas a cada 1 hora</p>
                 <p>📱 Enquanto isso, conheça seus direitos trabalhistas abaixo</p>
               </div>
             </div>
@@ -517,6 +516,59 @@ const HomePage = () => {
               </p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Seção para Empresas - Chamada para Ação */}
+      <section className="bg-gradient-to-r from-govgreen-600 to-govblue-600 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center text-white">
+            <div className="mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                🏢 Sua Empresa Precisa de Talentos?
+              </h2>
+              <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed">
+                Conecte-se diretamente com milhares de profissionais qualificados que estão procurando uma oportunidade! 
+                Domésticas, porteiros, cuidadores, auxiliares de limpeza, motoristas e muito mais.
+              </p>
+              
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/20">
+                <p className="text-lg mb-6 font-medium">
+                  <strong>Por que escolher o Site do Trabalhador para encontrar seus funcionários?</strong>
+                </p>
+                <div className="grid md:grid-cols-2 gap-6 text-left">
+                  <div>
+                    <p className="mb-3">✅ <strong>Candidatos Verificados:</strong> Profissionais com experiência real</p>
+                    <p className="mb-3">✅ <strong>Publicação Gratuita:</strong> Anuncie sua vaga sem custos</p>
+                  </div>
+                  <div>
+                    <p className="mb-3">✅ <strong>Resultados Rápidos:</strong> Receba candidatos em 24h</p>
+                    <p className="mb-3">✅ <strong>Suporte Dedicado:</strong> Nossa equipe te ajuda a encontrar o profissional ideal</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <Link href="/empresas">
+                <button className="group bg-white text-govblue-600 hover:bg-govgray-100 font-bold text-xl px-16 py-5 rounded-full transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105">
+                  <span className="flex items-center space-x-4">
+                    <span>🚀</span>
+                    <span>PUBLIQUE SUA VAGA GRATUITAMENTE</span>
+                    <span className="group-hover:translate-x-2 transition-transform">→</span>
+                  </span>
+                </button>
+              </Link>
+              
+              <p className="text-lg text-white/90 font-medium">
+                Junte-se a centenas de empresas que já encontraram seus funcionários conosco!
+              </p>
+              
+              <p className="text-sm text-white/80 italic">
+                ✅ Cadastro Rápido • ✅ Sem Taxas Ocultas • ✅ Candidatos Qualificados • ✅ Atendimento Personalizado
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

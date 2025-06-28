@@ -26,6 +26,45 @@ const EmpresasPage = () => {
 
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [openFaqItem, setOpenFaqItem] = useState(null)
+
+  const toggleFaq = (id) => {
+    setOpenFaqItem(openFaqItem === id ? null : id)
+  }
+
+  // Dados do FAQ
+  const faqData = [
+    {
+      id: 1,
+      question: "Como faço para cadastrar uma vaga?",
+      answer: "Basta preencher o formulário abaixo com os detalhes da oportunidade e seguir as instruções. É um processo rápido e intuitivo que leva menos de 5 minutos."
+    },
+    {
+      id: 2,
+      question: "É gratuito anunciar vagas?",
+      answer: "Sim, o cadastro e a publicação de vagas são 100% gratuitos. Nosso objetivo é conectar empregadores e candidatos sem custo adicional."
+    },
+    {
+      id: 3,
+      question: "Como recebo os currículos dos candidatos?",
+      answer: "As candidaturas são enviadas diretamente para o seu e-mail cadastrado. Você será notificado a cada nova candidatura recebida."
+    },
+    {
+      id: 4,
+      question: "Posso filtrar os candidatos?",
+      answer: "Sim, você pode configurar requisitos específicos na sua vaga para receber apenas candidatos que atendam aos seus critérios de experiência, localização, etc."
+    },
+    {
+      id: 5,
+      question: "Vocês fazem a triagem dos candidatos?",
+      answer: "Nossa plataforma atrai profissionais qualificados e oferecemos ferramentas para você verificar as informações dos candidatos, mas recomendamos que você sempre faça sua própria avaliação durante o processo seletivo."
+    },
+    {
+      id: 6,
+      question: "Como entro em contato com os candidatos?",
+      answer: "Após analisar os perfis, você pode entrar em contato diretamente com os candidatos selecionados através das informações de contato fornecidas por eles (e-mail ou telefone)."
+    }
+  ]
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -113,8 +152,10 @@ const EmpresasPage = () => {
   return (
     <>
       <Head>
-        <title>Para Empresas - Site do Trabalhador</title>
-        <meta name="description" content="Publique suas vagas no Site do Trabalhador e encontre os melhores candidatos" />
+        <title>Encontre os Melhores Talentos para Sua Casa ou Empresa. Contrate com Agilidade e Segurança! | Site do Trabalhador</title>
+        <meta name="description" content="Simplifique sua contratação e conecte-se a profissionais qualificados em todo o Brasil. Doméstica, porteiro, limpeza, cuidador - encontre o profissional ideal!" />
+        <meta name="keywords" content="contratar doméstica, vagas porteiro, recrutamento simples, contratação segura, profissionais qualificados, empregada doméstica, porteiro condomínio" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <div className="min-h-screen bg-govblue-50">
@@ -123,12 +164,26 @@ const EmpresasPage = () => {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-govblue-800 mb-6">
-              🏢 Área para Empresas
+              Encontre os Melhores Talentos para Sua Casa ou Empresa. Contrate com Agilidade e Segurança!
             </h1>
-            <p className="text-xl text-govgray-700 max-w-3xl mx-auto mb-8">
-              Publique suas vagas no maior portal de empregos do Brasil e encontre 
-              os melhores profissionais para sua empresa.
-            </p>
+            <h2 className="text-2xl md:text-3xl font-semibold text-govgray-700 mb-6">
+              Simplifique sua contratação e conecte-se a profissionais qualificados em todo o Brasil.
+            </h2>
+            
+            <div className="max-w-4xl mx-auto mb-8 space-y-4">
+              <p className="text-lg text-govgray-700 leading-relaxed">
+                Sabemos como pode ser desafiador encontrar o profissional certo para as suas necessidades. 
+                Seja você uma família buscando uma <strong>doméstica de confiança</strong>, uma <strong>cuidadora dedicada</strong>, 
+                ou uma empresa precisando de um <strong>porteiro atencioso</strong> ou uma <strong>equipe de limpeza eficiente</strong>, 
+                nosso portal foi feito para você.
+              </p>
+              
+              <p className="text-lg text-govgray-700 leading-relaxed">
+                Chega de processos burocráticos e demorados! Oferecemos uma plataforma intuitiva e uma rede de 
+                <strong> talentos verificados</strong>, prontos para a sua vaga. <strong>Economize tempo</strong>, 
+                <strong> minimize riscos</strong> e faça a escolha certa.
+              </p>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <div className="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-govblue-600-light">
@@ -151,6 +206,180 @@ const EmpresasPage = () => {
             </div>
           </div>
 
+          {/* Seção de Benefícios */}
+          <div className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-govblue-800 mb-4">
+                Vantagens de Anunciar Suas Vagas Conosco
+              </h2>
+              <p className="text-lg text-govgray-700 max-w-3xl mx-auto">
+                Descubra por que empresas e famílias de todo o Brasil escolhem nossa plataforma
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-govblue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">⚡</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-3 text-center">Agilidade na Contratação</h3>
+                <p className="text-govgray-700 text-center">
+                  Publique sua vaga em poucos minutos e comece a receber currículos de candidatos interessados rapidamente.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-govgreen-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">👥</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-3 text-center">Profissionais Qualificados</h3>
+                <p className="text-govgray-700 text-center">
+                  Nossa base de dados conta com um grande número de candidatos com experiência e referências, prontos para atender suas expectativas.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-govyellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">🇧🇷</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-3 text-center">Cobertura Nacional</h3>
+                <p className="text-govgray-700 text-center">
+                  Alcance talentos em todo o Brasil, ou foque em sua região para encontrar quem está perto de você.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">📱</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-3 text-center">Facilidade de Uso</h3>
+                <p className="text-govgray-700 text-center">
+                  Nosso sistema é intuitivo e fácil de usar, tanto para publicar quanto para gerenciar suas vagas e candidatos.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">🔒</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-3 text-center">Segurança e Confiança</h3>
+                <p className="text-govgray-700 text-center">
+                  Priorizamos a segurança dos seus dados e dos candidatos. Informações claras e transparentes em todo o processo.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-govgray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">🤝</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-3 text-center">Suporte Dedicado</h3>
+                <p className="text-govgray-700 text-center">
+                  Conte com nossa equipe para tirar dúvidas e ajudar no que precisar durante sua busca.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Divisor Moderno 1 */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative flex items-center justify-center py-8">
+              <div className="flex-grow border-t border-govgray-200"></div>
+              <div className="flex-shrink-0 px-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-govblue-500 to-govgreen-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">⚙️</span>
+                </div>
+              </div>
+              <div className="flex-grow border-t border-govgray-200"></div>
+            </div>
+          </div>
+
+          {/* Seção Como Funciona */}
+          <div className="mb-16 bg-govgray-50 rounded-xl p-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-govblue-800 mb-4">
+                Contratar o Profissional Ideal é Fácil Assim
+              </h2>
+              <p className="text-lg text-govgray-700">
+                Nosso processo simplificado em apenas 3 passos
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-govblue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-white text-3xl font-bold">1</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-4">Cadastre sua Vaga</h3>
+                <p className="text-govgray-700">
+                  Preencha um formulário simples com os detalhes da vaga, requisitos e benefícios. <strong>Leva menos de 5 minutos!</strong>
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-20 h-20 bg-govgreen-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-white text-3xl font-bold">2</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-4">Receba Candidaturas</h3>
+                <p className="text-govgray-700">
+                  Candidatos interessados e com o perfil ideal se aplicarão à sua vaga. <strong>Acesse os currículos e perfis diretamente em seu painel.</strong>
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-20 h-20 bg-govyellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-white text-3xl font-bold">3</span>
+                </div>
+                <h3 className="text-xl font-bold text-govblue-800 mb-4">Contrate com Sucesso</h3>
+                <p className="text-govgray-700">
+                  Entre em contato com os candidatos que mais se destacam, realize entrevistas e <strong>faça a sua melhor escolha!</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Divisor Moderno 2 */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative flex items-center justify-center py-8">
+              <div className="flex-grow border-t border-govgray-200"></div>
+              <div className="flex-shrink-0 px-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-govgreen-500 to-govblue-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">🚀</span>
+                </div>
+              </div>
+              <div className="flex-grow border-t border-govgray-200"></div>
+            </div>
+          </div>
+
+          {/* CTA Principal */}
+          <div className="text-center mb-16 bg-gradient-to-r from-govblue-600 to-govblue-700 rounded-xl p-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Pronto para Encontrar seu Próximo Colaborador?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+              Dê o primeiro passo para uma contratação eficiente e sem preocupações. 
+              Clique no botão abaixo e comece agora mesmo a publicar suas vagas.
+            </p>
+            <a 
+              href="#formulario" 
+              className="inline-block bg-govgreen-600 hover:bg-govgreen-700 text-white font-bold text-xl py-4 px-8 rounded-lg transition-colors shadow-lg"
+            >
+              🚀 PUBLIQUE SUA VAGA AGORA!
+            </a>
+          </div>
+
+          {/* Divisor Moderno 3 */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative flex items-center justify-center py-8">
+              <div className="flex-grow border-t border-govgray-200"></div>
+              <div className="flex-shrink-0 px-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-govyellow-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">📝</span>
+                </div>
+              </div>
+              <div className="flex-grow border-t border-govgray-200"></div>
+            </div>
+          </div>
+
           {success ? (
             /* Mensagem de Sucesso */
             <div className="max-w-2xl mx-auto bg-govgreen-100 border-2 border-govgreen-600 rounded-lg p-8 text-center shadow-xl">
@@ -169,7 +398,7 @@ const EmpresasPage = () => {
             </div>
           ) : (
             /* Formulário */
-            <div className="max-w-4xl mx-auto bg-white rounded-xl p-8 shadow-xl border border-govblue-600-light">
+            <div id="formulario" className="max-w-4xl mx-auto bg-white rounded-xl p-8 shadow-xl border border-govblue-600-light">
               <h2 className="text-2xl font-bold text-govblue-800 mb-8 text-center">
                 📝 Solicitar Publicação de Vaga
               </h2>
@@ -463,6 +692,98 @@ const EmpresasPage = () => {
               </form>
             </div>
           )}
+
+          {/* Divisor Moderno 4 */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative flex items-center justify-center py-8">
+              <div className="flex-grow border-t border-govgray-200"></div>
+              <div className="flex-shrink-0 px-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-govblue-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">❓</span>
+                </div>
+              </div>
+              <div className="flex-grow border-t border-govgray-200"></div>
+            </div>
+          </div>
+
+          {/* FAQ */}
+          <div className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-govblue-800 mb-4">
+                Perguntas Frequentes de Empresas e Famílias
+              </h2>
+              <p className="text-lg text-govgray-700">
+                Tire suas dúvidas mais comuns sobre nosso serviço
+              </p>
+            </div>
+            
+            <div className="max-w-4xl mx-auto space-y-4">
+              {faqData.map((item) => (
+                <div 
+                  key={item.id} 
+                  className="bg-white rounded-xl shadow-lg border-2 border-govgray-200 hover:border-govblue-300 transition-all duration-300 overflow-hidden"
+                >
+                  <button
+                    onClick={() => toggleFaq(item.id)}
+                    className="w-full p-6 text-left flex items-center justify-between hover:bg-govblue-50 transition-all duration-300"
+                  >
+                    <h3 className="text-lg font-bold text-govblue-800 pr-4">
+                      {item.question}
+                    </h3>
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-full bg-govblue-600 flex items-center justify-center transition-transform duration-300 ${
+                      openFaqItem === item.id ? 'rotate-180' : ''
+                    }`}>
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </button>
+                  
+                  <div className={`transition-all duration-300 ease-in-out ${
+                    openFaqItem === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  } overflow-hidden`}>
+                    <div className="px-6 pb-6 pt-0">
+                      <div className="border-t border-govgray-200 pt-4">
+                        <p className="text-govgray-700 leading-relaxed">
+                          {item.answer}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divisor Moderno 5 */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative flex items-center justify-center py-8">
+              <div className="flex-grow border-t border-govgray-200"></div>
+              <div className="flex-shrink-0 px-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-govgreen-500 to-govyellow-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">💬</span>
+                </div>
+              </div>
+              <div className="flex-grow border-t border-govgray-200"></div>
+            </div>
+          </div>
+
+          {/* Seção de Contato Direto */}
+          <div className="text-center bg-govgray-50 rounded-xl p-8">
+            <h3 className="text-2xl font-bold text-govblue-800 mb-4">
+              Ainda com Dúvidas ou Precisa de Ajuda Personalizada?
+            </h3>
+            <p className="text-lg text-govgray-700 mb-6 max-w-3xl mx-auto">
+              Nossa equipe está à disposição para te auxiliar em todas as etapas da sua busca por talentos. 
+              Fale conosco!
+            </p>
+            <a 
+              href="/contato" 
+              className="inline-block bg-govblue-600 hover:bg-govblue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-lg"
+            >
+              💬 FALE COM NOSSA EQUIPE COMERCIAL
+            </a>
+          </div>
         </div>
       </div>
     </>

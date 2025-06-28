@@ -36,13 +36,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Email opcional, mas se fornecido deve ser válido
-    if (leadData.email && leadData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadData.email)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Email inválido' 
-      });
-    }
+    // Email não é mais obrigatório no formulário
 
     // Experiência é opcional no formulário simplificado
     if (!leadData.experiencia || leadData.experiencia.length < 10) {
