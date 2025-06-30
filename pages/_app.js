@@ -1,4 +1,3 @@
-
 import '../pages/style.css'
 import Head from 'next/head'
 import Header from '../src/components/Header/Header'
@@ -11,7 +10,7 @@ function AppContent({ Component, pageProps }) {
   const { siteConfig } = useSiteContext()
   const router = useRouter()
   
-  // Páginas que não devem ter Header/Footer padrão (apenas admin)
+  // Páginas que não devem ter Header/Footer padrão (admin e landing pages)
   const excludeLayout = [
     '/admin',
     '/admin/login',
@@ -21,7 +20,9 @@ function AppContent({ Component, pageProps }) {
     '/admin/empresas', 
     '/admin/usuarios',
     '/admin/conteudo',
-    '/admin/configuracoes'
+    '/admin/configuracoes',
+    '/bancojota',
+    '/jotasolucoes'
   ]
   
   const shouldExcludeLayout = excludeLayout.some(path => 
