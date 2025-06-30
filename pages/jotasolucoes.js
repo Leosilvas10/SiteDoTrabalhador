@@ -107,6 +107,34 @@ export default function BancoJota({ pageData, error }) {
                 </div>
               </div>
               
+              {/* Navegação */}
+              <nav className="hidden md:flex items-center space-x-8">
+                <a
+                  href="#hero"
+                  className="text-indigo-700 hover:text-indigo-900 font-medium transition-colors duration-200"
+                >
+                  Início
+                </a>
+                <a
+                  href="#produtos"
+                  className="text-indigo-700 hover:text-indigo-900 font-medium transition-colors duration-200"
+                >
+                  Produtos
+                </a>
+                <a
+                  href="#bonus"
+                  className="text-indigo-700 hover:text-indigo-900 font-medium transition-colors duration-200"
+                >
+                  Bônus
+                </a>
+                <a
+                  href="#contato"
+                  className="text-indigo-700 hover:text-indigo-900 font-medium transition-colors duration-200"
+                >
+                  Contato
+                </a>
+              </nav>
+              
               <button
                 onClick={() => setShowForm(true)}
                 className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
@@ -571,7 +599,7 @@ export default function BancoJota({ pageData, error }) {
         )}
 
         {/* Footer */}
-        <footer className="bg-indigo-900 text-white py-16">
+        <footer id="contato" className="bg-indigo-900 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="col-span-1 md:col-span-2">
@@ -588,48 +616,123 @@ export default function BancoJota({ pageData, error }) {
                   O banco digital que faz seu dinheiro render mais e sua vida ficar mais simples.
                 </p>
                 <div className="flex space-x-4">
-                  <button className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
-                    📱
-                  </button>
-                  <button className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <button 
+                    onClick={handleWhatsAppClick}
+                    className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    title="WhatsApp"
+                  >
                     💬
                   </button>
-                  <button className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <a 
+                    href="mailto:contato@bancojota.com.br"
+                    className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    title="E-mail"
+                  >
                     📧
+                  </a>
+                  <button 
+                    onClick={() => setShowForm(true)}
+                    className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    title="Abrir Conta"
+                  >
+                    🏦
                   </button>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-lg font-semibold mb-4 text-white">Produtos</h4>
+                <h4 className="text-lg font-semibold mb-4 text-white">Navegação</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">Conta Digital</a></li>
-                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">Cartão de Crédito</a></li>
-                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">Investimentos</a></li>
-                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">PIX</a></li>
+                  <li>
+                    <a 
+                      href="#hero" 
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                    >
+                      Início
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#produtos" 
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                    >
+                      Produtos
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#bonus" 
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                    >
+                      Bônus R$ 50
+                    </a>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => setShowForm(true)}
+                      className="text-blue-200 hover:text-white transition-colors text-left"
+                    >
+                      Abrir Conta
+                    </button>
+                  </li>
                 </ul>
               </div>
               
               <div>
                 <h4 className="text-lg font-semibold mb-4 text-white">Contato</h4>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="text-blue-200">
-                    📞 0800 123 4567
+                    <span className="font-semibold">📞 Central:</span><br />
+                    <a href="tel:08001234567" className="hover:text-white transition-colors">
+                      0800 123 4567
+                    </a>
                   </div>
                   <div className="text-blue-200">
-                    📧 contato@bancojota.com.br
+                    <span className="font-semibold">📧 E-mail:</span><br />
+                    <a href="mailto:contato@bancojota.com.br" className="hover:text-white transition-colors">
+                      contato@bancojota.com.br
+                    </a>
                   </div>
                   <div className="text-blue-200">
-                    💬 WhatsApp: (11) 99988-7766
+                    <span className="font-semibold">💬 WhatsApp:</span><br />
+                    <button 
+                      onClick={handleWhatsAppClick}
+                      className="hover:text-white transition-colors text-left"
+                    >
+                      (11) 99988-7766
+                    </button>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      onClick={() => setShowForm(true)}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all"
+                    >
+                      🎁 Ganhar R$ 50
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="border-t border-blue-800 mt-12 pt-8 text-center">
-              <p className="text-blue-200">
-                © 2024 Banco Jota. Todos os direitos reservados. CNPJ: 00.000.000/0001-00
-              </p>
+            <div className="border-t border-blue-800 mt-12 pt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left">
+                <div>
+                  <p className="text-blue-200">
+                    © 2024 Banco Jota. Todos os direitos reservados.
+                  </p>
+                  <p className="text-blue-300 text-sm mt-1">
+                    CNPJ: 00.000.000/0001-00
+                  </p>
+                </div>
+                <div className="text-center md:text-right">
+                  <p className="text-blue-200 text-sm">
+                    Banco digital 100% seguro e regulamentado
+                  </p>
+                  <p className="text-blue-300 text-xs mt-1">
+                    Seus dados protegidos pela LGPD
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </footer>
