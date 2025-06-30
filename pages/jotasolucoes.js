@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-export default function JotaSolucoes({ pageData, error }) {
+export default function BancoJota({ pageData, error }) {
   const [formData, setFormData] = useState({
     nome: '',
     telefone: '',
@@ -11,6 +11,27 @@ export default function JotaSolucoes({ pageData, error }) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [showForm, setShowForm] = useState(false)
+  const [activeTab, setActiveTab] = useState('conta')
+  const [isVisible, setIsVisible] = useState({})
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }))
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    document.querySelectorAll('[id]').forEach((el) => {
+      observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   if (error) {
     return (
@@ -36,270 +57,458 @@ export default function JotaSolucoes({ pageData, error }) {
         },
         body: JSON.stringify({
           ...formData,
-          landingSlug: pageData.slug,
-          landingTitulo: pageData.titulo
+          landingSlug: 'bancojota',
+          landingTitulo: 'Banco Jota - Conta Digital'
         })
       })
 
       const data = await response.json()
 
       if (data.success) {
-        setMessage('Obrigado! Entraremos em contato em breve.')
+        setMessage('🎉 Parabéns! Sua conta será criada em breve. Você receberá R$ 50 de bônus!')
         setFormData({ nome: '', telefone: '', email: '' })
         setShowForm(false)
-        
-        // Redirecionar para WhatsApp após 2 segundos
-        setTimeout(() => {
-          if (pageData.whatsapp?.numero) {
-            const whatsappUrl = `https://wa.me/${pageData.whatsapp.numero}?text=${encodeURIComponent(pageData.whatsapp.mensagem)}`
-            window.open(whatsappUrl, '_blank')
-          }
-        }, 2000)
       } else {
-        setMessage(data.message || 'Erro ao enviar formulário')
+        setMessage(data.message || 'Erro ao processar solicitação')
       }
     } catch (error) {
-      setMessage('Erro ao enviar formulário. Tente novamente.')
+      setMessage('Erro ao processar solicitação. Tente novamente.')
     } finally {
       setLoading(false)
     }
   }
 
   const handleWhatsAppClick = () => {
-    if (pageData.whatsapp?.numero) {
-      const whatsappUrl = `https://wa.me/${pageData.whatsapp.numero}?text=${encodeURIComponent(pageData.whatsapp.mensagem)}`
-      window.open(whatsappUrl, '_blank')
-    }
+    const whatsappUrl = `https://wa.me/5511999887766?text=${encodeURIComponent('Oi! Quero abrir minha conta no Banco Jota e receber meu bônus de R$ 50!')}`
+    window.open(whatsappUrl, '_blank')
   }
 
   return (
     <>
       <Head>
-        <title>{pageData.metaTitle || pageData.titulo}</title>
-        <meta name="description" content={pageData.metaDescription} />
-        <meta name="keywords" content={pageData.metaKeywords} />
+        <title>Banco Jota - Conta Digital Gratuita com R$ 50 de Bônus</title>
+        <meta name="description" content="Abra sua conta digital gratuita no Banco Jota e ganhe R$ 50 de bônus. Sem taxas, sem burocracias!" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white overflow-x-hidden">
+        {/* Header */}
+        <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50 transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-indigo-900 to-blue-800 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-lg">B</span>
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-indigo-900">banco</h1>
+                  <h2 className="text-lg font-bold text-indigo-900 -mt-1">jota</h2>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => setShowForm(true)}
+                className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              >
+                Abrir Conta
+              </button>
+            </div>
+          </div>
+        </header>
+
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <section id="hero" className={`pt-24 pb-20 bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 transition-all duration-1000 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="text-center lg:text-left">
-                {pageData.imagens?.logo && (
-                  <img
-                    src={pageData.imagens.logo}
-                    alt="Jota Soluções"
-                    className="h-16 w-auto mx-auto lg:mx-0 mb-8"
-                  />
-                )}
-                <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                  {pageData.titulo}
+                <div className="inline-flex items-center bg-gradient-to-r from-green-100 to-blue-100 rounded-full px-4 py-2 mb-6">
+                  <span className="text-green-600 font-semibold text-sm">🎁 OFERTA LIMITADA</span>
+                </div>
+                
+                <h1 className="text-4xl md:text-6xl font-bold text-indigo-900 mb-6 leading-tight">
+                  Seu futuro
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                    financeiro
+                  </span>
+                  começa aqui
                 </h1>
-                <p className="text-xl md:text-2xl mb-4 text-blue-100">
-                  {pageData.subtitulo}
-                </p>
-                <p className="text-lg mb-8 text-blue-200 max-w-2xl mx-auto lg:mx-0">
-                  {pageData.heroDescription}
+                
+                <p className="text-xl text-gray-700 mb-8 max-w-2xl">
+                  Conta digital 100% gratuita + <strong className="text-green-600">R$ 50 de bônus</strong> para quem abrir conta até o final do mês
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <button
                     onClick={() => setShowForm(true)}
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                   >
-                    {pageData.formulario?.ctaTexto || 'Solicitar Diagnóstico'}
+                    🏦 Abrir Conta Grátis
                   </button>
                   
-                  {pageData.whatsapp?.numero && (
-                    <button
-                      onClick={handleWhatsAppClick}
-                      className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
-                    >
-                      <span>📱</span>
-                      {pageData.whatsapp.ctaTexto}
-                    </button>
-                  )}
+                  <button
+                    onClick={handleWhatsAppClick}
+                    className="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-4 px-8 rounded-full text-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  >
+                    💬 Falar com Consultor
+                  </button>
+                </div>
+                
+                <div className="flex items-center justify-center lg:justify-start space-x-6 text-sm text-gray-600">
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✓</span>
+                    Sem taxas
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✓</span>
+                    Sem anuidade
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✓</span>
+                    R$ 50 grátis
+                  </div>
                 </div>
               </div>
               
               <div className="relative">
-                {pageData.imagens?.hero ? (
-                  <img
-                    src={pageData.imagens.hero}
-                    alt="Jota Soluções"
-                    className="w-full h-auto rounded-lg shadow-2xl"
-                  />
-                ) : (
-                  <div className="w-full h-96 bg-blue-600 rounded-lg shadow-2xl flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-6xl mb-4">💼</div>
-                      <p className="text-xl">Transforme Seu Negócio</p>
+                <div className="relative bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-8 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <div className="bg-white rounded-2xl p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg"></div>
+                      <span className="text-gray-600 text-sm">Conta Digital</span>
                     </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Sobre Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  {pageData.sobre?.titulo}
-                </h2>
-                <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                  {pageData.sobre?.texto}
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="text-3xl font-bold text-blue-600 mb-2">10+</div>
-                    <div className="text-gray-600">Anos de Experiência</div>
-                  </div>
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="text-3xl font-bold text-green-600 mb-2">500+</div>
-                    <div className="text-gray-600">Empresas Atendidas</div>
-                  </div>
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="text-3xl font-bold text-purple-600 mb-2">95%</div>
-                    <div className="text-gray-600">Satisfação dos Clientes</div>
-                  </div>
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="text-3xl font-bold text-orange-600 mb-2">24h</div>
-                    <div className="text-gray-600">Resposta Garantida</div>
+                    
+                    <div className="mb-4">
+                      <p className="text-gray-500 text-sm">Saldo disponível</p>
+                      <p className="text-3xl font-bold text-gray-900">R$ 1.250,00</p>
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-4 mb-4">
+                      <p className="text-green-600 font-semibold text-sm">🎁 Bônus de boas-vindas</p>
+                      <p className="text-2xl font-bold text-green-700">+ R$ 50,00</p>
+                    </div>
+                    
+                    <div className="flex space-x-3">
+                      {['💳', '💰', '📊', '🔒'].map((icon, index) => (
+                        <div key={index} className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-xl hover:scale-110 transition-transform duration-300">
+                          {icon}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div>
-                {pageData.sobre?.imagem ? (
-                  <img
-                    src={pageData.sobre.imagem}
-                    alt="Sobre a Jota Soluções"
-                    className="w-full h-auto rounded-lg shadow-xl"
-                  />
-                ) : (
-                  <div className="w-full h-96 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-xl flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <div className="text-6xl mb-4">🎯</div>
-                      <p className="text-xl">Excelência em Resultados</p>
-                    </div>
-                  </div>
-                )}
+                
+                {/* Elementos flutuantes */}
+                <div className="absolute -top-4 -right-4 w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center text-2xl animate-bounce">
+                  💎
+                </div>
+                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold animate-pulse">
+                  R$
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Serviços Section */}
-        <section className="py-20 bg-white">
+        {/* Produtos Section */}
+        <section id="produtos" className={`py-20 bg-white transition-all duration-1000 ${isVisible.produtos ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {pageData.servicos?.titulo}
+              <h2 className="text-3xl md:text-4xl font-bold text-indigo-900 mb-4">
+                Produtos que fazem a diferença
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                {pageData.servicos?.subtitulo}
+                Tudo que você precisa para gerenciar seu dinheiro, sem complicação
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {pageData.servicos?.lista?.map((servico, index) => (
-                <div key={index} className="bg-gray-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-                  <div className="text-4xl mb-4 text-center">
-                    {servico.icone}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
-                    {servico.titulo}
-                  </h3>
-                  <p className="text-gray-700 text-center">
-                    {servico.descricao}
-                  </p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                   onClick={() => setActiveTab('conta')}>
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-all duration-300 ${activeTab === 'conta' ? 'bg-gradient-to-br from-indigo-500 to-blue-500 text-white' : 'bg-gray-100 group-hover:bg-indigo-100'}`}>
+                  🏦
                 </div>
-              ))}
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Conta Digital</h3>
+                <p className="text-gray-600 text-sm">Gratuita e sem taxas</p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                   onClick={() => setActiveTab('cartao')}>
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-all duration-300 ${activeTab === 'cartao' ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white' : 'bg-gray-100 group-hover:bg-purple-100'}`}>
+                  💳
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Cartão</h3>
+                <p className="text-gray-600 text-sm">Sem anuidade para sempre</p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                   onClick={() => setActiveTab('investimentos')}>
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-all duration-300 ${activeTab === 'investimentos' ? 'bg-gradient-to-br from-green-500 to-emerald-500 text-white' : 'bg-gray-100 group-hover:bg-green-100'}`}>
+                  📈
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Investimentos</h3>
+                <p className="text-gray-600 text-sm">Renda fixa e variável</p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                   onClick={() => setActiveTab('pix')}>
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-all duration-300 ${activeTab === 'pix' ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white' : 'bg-gray-100 group-hover:bg-orange-100'}`}>
+                  ⚡
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">PIX Grátis</h3>
+                <p className="text-gray-600 text-sm">Ilimitado e instantâneo</p>
+              </div>
+            </div>
+            
+            {/* Conteúdo das Abas */}
+            <div className="bg-gradient-to-br from-gray-50 to-indigo-50 rounded-3xl p-8">
+              {activeTab === 'conta' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold text-indigo-900 mb-4">Conta Digital 100% Gratuita</h3>
+                    <ul className="space-y-3">
+                      {[
+                        'Sem taxa de manutenção',
+                        'Transferências ilimitadas',
+                        'Cartão virtual imediato',
+                        'Controle total pelo app',
+                        'Suporte 24/7'
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-center">
+                          <span className="text-green-500 mr-3">✓</span>
+                          <span className="text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-lg">
+                    <div className="text-center mb-4">
+                      <div className="text-4xl mb-2">🏦</div>
+                      <h4 className="font-bold text-gray-900">Conta sempre no azul</h4>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span>Taxa de manutenção</span>
+                        <span className="font-bold text-green-600">R$ 0,00</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Transferências TED</span>
+                        <span className="font-bold text-green-600">Grátis</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>PIX</span>
+                        <span className="font-bold text-green-600">Ilimitado</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'cartao' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold text-indigo-900 mb-4">Cartão Sem Anuidade</h3>
+                    <ul className="space-y-3">
+                      {[
+                        'Sem anuidade para sempre',
+                        'Aceito em todo o mundo',
+                        'Programa de pontos',
+                        'Controle de gastos em tempo real',
+                        'Bloqueio e desbloqueio pelo app'
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-center">
+                          <span className="text-purple-500 mr-3">✓</span>
+                          <span className="text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="relative">
+                    <div className="w-80 h-48 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-2xl mx-auto">
+                      <div className="flex justify-between items-start mb-8">
+                        <span className="text-sm opacity-80">banco jota</span>
+                        <span className="text-2xl">💳</span>
+                      </div>
+                      <div className="mb-4">
+                        <p className="text-lg tracking-wider">•••• •••• •••• 1234</p>
+                      </div>
+                      <div className="flex justify-between items-end">
+                        <div>
+                          <p className="text-xs opacity-80">Titular</p>
+                          <p className="text-sm font-semibold">SEU NOME AQUI</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs opacity-80">Válido</p>
+                          <p className="text-sm">12/28</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'investimentos' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold text-indigo-900 mb-4">Investimentos Inteligentes</h3>
+                    <ul className="space-y-3">
+                      {[
+                        'CDB com liquidez diária',
+                        'Tesouro Direto sem taxa',
+                        'Fundos de investimento',
+                        'Corretagem zero em ações',
+                        'Consultoria gratuita'
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-center">
+                          <span className="text-green-500 mr-3">✓</span>
+                          <span className="text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white rounded-xl p-4 shadow-md">
+                      <div className="text-green-600 text-2xl mb-2">📈</div>
+                      <p className="text-sm text-gray-600">CDB</p>
+                      <p className="text-xl font-bold text-green-600">12,5% a.a.</p>
+                    </div>
+                    <div className="bg-white rounded-xl p-4 shadow-md">
+                      <div className="text-blue-600 text-2xl mb-2">🏛️</div>
+                      <p className="text-sm text-gray-600">Tesouro</p>
+                      <p className="text-xl font-bold text-blue-600">11,8% a.a.</p>
+                    </div>
+                    <div className="bg-white rounded-xl p-4 shadow-md">
+                      <div className="text-purple-600 text-2xl mb-2">📊</div>
+                      <p className="text-sm text-gray-600">Fundos</p>
+                      <p className="text-xl font-bold text-purple-600">15,2% a.a.</p>
+                    </div>
+                    <div className="bg-white rounded-xl p-4 shadow-md">
+                      <div className="text-orange-600 text-2xl mb-2">💎</div>
+                      <p className="text-sm text-gray-600">Ações</p>
+                      <p className="text-xl font-bold text-orange-600">R$ 0 taxa</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'pix' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold text-indigo-900 mb-4">PIX Ilimitado e Grátis</h3>
+                    <ul className="space-y-3">
+                      {[
+                        'Transferências instantâneas',
+                        'Disponível 24h por dia',
+                        '100% gratuito sempre',
+                        'Chave PIX personalizável',
+                        'Histórico completo'
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-center">
+                          <span className="text-orange-500 mr-3">⚡</span>
+                          <span className="text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-lg">
+                    <div className="text-center mb-6">
+                      <div className="text-4xl mb-2">⚡</div>
+                      <h4 className="font-bold text-gray-900">PIX em segundos</h4>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                        <span className="text-sm">Para: Maria Silva</span>
+                        <span className="font-bold text-orange-600">R$ 250,00</span>
+                      </div>
+                      <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                        <span className="text-sm">Para: João Santos</span>
+                        <span className="font-bold text-orange-600">R$ 150,00</span>
+                      </div>
+                      <div className="text-center">
+                        <span className="text-green-600 font-semibold">✓ Transferências realizadas</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
 
-        {/* Bonus Section */}
-        <section className="py-20 bg-gradient-to-r from-orange-500 to-red-600 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="text-center lg:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                  {pageData.bonus?.titulo}
-                </h2>
-                <p className="text-lg mb-8 text-orange-100">
-                  {pageData.bonus?.descricao}
-                </p>
-                
-                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg mb-8">
-                  <div className="flex items-center gap-4">
-                    <div className="text-4xl">⏰</div>
-                    <div>
-                      <div className="font-bold text-lg">Oferta Limitada!</div>
-                      <div className="text-orange-100">Apenas para os primeiros 50 cadastros</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="bg-white text-orange-600 font-bold py-4 px-8 rounded-lg text-lg hover:bg-orange-50 transition-all duration-300 transform hover:scale-105"
-                >
-                  {pageData.bonus?.ctaTexto}
-                </button>
+        {/* CTA Bonus Section */}
+        <section id="bonus" className={`py-20 bg-gradient-to-br from-yellow-400 via-orange-400 to-red-500 text-white relative overflow-hidden transition-all duration-1000 ${isVisible.bonus ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="mb-8">
+              <div className="inline-flex items-center bg-white/20 rounded-full px-6 py-2 mb-6">
+                <span className="text-white font-bold">⏰ OFERTA POR TEMPO LIMITADO</span>
               </div>
               
-              <div>
-                {pageData.bonus?.imagem ? (
-                  <img
-                    src={pageData.bonus.imagem}
-                    alt="Oferta Especial"
-                    className="w-full h-auto rounded-lg shadow-xl"
-                  />
-                ) : (
-                  <div className="w-full h-96 bg-white/20 backdrop-blur-sm rounded-lg shadow-xl flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-6xl mb-4">🎁</div>
-                      <p className="text-xl">Diagnóstico Gratuito</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Formulário Modal */}
-        {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">
-                  {pageData.formulario?.titulo}
-                </h3>
-                <button
-                  onClick={() => setShowForm(false)}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
-                >
-                  ×
-                </button>
-              </div>
+              <h2 className="text-4xl md:text-6xl font-bold mb-4">
+                Ganhe R$ 50
+                <span className="block text-yellow-200">de bônus!</span>
+              </h2>
               
-              <p className="text-gray-600 mb-6">
-                {pageData.formulario?.subtitulo}
+              <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-3xl mx-auto">
+                Abra sua conta digital gratuita até o final do mês e receba R$ 50 direto na sua conta. Sem pegadinhas!
               </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
+                <div className="text-4xl mb-4">🎁</div>
+                <h3 className="text-xl font-bold mb-2">R$ 50 Grátis</h3>
+                <p className="text-white/80">Bônus creditado na abertura da conta</p>
+              </div>
+              
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
+                <div className="text-4xl mb-4">🚀</div>
+                <h3 className="text-xl font-bold mb-2">Conta em 5min</h3>
+                <p className="text-white/80">Aprovação automática e instantânea</p>
+              </div>
+              
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
+                <div className="text-4xl mb-4">💎</div>
+                <h3 className="text-xl font-bold mb-2">Zero Taxas</h3>
+                <p className="text-white/80">Para sempre, sem letras miúdas</p>
+              </div>
+            </div>
+            
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-white text-orange-600 font-bold py-6 px-12 rounded-full text-xl hover:shadow-2xl transform hover:scale-110 transition-all duration-300 inline-flex items-center gap-3"
+            >
+              <span>🏦</span>
+              Quero Meus R$ 50 Grátis
+            </button>
+          </div>
+          
+          {/* Elementos decorativos */}
+          <div className="absolute top-10 left-10 text-6xl opacity-20 animate-bounce">💰</div>
+          <div className="absolute top-20 right-20 text-4xl opacity-30 animate-pulse">💎</div>
+          <div className="absolute bottom-10 left-20 text-5xl opacity-25 animate-bounce delay-500">🎁</div>
+          <div className="absolute bottom-20 right-10 text-3xl opacity-40 animate-pulse delay-1000">⚡</div>
+        </section>
+
+        {/* Modal do Formulário */}
+        {showForm && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform animate-in slide-in-from-bottom-4">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center text-2xl text-white mx-auto mb-4">
+                  🏦
+                </div>
+                <h3 className="text-2xl font-bold text-indigo-900 mb-2">
+                  Abrir Conta Digital
+                </h3>
+                <p className="text-gray-600">
+                  Preencha os dados e receba seus R$ 50 de bônus
+                </p>
+              </div>
               
               {message && (
-                <div className={`p-4 rounded-lg mb-6 ${
-                  message.includes('Obrigado') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                <div className={`p-4 rounded-xl mb-6 text-center ${
+                  message.includes('Parabéns') ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'
                 }`}>
                   {message}
                 </div>
@@ -307,115 +516,119 @@ export default function JotaSolucoes({ pageData, error }) {
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nome Completo *
-                  </label>
                   <input
                     type="text"
                     required
                     value={formData.nome}
                     onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Seu nome completo"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    placeholder="Nome completo"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Telefone *
-                  </label>
                   <input
                     type="tel"
                     required
                     value={formData.telefone}
                     onChange={(e) => setFormData({...formData, telefone: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     placeholder="(11) 99999-9999"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    E-mail *
-                  </label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     placeholder="seu@email.com"
                   />
                 </div>
                 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
-                  {loading ? 'Enviando...' : pageData.formulario?.ctaTexto}
-                </button>
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="flex-1 bg-gray-100 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
+                  >
+                    {loading ? 'Processando...' : '🎁 Ganhar R$ 50'}
+                  </button>
+                </div>
               </form>
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <footer className="bg-gray-900 text-white py-12">
+        <footer className="bg-indigo-900 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="col-span-1 md:col-span-2">
-                {pageData.imagens?.logo && (
-                  <img
-                    src={pageData.imagens.logo}
-                    alt="Jota Soluções"
-                    className="h-12 w-auto mb-6"
-                  />
-                )}
-                <p className="text-gray-400 mb-6">
-                  {pageData.subtitulo}
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-xl flex items-center justify-center">
+                    <span className="text-white font-bold text-lg">B</span>
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold text-white">banco</h1>
+                    <h2 className="text-lg font-bold text-blue-200 -mt-1">jota</h2>
+                  </div>
+                </div>
+                <p className="text-blue-200 mb-6 max-w-md">
+                  O banco digital que faz seu dinheiro render mais e sua vida ficar mais simples.
                 </p>
                 <div className="flex space-x-4">
-                  <a href="#" className="text-gray-400 hover:text-white">
-                    📧 contato@jotasolucoes.com.br
-                  </a>
+                  <button className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                    📱
+                  </button>
+                  <button className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                    💬
+                  </button>
+                  <button className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                    📧
+                  </button>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-lg font-semibold mb-4">Serviços</h4>
+                <h4 className="text-lg font-semibold mb-4 text-white">Produtos</h4>
                 <ul className="space-y-2">
-                  {pageData.servicos?.lista?.map((servico, index) => (
-                    <li key={index}>
-                      <a href="#" className="text-gray-400 hover:text-white">
-                        {servico.titulo}
-                      </a>
-                    </li>
-                  ))}
+                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">Conta Digital</a></li>
+                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">Cartão de Crédito</a></li>
+                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">Investimentos</a></li>
+                  <li><a href="#" className="text-blue-200 hover:text-white transition-colors">PIX</a></li>
                 </ul>
               </div>
               
               <div>
-                <h4 className="text-lg font-semibold mb-4">Contato</h4>
+                <h4 className="text-lg font-semibold mb-4 text-white">Contato</h4>
                 <div className="space-y-2">
-                  {pageData.whatsapp?.numero && (
-                    <div className="text-gray-400">
-                      📱 {pageData.whatsapp.numero}
-                    </div>
-                  )}
-                  <div className="text-gray-400">
-                    📧 contato@jotasolucoes.com.br
+                  <div className="text-blue-200">
+                    📞 0800 123 4567
                   </div>
-                  <div className="text-gray-400">
-                    📍 São Paulo, SP
+                  <div className="text-blue-200">
+                    📧 contato@bancojota.com.br
+                  </div>
+                  <div className="text-blue-200">
+                    💬 WhatsApp: (11) 99988-7766
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-              <p className="text-gray-400">
-                © 2024 {pageData.titulo}. Todos os direitos reservados.
+            <div className="border-t border-blue-800 mt-12 pt-8 text-center">
+              <p className="text-blue-200">
+                © 2024 Banco Jota. Todos os direitos reservados. CNPJ: 00.000.000/0001-00
               </p>
             </div>
           </div>
@@ -427,29 +640,18 @@ export default function JotaSolucoes({ pageData, error }) {
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/landing-pages/jotasolucoes`)
-    
-    if (!res.ok) {
-      return {
-        props: {
-          error: true
-        }
-      }
-    }
-    
-    const data = await res.json()
-    
-    if (!data.success) {
-      return {
-        props: {
-          error: true
-        }
-      }
+    // Dados mockados já que não temos a API específica do Banco Jota
+    const pageData = {
+      slug: 'bancojota',
+      titulo: 'Banco Jota - Conta Digital Gratuita',
+      subtitulo: 'Seu futuro financeiro começa aqui',
+      metaTitle: 'Banco Jota - Conta Digital Gratuita com R$ 50 de Bônus',
+      metaDescription: 'Abra sua conta digital gratuita no Banco Jota e ganhe R$ 50 de bônus. Sem taxas, sem burocracias!'
     }
     
     return {
       props: {
-        pageData: data.data,
+        pageData,
         error: false
       }
     }

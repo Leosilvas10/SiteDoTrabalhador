@@ -127,49 +127,54 @@
     "id": "bancojota",
     "slug": "bancojota",
     "titulo": "Banco Jota - Seu Futuro Financeiro Começa Aqui",
-    "subtitulo": "Conta digital sem taxas com benefícios exclusivos",
-    "heroDescription": "Abra sua conta digital gratuita e tenha acesso a produtos financeiros inovadores.",
+    "subtitulo": "Conta digital 100% gratuita + R$ 50 de bônus de boas-vindas",
+    "heroDescription": "O banco digital que faz seu dinheiro render mais e sua vida ficar mais simples. Sem taxas, sem burocracias, só vantagens!",
     "sobre": {
-      "titulo": "Sobre o Banco Jota",
-      "texto": "Somos um banco digital 100% gratuito, focado em democratizar o acesso a serviços financeiros de qualidade.",
+      "titulo": "Por que escolher o Banco Jota?",
+      "texto": "Somos o banco digital mais inovador do Brasil. Nossa missão é democratizar o acesso a serviços financeiros de qualidade, oferecendo produtos que realmente fazem diferença na vida das pessoas.",
       "imagem": "/images/banco-sobre.jpg"
     },
     "servicos": {
-      "titulo": "Produtos e Serviços",
-      "subtitulo": "Tudo que você precisa em um só lugar",
+      "titulo": "Produtos que fazem a diferença",
+      "subtitulo": "Tudo que você precisa para gerenciar seu dinheiro, sem complicação",
       "lista": [
         {
           "titulo": "Conta Digital Gratuita",
-          "descricao": "Sem taxas de manutenção ou anuidade",
-          "icone": "💳"
+          "descricao": "Zero taxas, transferências ilimitadas e cartão virtual imediato",
+          "icone": "🏦"
         },
         {
           "titulo": "Cartão Sem Anuidade",
-          "descricao": "Cartão de crédito internacional",
+          "descricao": "Para sempre, aceito mundialmente com programa de pontos",
           "icone": "💳"
         },
         {
-          "titulo": "Investimentos",
-          "descricao": "Renda fixa e variável sem taxas",
+          "titulo": "Investimentos Inteligentes",
+          "descricao": "CDB, Tesouro Direto, ações e fundos sem taxa de corretagem",
           "icone": "📈"
+        },
+        {
+          "titulo": "PIX Ilimitado",
+          "descricao": "Transferências instantâneas 24h por dia, 100% gratuito",
+          "icone": "⚡"
         }
       ]
     },
     "bonus": {
-      "titulo": "Promoção Especial",
-      "descricao": "R$ 50 de bônus para quem abrir a conta até o final do mês",
+      "titulo": "🎁 Ganhe R$ 50 de Bônus!",
+      "descricao": "Oferta por tempo limitado! Abra sua conta digital gratuita até o final do mês e receba R$ 50 direto na sua conta. Sem pegadinhas, sem letra miúda!",
       "imagem": "/images/bonus-banco.jpg",
-      "ctaTexto": "Quero Meus R$ 50"
+      "ctaTexto": "Quero Meus R$ 50 Grátis"
     },
     "formulario": {
-      "titulo": "Abra Sua Conta Digital",
-      "subtitulo": "Preencha os dados e receba seu bônus",
-      "ctaTexto": "Abrir Conta Grátis"
+      "titulo": "Abrir Conta Digital",
+      "subtitulo": "Preencha os dados e receba seus R$ 50 de bônus",
+      "ctaTexto": "🎁 Ganhar R$ 50"
     },
     "whatsapp": {
-      "numero": "5511777777777",
-      "mensagem": "Olá! Quero abrir minha conta no Banco Jota e receber o bônus de R$ 50.",
-      "ctaTexto": "Falar com Consultor"
+      "numero": "5511999887766",
+      "mensagem": "Oi! Quero abrir minha conta no Banco Jota e receber meu bônus de R$ 50!",
+      "ctaTexto": "💬 Falar com Consultor"
     },
     "pdfs": [],
     "imagens": {
@@ -178,9 +183,9 @@
       "bonus": "/images/bonus-banco.jpg",
       "logo": "/images/logo-banco.png"
     },
-    "metaTitle": "Banco Jota - Conta Digital Gratuita",
-    "metaDescription": "Abra sua conta digital sem taxas e ganhe R$ 50 de bônus. Cadastre-se agora!",
-    "metaKeywords": "banco digital, conta gratuita, cartão sem anuidade, investimentos",
+    "metaTitle": "Banco Jota - Conta Digital Gratuita com R$ 50 de Bônus",
+    "metaDescription": "Abra sua conta digital 100% gratuita no Banco Jota e ganhe R$ 50 de bônus. Sem taxas, sem burocracias, só vantagens!",
+    "metaKeywords": "banco digital, conta gratuita, bônus 50 reais, cartão sem anuidade, investimentos, pix grátis",
     "ativo": true,
     "criadoEm": "2025-06-30T15:54:05.469Z",
     "atualizadoEm": "2025-06-30T15:54:05.469Z"
