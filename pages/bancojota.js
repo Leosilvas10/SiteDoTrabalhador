@@ -184,7 +184,7 @@ export default function BancoJota({ pageData, error }) {
                 
                 <h1 className="text-4xl md:text-6xl font-bold text-blue-900 mb-6 leading-tight">
                   {pageData?.titulo || 'Seu sonho realizado com'}
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mt-2">
                     {pageData?.subtitulo || 'Consórcio Inteligente'}
                   </span>
                 </h1>
@@ -566,7 +566,7 @@ export default function BancoJota({ pageData, error }) {
 
         {/* Seção PDF */}
         {pageData?.pdfs && pageData.pdfs.length > 0 && (
-          <section className="py-20 bg-white">
+          <section className="py-24 bg-white mt-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-blue-900 mb-4">
