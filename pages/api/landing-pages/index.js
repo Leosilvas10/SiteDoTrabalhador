@@ -1,4 +1,3 @@
-
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -133,64 +132,70 @@ const defaultLandingPages = [
   {
     id: 'bancojota',
     slug: 'bancojota',
-    titulo: 'Banco Jota - Seu Futuro Financeiro Começa Aqui',
-    subtitulo: 'Conta digital sem taxas com benefícios exclusivos',
-    heroDescription: 'Abra sua conta digital gratuita e tenha acesso a produtos financeiros inovadores.',
+    titulo: 'Seu sonho realizado com',
+    subtitulo: 'Consórcio Inteligente',
+    heroDescription: 'Te acompanhamos do primeiro contato até a entrega do seu bem. Consultoria financeira personalizada e processo transparente.',
     sobre: {
-      titulo: 'Sobre o Banco Jota',
-      texto: 'Somos um banco digital 100% gratuito, focado em democratizar o acesso a serviços financeiros de qualidade.',
+      titulo: 'Por que fazer consórcio com o Banco Jota?',
+      texto: 'Não somos apenas uma administradora de consórcio. Somos seus parceiros na realização do seu sonho, oferecendo consultoria especializada e acompanhamento personalizado.',
       imagem: '/images/banco-sobre.jpg'
     },
     servicos: {
-      titulo: 'Produtos e Serviços',
-      subtitulo: 'Tudo que você precisa em um só lugar',
+      titulo: 'Nossos Diferenciais',
+      subtitulo: 'O que nos torna únicos no mercado de consórcios',
       lista: [
         {
-          titulo: 'Conta Digital Gratuita',
-          descricao: 'Sem taxas de manutenção ou anuidade',
-          icone: '💳'
+          titulo: 'Consultoria Personalizada',
+          descricao: 'Análise completa do seu perfil financeiro para definir a melhor estratégia de contemplação.',
+          icone: '🎯'
         },
         {
-          titulo: 'Cartão Sem Anuidade',
-          descricao: 'Cartão de crédito internacional',
-          icone: '💳'
+          titulo: 'Acompanhamento 360°',
+          descricao: 'Desde a adesão até a entrega do bem, você tem suporte total da nossa equipe especializada.',
+          icone: '🔄'
         },
         {
-          titulo: 'Investimentos',
-          descricao: 'Renda fixa e variável sem taxas',
-          icone: '📈'
+          titulo: 'Processo Consultivo',
+          descricao: 'Não vendemos consórcio, fazemos consultoria. Indicamos o que é melhor para seu caso específico.',
+          icone: '💡'
         }
       ]
     },
     bonus: {
-      titulo: 'Promoção Especial',
-      descricao: 'R$ 50 de bônus para quem abrir a conta até o final do mês',
+      titulo: 'Oferta Especial',
+      descricao: 'Consultoria gratuita para análise do seu perfil e definição da melhor estratégia de contemplação.',
       imagem: '/images/bonus-banco.jpg',
-      ctaTexto: 'Quero Meus R$ 50'
+      ctaTexto: 'Quero Minha Consultoria Grátis'
     },
     formulario: {
-      titulo: 'Abra Sua Conta Digital',
-      subtitulo: 'Preencha os dados e receba seu bônus',
-      ctaTexto: 'Abrir Conta Grátis'
+      titulo: 'Consultoria Gratuita',
+      subtitulo: 'Preencha seus dados e nosso consultor entrará em contato',
+      ctaTexto: '🎯 Quero Consultoria'
     },
     whatsapp: {
-      numero: '5511777777777',
-      mensagem: 'Olá! Quero abrir minha conta no Banco Jota e receber o bônus de R$ 50.',
+      numero: '5511999887766',
+      mensagem: 'Olá! Tenho interesse no consórcio do Banco Jota. Gostaria de mais informações sobre como funciona e quais são as condições.',
       ctaTexto: 'Falar com Consultor'
     },
-    pdfs: [],
+    pdfs: [
+      {
+        nome: 'Guia Completo do Consórcio',
+        url: '#',
+        descricao: 'Tudo que você precisa saber sobre consórcio'
+      }
+    ],
     imagens: {
       hero: '/images/banco-hero.jpg',
       sobre: '/images/banco-sobre.jpg',
       bonus: '/images/bonus-banco.jpg',
       logo: '/images/logo-banco.png'
     },
-    metaTitle: 'Banco Jota - Conta Digital Gratuita',
-    metaDescription: 'Abra sua conta digital sem taxas e ganhe R$ 50 de bônus. Cadastre-se agora!',
-    metaKeywords: 'banco digital, conta gratuita, cartão sem anuidade, investimentos',
+    metaTitle: 'Banco Jota - Consórcio com Consultoria Especializada',
+    metaDescription: 'Realize seu sonho com o consórcio do Banco Jota. Atendimento personalizado e consultoria financeira até a contemplação.',
+    metaKeywords: 'consórcio, banco jota, financiamento, consultoria financeira, contemplação',
     ativo: true,
-    criadoEm: new Date().toISOString(),
-    atualizadoEm: new Date().toISOString()
+    criadoEm: '2024-01-15T10:30:00.000Z',
+    atualizadoEm: '2024-01-20T14:45:00.000Z'
   }
 ]
 
@@ -227,11 +232,11 @@ export default async function handler(req, res) {
           criadoEm: new Date().toISOString(),
           atualizadoEm: new Date().toISOString()
         }
-        
+
         const allPages = await getLandingPages()
         allPages.push(newPage)
         await saveLandingPages(allPages)
-        
+
         res.status(201).json({ success: true, data: newPage })
         break
 
@@ -241,30 +246,30 @@ export default async function handler(req, res) {
           ...req.body,
           atualizadoEm: new Date().toISOString()
         }
-        
+
         const pages2 = await getLandingPages()
         const index = pages2.findIndex(p => p.id === id)
-        
+
         if (index === -1) {
           return res.status(404).json({ success: false, message: 'Página não encontrada' })
         }
-        
+
         pages2[index] = { ...pages2[index], ...updatedPage }
         await saveLandingPages(pages2)
-        
+
         res.status(200).json({ success: true, data: pages2[index] })
         break
 
       case 'DELETE':
         const { id: deleteId } = req.query
-        
+
         const pages3 = await getLandingPages()
         const filteredPages = pages3.filter(p => p.id !== deleteId)
-        
+
         if (pages3.length === filteredPages.length) {
           return res.status(404).json({ success: false, message: 'Página não encontrada' })
         }
-        
+
         await saveLandingPages(filteredPages)
         res.status(200).json({ success: true, message: 'Página deletada' })
         break
