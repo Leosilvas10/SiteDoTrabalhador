@@ -137,8 +137,7 @@ const defaultLandingPages = [
     heroDescription: 'Te acompanhamos do primeiro contato até a entrega do seu bem. Consultoria financeira personalizada e processo transparente.',
     sobre: {
       titulo: 'Por que fazer consórcio com o Banco Jota?',
-      texto: 'Não somos apenas uma administradora de consórcio. Somos seus parceiros na realização do seu sonho, oferecendo consultoria especializada e acompanhamento personalizado.',
-      imagem: '/images/banco-sobre.jpg'
+      texto: 'Não somos apenas uma administradora de consórcio. Somos seus parceiros na realização do seu sonho, oferecendo consultoria especializada e acompanhamento personalizado.'
     },
     servicos: {
       titulo: 'Nossos Diferenciais',

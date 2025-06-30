@@ -72,10 +72,12 @@ export default function EditarLandingPage() {
       const data = await response.json()
       
       if (data.success) {
-        const page = data.data.find(p => p.id === id)
+        const page = data.data.find(p => p.id === id || p.slug === id)
         if (page) {
+          console.log('Landing page encontrada:', page)
           setFormData(page)
         } else {
+          console.log('Landing page não encontrada para ID:', id)
           setMessage('Landing page não encontrada')
         }
       }

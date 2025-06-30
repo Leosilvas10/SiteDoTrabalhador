@@ -126,55 +126,55 @@
   {
     "id": "bancojota",
     "slug": "bancojota",
-    "titulo": "Banco Jota - Seu Futuro Financeiro Começa Aqui",
-    "subtitulo": "Conta digital 100% gratuita + R$ 50 de bônus de boas-vindas",
-    "heroDescription": "O banco digital que faz seu dinheiro render mais e sua vida ficar mais simples. Sem taxas, sem burocracias, só vantagens!",
+    "titulo": "Seu sonho realizado com",
+    "subtitulo": "Consórcio Inteligente",
+    "heroDescription": "Te acompanhamos do primeiro contato até a entrega do seu bem. Consultoria financeira personalizada e processo transparente.",
     "sobre": {
-      "titulo": "Por que escolher o Banco Jota?",
-      "texto": "Somos o banco digital mais inovador do Brasil. Nossa missão é democratizar o acesso a serviços financeiros de qualidade, oferecendo produtos que realmente fazem diferença na vida das pessoas.",
+      "titulo": "Por que fazer consórcio com o Banco Jota?",
+      "texto": "Não somos apenas uma administradora de consórcio. Somos seus parceiros na realização do seu sonho, oferecendo consultoria especializada e acompanhamento personalizado.",
       "imagem": "/images/banco-sobre.jpg"
     },
     "servicos": {
-      "titulo": "Produtos que fazem a diferença",
-      "subtitulo": "Tudo que você precisa para gerenciar seu dinheiro, sem complicação",
+      "titulo": "Nossos Serviços",
+      "subtitulo": "Planeje a conquista do seu bem com segurança",
       "lista": [
         {
-          "titulo": "Conta Digital Gratuita",
-          "descricao": "Zero taxas, transferências ilimitadas e cartão virtual imediato",
-          "icone": "🏦"
+          "titulo": "Consórcio de Imóveis",
+          "descricao": "Realize o sonho da casa própria com parcelas acessíveis e sem juros.",
+          "icone": "🏠"
         },
         {
-          "titulo": "Cartão Sem Anuidade",
-          "descricao": "Para sempre, aceito mundialmente com programa de pontos",
-          "icone": "💳"
+          "titulo": "Consórcio de Automóveis",
+          "descricao": "Troque de carro sem entrada e sem burocracia.",
+          "icone": "🚗"
         },
         {
-          "titulo": "Investimentos Inteligentes",
-          "descricao": "CDB, Tesouro Direto, ações e fundos sem taxa de corretagem",
-          "icone": "📈"
+          "titulo": "Consórcio de Motos",
+          "descricao": "Sua moto nova de forma econômica e planejada.",
+          "icone": "🏍️"
         },
         {
-          "titulo": "PIX Ilimitado",
-          "descricao": "Transferências instantâneas 24h por dia, 100% gratuito",
-          "icone": "⚡"
+          "titulo": "Consórcio de Serviços",
+          "descricao": "Invista no seu futuro com consórcio para estudos, viagens e muito mais.",
+          "icone": "🎓"
         }
       ]
     },
     "bonus": {
-      "titulo": "🎁 Ganhe R$ 50 de Bônus!",
-      "descricao": "Oferta por tempo limitado! Abra sua conta digital gratuita até o final do mês e receba R$ 50 direto na sua conta. Sem pegadinhas, sem letra miúda!",
+      "titulo": "Condições Exclusivas",
+      "descricao": "Descontos especiais e planos personalizados para você começar 2024 com o pé direito.",
       "imagem": "/images/bonus-banco.jpg",
-      "ctaTexto": "Quero Meus R$ 50 Grátis"
+      "ctaTexto": "Quero um Plano Personalizado"
     },
     "formulario": {
-      "titulo": "Abrir Conta Digital",
-      "subtitulo": "Preencha os dados e receba seus R$ 50 de bônus",
-      "ctaTexto": "🎁 Ganhar R$ 50"
+      "titulo": "Simule Seu Consórcio",
+      "subtitulo": "Preencha os dados e encontre o plano ideal para você",
+      "ctaTexto": "Simular Agora"
     },
     "whatsapp": {
       "numero": "5511999887766",
-      "mensagem": "Oi! Quero abrir minha conta no Banco Jota e receber meu bônus de R$ 50!",
-      "ctaTexto": "💬 Falar com Consultor"
+      "mensagem": "Olá! Gostaria de simular um plano de consórcio.",
+      "ctaTexto": "Falar com um Consultor"
     },
     "pdfs": [],
     "imagens": {
@@ -183,9 +183,9 @@
       "bonus": "/images/bonus-banco.jpg",
       "logo": "/images/logo-banco.png"
     },
-    "metaTitle": "Banco Jota - Conta Digital Gratuita com R$ 50 de Bônus",
-    "metaDescription": "Abra sua conta digital 100% gratuita no Banco Jota e ganhe R$ 50 de bônus. Sem taxas, sem burocracias, só vantagens!",
-    "metaKeywords": "banco digital, conta gratuita, bônus 50 reais, cartão sem anuidade, investimentos, pix grátis",
+    "metaTitle": "Consórcio Banco Jota - Seu Caminho Para Realizar Seus Sonhos",
+    "metaDescription": "Planeje a conquista do seu imóvel, carro ou moto com o Consórcio Banco Jota. Parcelas acessíveis e sem juros.",
+    "metaKeywords": "consórcio, imóvel, carro, moto, banco jota, sem juros",
     "ativo": true,
     "criadoEm": "2025-06-30T15:54:05.469Z",
     "atualizadoEm": "2025-06-30T15:54:05.469Z"
