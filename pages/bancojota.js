@@ -681,95 +681,95 @@ export default function BancoJota({ pageData, error }) {
         )}
 
         {/* Footer */}
-        <footer id="contato" className="bg-blue-900 text-white py-16">
+        <footer id="contato" className="bg-gradient-to-br from-blue-900 to-blue-800 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="col-span-1 md:col-span-2">
                 <div className="flex items-center space-x-4 mb-6">
-                  {pageData?.imagens?.logo ? (
-                    <img
-                      src={pageData.imagens.logo}
-                      alt="Banco Jota"
-                      className="h-12 w-auto"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-xl flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">BJ</span>
+                  <div className="w-16 h-16 bg-gradient-to-br from-white to-blue-100 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="text-center">
+                      <div className="text-xs font-bold text-blue-900 leading-none">banco</div>
+                      <div className="text-xs font-bold text-blue-900 leading-none">jota</div>
                     </div>
-                  )}
+                  </div>
                   <div>
-                    <h1 className="text-xl font-bold text-white">Banco Jota</h1>
-                    <h2 className="text-lg font-bold text-blue-200 -mt-1">Consórcio Especializado</h2>
+                    <h1 className="text-2xl font-bold text-white">banco jota</h1>
+                    <p className="text-blue-200 text-sm">Consórcio com Consultoria Especializada</p>
                   </div>
                 </div>
-                <p className="text-blue-200 mb-6 max-w-md">
-                  Sua parceria de confiança para realizar sonhos através do consórcio com consultoria especializada.
+                <p className="text-blue-200 mb-6 max-w-md leading-relaxed">
+                  Te acompanhamos do primeiro contato até a entrega do seu bem. Consultoria financeira personalizada e processo transparente para realizar seus sonhos.
                 </p>
-                <div className="flex space-x-4">
+                <div className="flex space-x-3">
                   <button 
                     onClick={handleWhatsAppRedirect}
-                    className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center hover:bg-green-500 transition-all transform hover:scale-105 shadow-lg"
                     title="WhatsApp"
                   >
-                    💬
+                    <span className="text-xl">💬</span>
                   </button>
                   <a 
                     href={`mailto:${pageData?.contato?.email || 'contato@bancojota.com.br'}`}
-                    className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-500 transition-all transform hover:scale-105 shadow-lg"
                     title="E-mail"
                   >
-                    📧
+                    <span className="text-xl">📧</span>
                   </a>
                   <button 
                     onClick={() => setShowForm(true)}
-                    className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
-                    title="Consultoria"
+                    className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center hover:bg-indigo-500 transition-all transform hover:scale-105 shadow-lg"
+                    title="Consultoria Gratuita"
                   >
-                    🎯
+                    <span className="text-xl">🎯</span>
                   </button>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-lg font-semibold mb-4 text-white">Navegação</h4>
-                <ul className="space-y-2">
+                <h4 className="text-lg font-bold mb-6 text-white">Navegação</h4>
+                <ul className="space-y-3">
                   <li>
                     <a 
                       href="#hero" 
-                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer flex items-center group"
                     >
+                      <span className="mr-2 group-hover:mr-3 transition-all">🏠</span>
                       Início
                     </a>
                   </li>
                   <li>
                     <a 
                       href="#como-funciona" 
-                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer flex items-center group"
                     >
+                      <span className="mr-2 group-hover:mr-3 transition-all">⚙️</span>
                       Como Funciona
                     </a>
                   </li>
                   <li>
                     <a 
                       href="#beneficios" 
-                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer flex items-center group"
                     >
+                      <span className="mr-2 group-hover:mr-3 transition-all">⭐</span>
                       Benefícios
                     </a>
                   </li>
                   <li>
                     <a 
                       href="#depoimentos" 
-                      className="text-blue-200 hover:text-white transition-colors cursor-pointer"
+                      className="text-blue-200 hover:text-white transition-colors cursor-pointer flex items-center group"
                     >
+                      <span className="mr-2 group-hover:mr-3 transition-all">💬</span>
                       Depoimentos
                     </a>
                   </li>
                   <li>
                     <button 
                       onClick={() => setShowForm(true)}
-                      className="text-blue-200 hover:text-white transition-colors text-left"
+                      className="text-blue-200 hover:text-white transition-colors text-left flex items-center group"
                     >
+                      <span className="mr-2 group-hover:mr-3 transition-all">🎯</span>
                       Consultoria Gratuita
                     </button>
                   </li>
@@ -777,62 +777,89 @@ export default function BancoJota({ pageData, error }) {
               </div>
               
               <div>
-                <h4 className="text-lg font-semibold mb-4 text-white">Contato</h4>
-                <div className="space-y-3">
-                  <div className="text-blue-200">
-                    <span className="font-semibold">📞 Central:</span><br />
-                    <a href={`tel:${pageData?.contato?.telefone || '08001234567'}`} className="hover:text-white transition-colors">
-                      {pageData?.contato?.telefone || '0800 123 4567'}
-                    </a>
+                <h4 className="text-lg font-bold mb-6 text-white">Fale Conosco</h4>
+                <div className="space-y-4">
+                  <div className="bg-blue-800/50 rounded-lg p-3">
+                    <div className="text-blue-200">
+                      <div className="flex items-center mb-1">
+                        <span className="text-lg mr-2">📞</span>
+                        <span className="font-semibold text-white">Central de Atendimento</span>
+                      </div>
+                      <a href={`tel:${pageData?.contato?.telefone || '08001234567'}`} className="hover:text-white transition-colors block ml-7">
+                        {pageData?.contato?.telefone || '0800 123 4567'}
+                      </a>
+                    </div>
                   </div>
-                  <div className="text-blue-200">
-                    <span className="font-semibold">📧 E-mail:</span><br />
-                    <a href={`mailto:${pageData?.contato?.email || 'contato@bancojota.com.br'}`} className="hover:text-white transition-colors">
-                      {pageData?.contato?.email || 'contato@bancojota.com.br'}
-                    </a>
+                  
+                  <div className="bg-blue-800/50 rounded-lg p-3">
+                    <div className="text-blue-200">
+                      <div className="flex items-center mb-1">
+                        <span className="text-lg mr-2">📧</span>
+                        <span className="font-semibold text-white">E-mail</span>
+                      </div>
+                      <a href={`mailto:${pageData?.contato?.email || 'contato@bancojota.com.br'}`} className="hover:text-white transition-colors block ml-7 text-sm">
+                        {pageData?.contato?.email || 'contato@bancojota.com.br'}
+                      </a>
+                    </div>
                   </div>
-                  <div className="text-blue-200">
-                    <span className="font-semibold">💬 WhatsApp:</span><br />
-                    <button 
-                      onClick={handleWhatsAppRedirect}
-                      className="hover:text-white transition-colors text-left"
-                    >
-                      {pageData?.whatsapp?.numero || '(11) 99988-7766'}
-                    </button>
+                  
+                  <div className="bg-green-600/20 rounded-lg p-3">
+                    <div className="text-blue-200">
+                      <div className="flex items-center mb-1">
+                        <span className="text-lg mr-2">💬</span>
+                        <span className="font-semibold text-white">WhatsApp</span>
+                      </div>
+                      <button 
+                        onClick={handleWhatsAppRedirect}
+                        className="hover:text-green-300 transition-colors text-left block ml-7"
+                      >
+                        {pageData?.whatsapp?.numero ? 
+                          pageData.whatsapp.numero.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : 
+                          '(11) 99988-7766'
+                        }
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-4">
-                    <button
-                      onClick={() => setShowForm(true)}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all"
-                    >
-                      🎯 Consultoria Gratuita
-                    </button>
-                  </div>
+                  
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center"
+                  >
+                    <span className="mr-2">🎯</span>
+                    Quero Minha Consultoria
+                  </button>
                 </div>
               </div>
             </div>
             
-            <div className="border-t border-blue-800 mt-12 pt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left">
+            <div className="border-t border-blue-700 mt-12 pt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-center md:text-left">
                 <div>
-                  <p className="text-blue-200">
-                    © 2024 Banco Jota. Todos os direitos reservados.
+                  <p className="text-blue-200 font-medium">
+                    © 2024 <strong className="text-white">Banco Jota</strong>. Todos os direitos reservados.
                   </p>
                   <p className="text-blue-300 text-sm mt-1">
-                    CNPJ: 00.000.000/0001-00
+                    CNPJ: 00.000.000/0001-00 | Consultoria em Consórcio
+                  </p>
+                  <p className="text-blue-300 text-xs mt-1">
+                    Acompanhamento especializado até a contemplação
                   </p>
                 </div>
                 <div className="text-center md:text-right">
-                  <p className="text-blue-200 text-sm">
-                    Consultoria especializada em consórcio
+                  <p className="text-blue-200 text-sm font-medium mb-2">
+                    Navegação Legal
                   </p>
-                  <div className="flex justify-center md:justify-end space-x-4 mt-2">
-                    <a href="/termos" className="text-blue-300 text-xs hover:text-white">
+                  <div className="flex justify-center md:justify-end space-x-6">
+                    <a href="/termos" className="text-blue-300 text-sm hover:text-white transition-colors">
                       Termos de Uso
                     </a>
-                    <a href="/privacidade" className="text-blue-300 text-xs hover:text-white">
+                    <a href="/privacidade" className="text-blue-300 text-sm hover:text-white transition-colors">
                       Política de Privacidade
                     </a>
+                  </div>
+                  <div className="mt-2 flex justify-center md:justify-end items-center text-xs text-blue-400">
+                    <span className="mr-1">🔒</span>
+                    Seus dados estão protegidos
                   </div>
                 </div>
               </div>
